@@ -1,33 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   m_types.h                                          :+:      :+:    :+:   */
+/*   shell_cmd_const.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/26 16:22:10 by rtrant           ###   ########.fr       */
+/*   Created: 2020/09/26 15:48:44 by rtrant            #+#    #+#             */
+/*   Updated: 2020/09/26 16:06:36 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef M_TYPES_H
-# define M_TYPES_H
+#include "m_types.h"
 
-typedef struct	s_command
+t_shell_cmd	new_shell_cmd(char *name, int (*func)(t_command command))
 {
-	char				*command;
-	char				*flags;
-	char				**arguments;
-	struct s_command	*next;
-	char				*infile;
-	char				*outfile;
-	char				*errfile;
-}				t_command;
+	t_shell_cmd	new_cmd;
 
-typedef struct	s_shell_cmd
-{
-	char		*name;
-	int			(*function)(t_command command);
-}				t_shell_cmd;
-
-#endif
+	new_cmd.name = name;
+	new_cmd.function = func;
+	return (new_cmd);
+}
