@@ -1,4 +1,4 @@
-SRCS = srcs/main.c
+SRCS = srcs/main.c srcs/shell_cmd_const.c
 
 NAME = minishell
 
