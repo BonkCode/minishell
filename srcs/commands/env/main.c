@@ -1,34 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/30 20:06:55 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/26 17:35:03 by rvernius         ###   ########.fr       */
+/*   Created: 2020/09/29 14:15:38 by rvernius          #+#    #+#             */
+/*   Updated: 2020/09/29 14:28:24 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+int		ft_env(char **environ);
 
-int		ft_strncmp(const char *s1, const char *s2, size_t num)
+int main(int argc, char **av, char **environ)
 {
-	size_t i;
-
-	i = 0;
-	if (!s1 || !s2)
-		return (-1);
-	while (s1[i] && i < num)
-	{
-		if (s1[i] != s2[i])
-		{
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		}
-		i++;
-	}
-	if (s2[i] == '\0' || i == num)
-		return (0);
-	else
-		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	ft_env(environ);
+	return(0);
 }

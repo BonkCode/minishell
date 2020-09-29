@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   m_types.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/29 13:06:00 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/09/29 15:36:55 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct	s_command
 typedef struct	s_shell_cmd
 {
 	char		*name;
-	int			(*function)(t_command command);
+	void			(*function)(t_command command);
 }				t_shell_cmd;
 
 #endif
