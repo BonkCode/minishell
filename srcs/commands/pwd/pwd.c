@@ -6,20 +6,17 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 15:37:27 by rvernius          #+#    #+#             */
-/*   Updated: 2020/09/26 17:22:19 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/09/29 15:17:02 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "../../../headers/m_types.h"
+#include "../../../headers/commands.h"
 
-int	ft_pwd(t_command command)
+int		ft_pwd(t_command command)
 {
 	char *buf;
 
 	buf = getcwd(NULL, 0);
-	printf("%s\n", buf);
+	ft_putstr_fd(buf, 1);
 	return (0);
 }
