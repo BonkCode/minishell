@@ -6,19 +6,24 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/26 16:22:10 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/09/29 13:06:00 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef M_TYPES_H
 # define M_TYPES_H
 
+typedef struct	s_simple_command
+{
+	char						*command;
+	char						*flags;
+	char						**arguments;
+	struct s_simple_commamnd	*next;
+}				t_simple_command;
+
 typedef struct	s_command
 {
-	char				*command;
-	char				*flags;
-	char				**arguments;
-	struct s_command	*next;
+	t_simple_command	*command;
 	char				*infile;
 	char				*outfile;
 	char				*errfile;

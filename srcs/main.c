@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/26 17:26:58 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/09/29 12:38:57 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,11 @@ char		**lex(char *line)
 
 int			main(void)
 {
-	char	*line;
-	char	**tokens;
-	int		i;
-	int		command_flag;
+	char		*line;
+	char		**tokens;
+	int			i;
+	int			command_flag;
+	t_command	command;
 
 	setup_commands(g_commands);
 	while (1)
@@ -66,6 +67,8 @@ int			main(void)
 				{
 					command_flag = 1;
 					ft_putstr_fd(g_commands[i].name, 1);
+					command.command = g_commands[i].name;
+					ft_putnbr_fd(g_commands[i].function(command), 1);
 					break ;
 				}
 			}
