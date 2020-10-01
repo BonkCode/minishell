@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 13:07:03 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/01 17:17:07 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static size_t	get_token_count(char const *str)
 			if (str[i + 1] != '\0' && str[i + 1] != ' ')
 				++size;
 		}
-		while (str[i] != ' ' && str[i] != '\0')
+		while (str[i] != ' ' && str[i] != '\0' && str[i] != 34 && str[i] != 39)
 			++i;
 		if (str[i] != '\0')
 			++i;
@@ -63,7 +63,7 @@ static size_t	get_token_size(char const *str)
 	}
 	else
 	{
-		while (str[size] != ' ' && str[size] != '\0')
+		while (str[size] != ' ' && str[size] != '\0' && str[size] != 34 && str[size] != 39)
 			++size;
 	}
 	return (size);
