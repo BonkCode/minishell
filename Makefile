@@ -1,4 +1,6 @@
-SRCS = srcs/main.c srcs/shell_cmd_const.c
+SRCS = 	srcs/main.c \
+		srcs/shell_cmd_const.c \
+		srcs/lexer/tokenize.c
 
 NAME = minishell
 

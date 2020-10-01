@@ -6,11 +6,12 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/29 15:40:18 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/01 13:07:03 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "m_types.h"
 
 static size_t	get_token_count(char const *str)
 {
@@ -22,18 +23,22 @@ static size_t	get_token_count(char const *str)
 	while (str[i] != '\0')
 	{
 		if (str[i] != ' ')
-			size++;
+			++size;
 		if (str[i] == 34)
 		{
 			++i;
 			while (str[i] != 34)
 				++i;
+			if (str[i + 1] != '\0' && str[i + 1] != ' ')
+				++size;
 		}
 		else if (str[i] == 39)
 		{
 			++i;
 			while (str[i] != 39)
 				++i;
+			if (str[i + 1] != '\0' && str[i + 1] != ' ')
+				++size;
 		}
 		while (str[i] != ' ' && str[i] != '\0')
 			++i;
@@ -53,6 +58,8 @@ static size_t	get_token_size(char const *str)
 		++size;
 		while (str[size] != *str && str[size] != '\0')
 			++size;
+		if (str[size] !='\0')
+			++size;
 	}
 	else
 	{
@@ -62,7 +69,7 @@ static size_t	get_token_size(char const *str)
 	return (size);
 }
 
-static char		*clear_tokens(char **tokens, int count)
+static char		**clear_tokens(char **tokens, int count)
 {
 	int	i;
 
@@ -73,23 +80,10 @@ static char		*clear_tokens(char **tokens, int count)
 	return (NULL);
 }
 
-static void		proceed_to_next_token(char const *str)
+static void		proceed_to_next_token(char const **str)
 {
-	char	qmark;
-	
-	if (*str == 34 || *str == 39)
-	{
-		qmark = *str
-		++str;
-		while (*str != qmark && *str != '\0')
-			++size;
-	}
-	else
-	{
-		while (str[size] != ' ' && str[size] != '\0')
-			++size;
-	}
-	return (size);
+	while (**str == ' ' && **str != '\0')
+		++(*str);
 }
 
 char			**tokenize(char const *str)
@@ -104,6 +98,7 @@ char			**tokenize(char const *str)
 	tokens = malloc((size + 1) * sizeof(char *));
 	if (!tokens)
 		return (NULL);
+	tokens[size] = 0;
 	i = 0;
 	while (*str)
 	{
@@ -117,6 +112,7 @@ char			**tokenize(char const *str)
 			ft_strlcpy(tokens[i], str, size + 1);
 			++i;
 		}
+		str = str + size;
 		proceed_to_next_token(&str);
 	}
 	return (tokens);
