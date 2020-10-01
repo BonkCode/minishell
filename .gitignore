@@ -1,5 +1,4 @@
 */*.o
 */*.a
 minishell
-a.out
-minishell
+*/*.out

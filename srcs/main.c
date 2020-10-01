@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/29 12:38:57 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/01 13:07:07 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include "flexer.h"
 #include "m_types.h"
 
-int	dummy_echo(t_command command) {return (ft_strlen(command.command));}
-int	dummy_cd(t_command command) {return (ft_strlen(command.command));}
-int	dummy_export(t_command command) {return (ft_strlen(command.command));}
-int	dummy_unset(t_command command) {return (ft_strlen(command.command));}
-int	dummy_env(t_command command) {return (ft_strlen(command.command));}
-int	dummy_exit(t_command command) {return (ft_strlen(command.command));}
+void	dummy_echo(t_command command) {ft_strlen(command.command->command);}
+void	dummy_cd(t_command command) {ft_strlen(command.command->command);}
+void	dummy_export(t_command command) {ft_strlen(command.command->command);}
+void	dummy_unset(t_command command) {ft_strlen(command.command->command);}
+void	dummy_env(t_command command) {ft_strlen(command.command->command);}
+void	dummy_exit(t_command command) {ft_strlen(command.command->command);}
 
 void		setup_commands(t_shell_cmd commands[7])
 {
@@ -43,13 +43,37 @@ char		**lex(char *line)
 	return (tokens);
 }
 
+void		print_2d_arr(char **str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		ft_putchar_fd('|', 1);
+		ft_putstr_fd(str[i], 1);
+		ft_putchar_fd('|', 1);
+		ft_putchar_fd(' ', 1);
+	}
+}
+
+void		free_tokens(char **tokens)
+{
+	int	i;
+
+	i = -1;
+	while (tokens[++i])
+		free(tokens[i]);
+	free(tokens);
+}
+
 int			main(void)
 {
 	char		*line;
 	char		**tokens;
 	int			i;
 	int			command_flag;
-	t_command	command;
+//	t_command	command;
 
 	setup_commands(g_commands);
 	while (1)
@@ -66,9 +90,12 @@ int			main(void)
 						ft_strlen(g_commands[i].name) + 1) == 0)
 				{
 					command_flag = 1;
-					ft_putstr_fd(g_commands[i].name, 1);
-					command.command = g_commands[i].name;
-					ft_putnbr_fd(g_commands[i].function(command), 1);
+					//ft_putstr_fd(g_commands[i].name, 1);
+					tokens = tokenize(line);
+					print_2d_arr(tokens);
+					free_tokens(tokens);
+					//command.command->command = g_commands[i].name;
+					//ft_putnbr_fd(g_commands[i].function(command), 1);
 					break ;
 				}
 			}

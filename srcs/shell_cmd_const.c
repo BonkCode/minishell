@@ -6,13 +6,13 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 15:48:44 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/26 16:06:36 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/01 12:25:34 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_types.h"
 
-t_shell_cmd	new_shell_cmd(char *name, int (*func)(t_command command))
+t_shell_cmd	new_shell_cmd(char *name, void (*func)(t_command command))
 {
 	t_shell_cmd	new_cmd;
 
