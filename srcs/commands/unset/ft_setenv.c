@@ -6,7 +6,7 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:47:12 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/01 14:25:46 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/01 17:36:19 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,5 @@ int ft_setenv(char **args, char **environ)
 
 	i = 0;
 	if (!args[0])
-	
+	return (0);	
 }
