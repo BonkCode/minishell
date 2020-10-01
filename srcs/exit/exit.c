@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/26 15:37:27 by rvernius          #+#    #+#             */
-/*   Updated: 2020/09/26 17:16:09 by rvernius         ###   ########.fr       */
+/*   Created: 2020/09/29 16:53:13 by rvernius          #+#    #+#             */
+/*   Updated: 2020/09/29 16:59:06 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <
+#include "../../../headers/commands.h"
 
-int ft_pwd(t)
+void	ft_exit(t_command)
 {
-	char *buf;
-
-	buf = getcwd(NULL, 0);
-	printf("%s\n", buf);
-	return (0);
+	exit(0);	
 }
-
