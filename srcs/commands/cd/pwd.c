@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands.h                                         :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/26 16:17:59 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/01 15:56:20 by rvernius         ###   ########.fr       */
+/*   Created: 2020/09/26 15:37:27 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/01 12:52:30 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMANDS_H
-# define COMMANDS_H
+#include "../../../headers/commands.h"
 
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include "../libft/libft.h"
-# include "m_types.h"
+int		ft_pwd(t_command command)
+{
+	char *buf;
 
-void		ft_echo(t_command command);
-void		ft_pwd(t_command command);
-void		ft_cd(t_command command);
-void		ft_exit(t_command command);
-
-#endif
+	buf = getcwd(NULL, 0);
+	ft_putendl_fd(buf, 1);
+	return (0);
+}

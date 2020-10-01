@@ -1,38 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 13:26:29 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/01 15:50:32 by rvernius         ###   ########.fr       */
+/*   Created: 2020/10/01 13:57:24 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/01 14:50:01 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/commands.h"
 
-void		ft_echo(t_command command)
+void		ft_unset(char *arg, char **environ)
 {
 	int i;
-	int n;
+	int j;
+	char **split_re;
 
-	n = 0;
 	i = 0;
-	if(ft_strcmp(command.command->flags, "-n") == 0)
-		n = 1;
-	if (!command.command->arguments[0])
+	j = 0;
+
+	while (environ[j])
 	{
-		if (!n)
-			ft_putstr_fd("\n", 1);
-		exit(0);
+		split_re = ft_split(environ[j], '=');
+		if (split_re)
+		{
+			if(ft_strncmp(split_re[0], arg, ft_strlen(environ[i])) == 0)
+			{
+				printf("%s\n", split_re[0]);
+				printf("%s\n", environ[j]);
+				free(environ[j]);
+				environ[j] = NULL;
+			}
+		}
+		++j;
 	}
-	while (command.command->arguments[i])
-	{
-		ft_putstr_fd(command.command->arguments[i], 1);
-		command.command->arguments[i + 1] ? ft_putstr_fd(" ", 1) : 0;
-		++i;
-	}
-	!n ? ft_putstr_fd("\n", 1) : 0;
-	exit (0);
 }
