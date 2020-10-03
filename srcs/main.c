@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 17:34:21 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/02 16:16:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,6 @@ void		print_2d_arr(char **str)
 	}
 }
 
-void		free_tokens(char **tokens)
-{
-	int	i;
-
-	i = -1;
-	while (tokens[++i])
-		free(tokens[i]);
-	free(tokens);
-}
-
 void		print_commands(t_command command)
 {
 	ft_putstr_fd("return status: ", 1);
@@ -83,7 +73,7 @@ void		print_commands(t_command command)
 	ft_putstr_fd("errfile: ", 1);
 	ft_putstr_fd(command.errfile, 1);
 	ft_putstr_fd("\n", 1);
-	ft_putstr_fd("-------------------------\n", 1);
+	ft_putstr_fd("========================\n", 1);
 	while (command.commands)
 	{
 		ft_putstr_fd("command: ", 1);
@@ -95,18 +85,21 @@ void		print_commands(t_command command)
 		ft_putstr_fd("arguments: ", 1);
 		if (command.commands->arguments)
 		{
-			while (command.commands->arguments->next)
+			while (command.commands->arguments)
 			{
 				ft_putstr_fd(command.commands->arguments->content, 1);
 				ft_putstr_fd(" ", 1);
 				command.commands->arguments = command.commands->arguments->next;
 			}
 		}
+		ft_putstr_fd("\n", 1);
 		ft_putstr_fd("piped: ", 1);
 		ft_putnbr_fd(command.commands->piped, 1);
 		ft_putstr_fd("\n", 1);
 		command.commands = command.commands->next;
+		ft_putstr_fd("-------------------\n", 1);
 	}
+	ft_putstr_fd("========================\n", 1);
 }
 
 int			main(void)
@@ -141,9 +134,8 @@ int			main(void)
 					tokens = tokenize(line);
 					print_2d_arr(tokens);
 					command = parse(tokens, g_commands);
-					free_tokens(tokens);
+					clear_tokens(tokens, -1);
 					print_commands(command);
-					ft_putnbr_fd(command.status, 1);
 					//command.command->command = g_commands[i].name;
 					//ft_putnbr_fd(g_commands[i].function(command), 1);
 					break ;

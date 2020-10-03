@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flexer.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 16:05:55 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/02 15:53:24 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 t_shell_cmd			new_shell_cmd(char *name, void (*func)(t_command command));
 char				**tokenize(char const *str);
+char				**clear_tokens(char **tokens, int count);
 t_command			parse(char **tokens, t_shell_cmd cmds[7]);
 t_simple_command	*clear_command(t_simple_command **command);
 
