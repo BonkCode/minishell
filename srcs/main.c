@@ -6,13 +6,14 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/02 16:16:25 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/03 17:09:29 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "flexer.h"
 #include "m_types.h"
+#include "../ft_printf/libftprintf.h"
 
 void	dummy_echo(t_command command) {ft_strlen(command.commands->command);}
 void	dummy_cd(t_command command) {ft_strlen(command.commands->command);}
@@ -59,47 +60,36 @@ void		print_2d_arr(char **str)
 
 void		print_commands(t_command command)
 {
-	ft_putstr_fd("return status: ", 1);
-	ft_putnbr_fd(command.status, 1);
-	ft_putstr_fd("\n", 1);
+	t_list	*arg_tmp;
+
+	arg_tmp = NULL;
+	ft_printf("return_status: %i\n", command.status);
 	if (command.status != 0)
 		return ;
-	ft_putstr_fd("infile: ", 1);
-	ft_putstr_fd(command.infile, 1);
-	ft_putstr_fd("\n", 1);
-	ft_putstr_fd("outfile: ", 1);
-	ft_putstr_fd(command.outfile, 1);
-	ft_putstr_fd("\n", 1);
-	ft_putstr_fd("errfile: ", 1);
-	ft_putstr_fd(command.errfile, 1);
-	ft_putstr_fd("\n", 1);
-	ft_putstr_fd("========================\n", 1);
+	ft_printf("infile: %i\n", command.infile);
+	ft_printf("outfile: %i\n", command.outfile);
+	ft_printf("errfile: %i\n", command.errfile);
+	ft_printf("========================\n");
 	while (command.commands)
 	{
-		ft_putstr_fd("command: ", 1);
-		ft_putstr_fd(command.commands->command, 1);
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("flag: ", 1);
-		ft_putstr_fd(command.commands->flag, 1);
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("arguments: ", 1);
+		ft_printf("command: %s\n", command.commands->command);
+		ft_printf("flag: %s\n", command.commands->flag);
+		ft_printf("arguments: ");
 		if (command.commands->arguments)
 		{
+			arg_tmp = command.commands->arguments;
 			while (command.commands->arguments)
 			{
-				ft_putstr_fd(command.commands->arguments->content, 1);
-				ft_putstr_fd(" ", 1);
+				ft_printf("<%s> ", command.commands->arguments->content);
 				command.commands->arguments = command.commands->arguments->next;
 			}
+			command.commands->arguments = arg_tmp;
 		}
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("piped: ", 1);
-		ft_putnbr_fd(command.commands->piped, 1);
-		ft_putstr_fd("\n", 1);
+		ft_printf("\npiped: %i\n", command.commands->piped);
 		command.commands = command.commands->next;
-		ft_putstr_fd("-------------------\n", 1);
+		ft_printf("-------------------\n");
 	}
-	ft_putstr_fd("========================\n", 1);
+	ft_printf("========================\n");
 }
 
 int			main(void)
@@ -113,7 +103,7 @@ int			main(void)
 	setup_commands(g_commands);
 	while (1)
 	{
-		ft_putstr_fd("bibaibobabash-0.0.1$ ", 1);
+		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
 		if (get_next_line(0, &line))
 		{
 			command.status = 127;
@@ -121,8 +111,8 @@ int			main(void)
 			command.errfile = NULL;
 			command.outfile = NULL;
 			command.commands = NULL;
-			tokens = lex(line);
 			i = -1;
+			tokens = tokenize(line);
 			command_flag = 0;
 			while (++i < 7)
 			{
@@ -130,19 +120,15 @@ int			main(void)
 						ft_strlen(g_commands[i].name) + 1) == 0)
 				{
 					command_flag = 1;
-					//ft_putstr_fd(g_commands[i].name, 1);
-					tokens = tokenize(line);
 					print_2d_arr(tokens);
 					command = parse(tokens, g_commands);
 					clear_tokens(tokens, -1);
 					print_commands(command);
-					//command.command->command = g_commands[i].name;
-					//ft_putnbr_fd(g_commands[i].function(command), 1);
 					break ;
 				}
 			}
 			if (!command_flag)
-				ft_putstr_fd("wrong command", 1);
+				ft_putstr_fd("wrong command", 2);
 			ft_putstr_fd("\n", 1);
 			free(line);
 			clear_command(&command.commands);

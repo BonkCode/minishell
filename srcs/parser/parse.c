@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/02 16:21:51 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/03 16:50:20 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 	{
 		clear_command(&list);
 		return_command.status = -1;
+		if (simple_command)
+		{
+			free(simple_command);
+			simple_command = NULL;
+		}
 		return (return_command);
 	}
 	return_command.infile = NULL;
@@ -87,6 +92,11 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 			if (!simple_command->command)
 			{
 				return_command.status = 1;
+				if (simple_command)
+				{
+					free(simple_command);
+					simple_command = NULL;
+				}
 				return (return_command);
 			}
 		}
@@ -96,6 +106,11 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 			{
 				clear_command(&list);
 				return_command.status = 2;
+				if (simple_command)
+				{
+					free(simple_command);
+					simple_command = NULL;
+				}
 				return (return_command);
 			}
 			else if (!ft_strncmp(tokens[i], "-n", 3))
@@ -123,12 +138,22 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 			{
 				clear_command(&list);
 				return_command.status = 2;
+				if (simple_command)
+				{
+					free(simple_command);
+					simple_command = NULL;
+				}
 				return (return_command);
 			}
 			if (tokens[i + 1] == 0)
 			{
 				clear_command(&list);
 				return_command.status = 3;
+				if (simple_command)
+				{
+					free(simple_command);
+					simple_command = NULL;
+				}
 				return (return_command);
 			}
 			else
@@ -142,6 +167,11 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 				if (tokens[i + 2] == 0)
 				{
 					return_command.commands = list;
+					if (simple_command)
+					{
+						free(simple_command);
+						simple_command = NULL;
+					}
 					return (return_command);
 				}
 				else
@@ -153,6 +183,11 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 	}
 	if (simple_command->command != NULL)
 		ft_command_add_back(&list, simple_command);
+	else if (simple_command)
+	{
+		free(simple_command);
+		simple_command = NULL;
+	}
 	return_command.commands = list;
 	return (return_command);
 }
