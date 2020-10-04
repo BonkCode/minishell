@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/29 16:30:05 by rtrant            #+#    #+#              #
-#    Updated: 2020/09/08 13:59:09 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/01 15:21:17 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ $(BONUS_OBJS):
 $(NAME): $(OBJS)
 	@ar rcs $(NAME) $(OBJS)
 
-bonus: $(BONUS_OBJS)
+bonus: $(NAME) $(BONUS_OBJS)
 	@ar rcs $(NAME) $(BONUS_OBJS)
 
 clean:

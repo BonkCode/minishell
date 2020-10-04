@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 13:07:07 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/03 17:09:29 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "flexer.h"
 #include "m_types.h"
+#include "../ft_printf/libftprintf.h"
 
-void	dummy_echo(t_command command) {ft_strlen(command.command->command);}
-void	dummy_cd(t_command command) {ft_strlen(command.command->command);}
-void	dummy_export(t_command command) {ft_strlen(command.command->command);}
-void	dummy_unset(t_command command) {ft_strlen(command.command->command);}
-void	dummy_env(t_command command) {ft_strlen(command.command->command);}
-void	dummy_exit(t_command command) {ft_strlen(command.command->command);}
+void	dummy_echo(t_command command) {ft_strlen(command.commands->command);}
+void	dummy_cd(t_command command) {ft_strlen(command.commands->command);}
+void	dummy_export(t_command command) {ft_strlen(command.commands->command);}
+void	dummy_unset(t_command command) {ft_strlen(command.commands->command);}
+void	dummy_env(t_command command) {ft_strlen(command.commands->command);}
+void	dummy_exit(t_command command) {ft_strlen(command.commands->command);}
 
 void		setup_commands(t_shell_cmd commands[7])
 {
@@ -57,14 +58,38 @@ void		print_2d_arr(char **str)
 	}
 }
 
-void		free_tokens(char **tokens)
+void		print_commands(t_command command)
 {
-	int	i;
+	t_list	*arg_tmp;
 
-	i = -1;
-	while (tokens[++i])
-		free(tokens[i]);
-	free(tokens);
+	arg_tmp = NULL;
+	ft_printf("return_status: %i\n", command.status);
+	if (command.status != 0)
+		return ;
+	ft_printf("infile: %i\n", command.infile);
+	ft_printf("outfile: %i\n", command.outfile);
+	ft_printf("errfile: %i\n", command.errfile);
+	ft_printf("========================\n");
+	while (command.commands)
+	{
+		ft_printf("command: %s\n", command.commands->command);
+		ft_printf("flag: %s\n", command.commands->flag);
+		ft_printf("arguments: ");
+		if (command.commands->arguments)
+		{
+			arg_tmp = command.commands->arguments;
+			while (command.commands->arguments)
+			{
+				ft_printf("<%s> ", command.commands->arguments->content);
+				command.commands->arguments = command.commands->arguments->next;
+			}
+			command.commands->arguments = arg_tmp;
+		}
+		ft_printf("\npiped: %i\n", command.commands->piped);
+		command.commands = command.commands->next;
+		ft_printf("-------------------\n");
+	}
+	ft_printf("========================\n");
 }
 
 int			main(void)
@@ -73,16 +98,21 @@ int			main(void)
 	char		**tokens;
 	int			i;
 	int			command_flag;
-//	t_command	command;
+	t_command	command;
 
 	setup_commands(g_commands);
 	while (1)
 	{
-		ft_putstr_fd("bibaibobabash-0.0.1$ ", 1);
+		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
 		if (get_next_line(0, &line))
 		{
-			tokens = lex(line);
+			command.status = 127;
+			command.infile = NULL;
+			command.errfile = NULL;
+			command.outfile = NULL;
+			command.commands = NULL;
 			i = -1;
+			tokens = tokenize(line);
 			command_flag = 0;
 			while (++i < 7)
 			{
@@ -90,19 +120,33 @@ int			main(void)
 						ft_strlen(g_commands[i].name) + 1) == 0)
 				{
 					command_flag = 1;
-					//ft_putstr_fd(g_commands[i].name, 1);
-					tokens = tokenize(line);
 					print_2d_arr(tokens);
-					free_tokens(tokens);
-					//command.command->command = g_commands[i].name;
-					//ft_putnbr_fd(g_commands[i].function(command), 1);
+					command = parse(tokens, g_commands);
+					clear_tokens(tokens, -1);
+					print_commands(command);
 					break ;
 				}
 			}
 			if (!command_flag)
-				ft_putstr_fd("wrong command", 1);
+				ft_putstr_fd("wrong command", 2);
 			ft_putstr_fd("\n", 1);
 			free(line);
+			clear_command(&command.commands);
+			if (command.infile)
+			{
+				free(command.infile);
+				command.infile = NULL;
+			}
+			if (command.outfile)
+			{
+				free(command.outfile);
+				command.outfile = NULL;
+			}
+			if (command.errfile)
+			{
+				free(command.errfile);
+				command.errfile = NULL;
+			}
 		}
 	}
 	return (0);

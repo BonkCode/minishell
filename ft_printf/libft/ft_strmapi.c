@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   flexer.h                                           :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/02 15:53:24 by rtrant           ###   ########.fr       */
+/*   Created: 2020/05/01 11:29:27 by rtrant            #+#    #+#             */
+/*   Updated: 2020/05/01 12:26:53 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FLEXER_H
-# define FLEXER_H
-# include "libft.h"
-# include "m_types.h"
+#include <stdlib.h>
+#include "libft.h"
 
-t_shell_cmd			new_shell_cmd(char *name, void (*func)(t_command command));
-char				**tokenize(char const *str);
-char				**clear_tokens(char **tokens, int count);
-t_command			parse(char **tokens, t_shell_cmd cmds[7]);
-t_simple_command	*clear_command(t_simple_command **command);
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+{
+	unsigned int	i;
+	char			*result;
 
-#endif
+	i = 0;
+	if (!s || !f)
+		return (NULL);
+	result = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (!result)
+		return (NULL);
+	result[ft_strlen(s)] = '\0';
+	while (s[i] != '\0')
+	{
+		result[i] = f(i, s[i]);
+		i++;
+	}
+	return (result);
+}
