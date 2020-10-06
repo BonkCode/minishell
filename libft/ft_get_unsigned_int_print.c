@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_unsigned_int_print.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/13 05:13:41 by rtrant            #+#    #+#             */
-/*   Updated: 2020/07/02 17:13:40 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 12:52:30 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "libftprintf.h"
 
 static char	*ft_uitoa(unsigned long long int n)
