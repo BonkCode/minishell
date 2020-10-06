@@ -6,15 +6,36 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 16:26:40 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 17:27:22 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_types.h"
 #include <stdlib.h>
 #include <string.h>
-#include "libft.h"
+#include "libftprintf.h"
 #include "flexer.h"
+
+static int				ft_strncmp_split(char *s1, char *s2, char c)
+{
+	int		i;
+	char	**arr;
+
+	i = -1;
+	if (!(arr = ft_split(s2, c)))
+		return (1);
+	while (arr[++i])
+	{
+		if (!ft_strncmp(arr[i], s1, ft_strlen(arr[i]) + 1))
+		{
+			clear_tokens(arr, -1);
+			return (0);
+		}
+	}
+	i = -1;
+	clear_tokens(arr, -1);
+	return (1);
+}
 
 static t_simple_command	*new_simple_command(void)
 {
@@ -62,7 +83,7 @@ static t_command		abort_parsing(t_command *return_command, int code,
 				t_simple_command *simple_command, t_simple_command **list)
 {
 	clear_simple_commands(list);
-	return_command->status = -1;
+	return_command->status = code;
 	if (simple_command)
 	{
 		free(simple_command);
@@ -71,7 +92,7 @@ static t_command		abort_parsing(t_command *return_command, int code,
 	return (*return_command);
 }
 
-static t_shell_cmd		get_shell_cmd(t_simple_command **simple_command,
+static void		get_shell_cmd(t_simple_command **simple_command,
 							char **tokens, int i, t_shell_cmd cmds[7])
 {
 	int	j;
@@ -83,21 +104,31 @@ static t_shell_cmd		get_shell_cmd(t_simple_command **simple_command,
 			ft_strlen(cmds[j].name) + 1))
 		{
 			(*simple_command)->command = ft_strdup(tokens[i]);
-			return (cmds[j]);
+			return ;
 		}
 	}
-	return (cmds[j]);
 }
 
 static void				get_redirect_files(char **tokens, int i,
 							t_command *return_command)
 {
-	if (!ft_strncmp(tokens[i - 1], "1", 2))
+	if (!ft_strncmp_split(tokens[i], "<", ' '))
+		return_command->infile = ft_strdup(tokens[i + 1]);
+	else if (!ft_strncmp(tokens[i - 1], "1", 2))
 		return_command->outfile = ft_strdup(tokens[i + 1]);
-	if (!ft_strncmp(tokens[i - 1], "2", 2))
+	else if (!ft_strncmp(tokens[i - 1], "2", 2))
 		return_command->errfile = ft_strdup(tokens[i + 1]);
 	else
 		return_command->outfile = ft_strdup(tokens[i + 1]);
+}
+
+static void				clear_command(t_simple_command **simple_command)
+{
+	if (*simple_command)
+	{
+		free(*simple_command);
+		*simple_command = NULL;
+	}
 }
 
 t_command				parse(char **tokens, t_shell_cmd cmds[7])
@@ -106,80 +137,64 @@ t_command				parse(char **tokens, t_shell_cmd cmds[7])
 	int					j;
 	t_command			return_command;
 	t_simple_command	*list;
-	t_simple_command	*simple_command;
-	t_shell_cmd			cmd;
+	t_simple_command	*s_c;
 
 	i = -1;
-	if (!(simple_command = new_simple_command()))
-		return (abort_parsing(&return_command, -1, simple_command, &list));
+	if (!(s_c = new_simple_command()))
+		return (abort_parsing(&return_command, -1, s_c, &list));
 	init_return_command(&return_command);
 	list = NULL;
 	while (tokens[++i])
 	{
-		if (!simple_command->command)
+		if (!s_c->command)
 		{
-			cmd = get_shell_cmd(&simple_command, tokens, i, cmds);
-			if (!simple_command->command)
-				return (abort_parsing(&return_command, 1,
-							simple_command, &list));
+			get_shell_cmd(&s_c, tokens, i, cmds);
+			if (!s_c->command)
+				return (abort_parsing(&return_command, 1, s_c, &list));
 		}
 		else if (tokens[i][0] == '-' && !ft_strncmp(tokens[i - 1],
-					cmd.name, ft_strlen(cmd.name + 1)))
+					s_c->command, ft_strlen(s_c->command + 1)))
 		{
-			if (ft_strncmp(cmd.name, "echo", 5))
-				return (abort_parsing(&return_command, 2,
-									simple_command, &list));
+			if (ft_strncmp(s_c->command, "echo", 5))
+				return (abort_parsing(&return_command, 2, s_c, &list));
 			else if (!ft_strncmp(tokens[i], "-n", 3))
-				simple_command->flag = ft_strdup(tokens[i]);
+				s_c->flag = ft_strdup(tokens[i]);
 			else
-				ft_lstadd_back(&(simple_command->arguments),
-								ft_lstnew(tokens[i]));
+				ft_lstadd_back(&(s_c->arguments), ft_lstnew(tokens[i]));
 		}
 		else if (!ft_strncmp(tokens[i], "|", 2) ||
 				!ft_strncmp(tokens[i], ";", 2))
 		{
-			simple_command->piped = tokens[i][0] == '|' ? 1 : 0;
-			ft_command_add_back(&list, simple_command);
-			simple_command = new_simple_command();
+			s_c->piped = tokens[i][0] == '|' ? 1 : 0;
+			ft_command_add_back(&list, s_c);
+			s_c = new_simple_command();
 		}
-		else if (!ft_strncmp(tokens[i], ">>", 3) ||
-				!ft_strncmp(tokens[i], ">", 2) ||
-				!ft_strncmp(tokens[i], "<", 2))
+		else if (!ft_strncmp_split(tokens[i], ">> < >", ' '))
 		{
-			ft_command_add_back(&list, simple_command);
-			if (!(simple_command = new_simple_command()))
-				return (abort_parsing(&return_command, 3,
-						simple_command, &list));
+			ft_command_add_back(&list, s_c);
+			if (!(s_c = new_simple_command()))
+				return (abort_parsing(&return_command, 3, s_c, &list));
 			else if (tokens[i + 1] == 0)
-				return (abort_parsing(&return_command, 4,
-									simple_command, &list));
+				return (abort_parsing(&return_command, 4, s_c, &list));
 			else
 			{
 				get_redirect_files(tokens, i, &return_command);
 				if (tokens[i + 2] == 0)
 				{
 					return_command.commands = list;
-					if (simple_command)
-					{
-						free(simple_command);
-						simple_command = NULL;
-					}
+					clear_command(&s_c);
 					return (return_command);
 				}
 				i += 2;
 			}
 		}
 		else
-			ft_lstadd_back(&(simple_command->arguments),
-						ft_lstnew(ft_strdup(tokens[i])));
+			ft_lstadd_back(&(s_c->arguments), ft_lstnew(ft_strdup(tokens[i])));
 	}
-	if (simple_command->command != NULL)
-		ft_command_add_back(&list, simple_command);
-	else if (simple_command)
-	{
-		free(simple_command);
-		simple_command = NULL;
-	}
+	if (s_c->command != NULL)
+		ft_command_add_back(&list, s_c);
+	else if (s_c)
+		clear_command(&s_c);
 	return_command.commands = list;
 	return (return_command);
 }

@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:31:39 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 15:22:16 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 17:09:30 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		print_commands(t_command command)
 	t_list	*arg_tmp;
 
 	ft_printf("return_status: %i\n", command.status);
-	ft_printf("infile: %i\noutfile: %i\nerrfile: %i\n",
+	ft_printf("infile: %s\noutfile: %s\nerrfile: %s\n",
 			command.infile, command.outfile, command.errfile);
 	ft_printf("========================\n");
 	while (command.commands)

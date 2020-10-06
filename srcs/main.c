@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 14:35:08 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 17:16:55 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int			main(void)
 		{
 			init_command(&command);
 			tokens = tokenize(line);
+			print_2d(tokens);
 			command_flag = 0;
 			get_command(&command, &command_flag, tokens);
 			if (!command_flag)
