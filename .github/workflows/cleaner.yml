@@ -1,4 +1,16 @@
-name: Cleaner
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    cleaner.yml                                        :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/10/06 13:25:29 by rtrant            #+#    #+#              #
+#    Updated: 2020/10/06 13:28:35 by rtrant           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+name: cleaner
 
 on: push
 
@@ -8,4 +20,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:  
-        uses: ../actions/clean-action
+        - uses: ./../actions/clean-action
