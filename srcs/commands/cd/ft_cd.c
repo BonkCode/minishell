@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands.h                                         :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/26 16:17:59 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/01 15:56:20 by rvernius         ###   ########.fr       */
+/*   Created: 2020/10/01 12:33:32 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/01 15:53:40 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMANDS_H
-# define COMMANDS_H
+#include "../../../headers/commands.h"
+#include <unistd.h>
+#include <stdio.h>
 
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include "../libft/libft.h"
-# include "m_types.h"
+void	ft_cd(t_command command)
+{
+	if (ft_strlen(command.command->arguments) == 1)
+		chdir(command.command->arguments);
 
-void		ft_echo(t_command command);
-void		ft_pwd(t_command command);
-void		ft_cd(t_command command);
-void		ft_exit(t_command command);
+}
 
-#endif
+/*
+int		main(int argc, char **av, char **env)
+{
+	t_command com;
+
+	ft_pwd(com);
+	ft_cd(com);
+	ft_pwd(com);
+	return (0);
+}
+*/
