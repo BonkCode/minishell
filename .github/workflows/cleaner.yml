@@ -1,0 +1,11 @@
+name: Cleaner
+
+on: push
+
+jobs:
+  cleaner:
+    name: Clean workspace
+    runs-on: ubuntu-latest
+
+    steps:  
+        uses: ../actions/clean-action
