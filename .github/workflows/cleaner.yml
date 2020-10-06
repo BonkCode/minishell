@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/06 13:25:29 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/06 13:42:04 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/06 14:00:57 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,3 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/clean-action
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
