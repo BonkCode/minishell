@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/06 13:25:29 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/06 13:28:35 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/06 13:34:48 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,5 +19,6 @@ jobs:
     name: Clean workspace
     runs-on: ubuntu-latest
 
-    steps:  
-        - uses: ./../actions/clean-action
+    steps:
+      - uses: actions/checkout
+      - uses: ./.github/actions/clean-action
