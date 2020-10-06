@@ -1,29 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands.h                                         :+:      :+:    :+:   */
+/*   tokens_clearer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/26 16:17:59 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 14:30:59 by rtrant           ###   ########.fr       */
+/*   Created: 2020/10/06 15:25:59 by rtrant            #+#    #+#             */
+/*   Updated: 2020/10/06 15:26:15 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMANDS_H
-# define COMMANDS_H
+#include "flexer.h"
 
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include "../libft/libft.h"
-# include "m_types.h"
+char		**clear_tokens(char **tokens, int count)
+{
+	int	i;
 
-void	dummy_echo(t_command command);
-void	dummy_cd(t_command command);
-void	dummy_export(t_command command);
-void	dummy_unset(t_command command);
-void	dummy_env(t_command command);
-void	dummy_exit(t_command command);
-
-#endif
+	i = -1;
+	if (count < 0)
+	{
+		while (tokens[++i])
+		{
+			free(tokens[i]);
+			tokens[i] = NULL;
+		}
+	}
+	else
+	{
+		while (++i < count)
+		{
+			free(tokens[i]);
+			tokens[i] = NULL;
+		}
+	}
+	free(tokens);
+	tokens = NULL;
+	return (NULL);
+}

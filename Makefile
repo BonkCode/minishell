@@ -3,18 +3,22 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+         #
+#    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/06 12:55:36 by rvernius         ###   ########.fr        #
+#    Updated: 2020/10/06 15:26:38 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = 	srcs/main.c \
 		srcs/shell_cmd_const.c \
 		srcs/lexer/tokenize.c \
+		srcs/lexer/tokens_clearer.c \
 		srcs/parser/parse.c \
-		srcs/t_commands/command_clearer.c
+		srcs/t_commands/command_clearer.c \
+		srcs/commands/dummy/one.c \
+		srcs/commands/dummy/two.c \
+		srcs/t_commands/command_printer.c
 
 NAME = minishell
 
@@ -37,4 +41,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+norme:
+	norminette $(SRCS) headers/*.h
+
+.PHONY: all clean fclean re norme
