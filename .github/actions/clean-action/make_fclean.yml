@@ -1,0 +1,5 @@
+jobs:
+  clean-job:
+      steps:
+        - name: Clean workspace
+          run: make fclean;make -C libft fclean
