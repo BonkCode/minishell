@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   flexer.h                                           :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/02 15:53:24 by rtrant           ###   ########.fr       */
+/*   Created: 2020/05/01 12:10:25 by rtrant            #+#    #+#             */
+/*   Updated: 2020/05/06 19:23:57 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FLEXER_H
-# define FLEXER_H
-# include "libft.h"
-# include "m_types.h"
+#include <unistd.h>
 
-t_shell_cmd			new_shell_cmd(char *name, void (*func)(t_command command));
-char				**tokenize(char const *str);
-char				**clear_tokens(char **tokens, int count);
-t_command			parse(char **tokens, t_shell_cmd cmds[7]);
-t_simple_command	*clear_command(t_simple_command **command);
-
-#endif
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (!s || fd < 0)
+		return ;
+	while (*s != '\0')
+	{
+		write(fd, s, 1);
+		s++;
+	}
+}

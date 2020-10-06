@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   flexer.h                                           :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/02 15:53:24 by rtrant           ###   ########.fr       */
+/*   Created: 2020/04/29 16:56:59 by rtrant            #+#    #+#             */
+/*   Updated: 2020/05/06 19:27:23 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FLEXER_H
-# define FLEXER_H
-# include "libft.h"
-# include "m_types.h"
+#include "libft.h"
 
-t_shell_cmd			new_shell_cmd(char *name, void (*func)(t_command command));
-char				**tokenize(char const *str);
-char				**clear_tokens(char **tokens, int count);
-t_command			parse(char **tokens, t_shell_cmd cmds[7]);
-t_simple_command	*clear_command(t_simple_command **command);
-
-#endif
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	if (!s1 || !s2)
+		return (0);
+	while (*s1 == *s2 && *s1 != '\0' && *s2 != '\0' && n > 0)
+	{
+		s1++;
+		s2++;
+		n--;
+	}
+	if (n == 0)
+		return (0);
+	return ((unsigned char)*s1 - (unsigned char)*s2);
+}

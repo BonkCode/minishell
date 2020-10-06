@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 17:34:10 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/03 16:50:20 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	ft_command_add_back(t_simple_command **lst, t_simple_command *new)
 	}
 }
 
-
 t_command		parse(char **tokens, t_shell_cmd cmds[7])
 {
 	int					i;
@@ -63,28 +62,13 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 	{
 		clear_command(&list);
 		return_command.status = -1;
+		if (simple_command)
+		{
+			free(simple_command);
+			simple_command = NULL;
+		}
 		return (return_command);
 	}
-	/*
-	if (!(return_command.infile = ft_strdup("")))
-	{
-		clear_command(&list);
-		return_command.status = -2;
-		return (return_command);
-	}
-	if (!(return_command.errfile = ft_strdup("")))
-	{
-		clear_command(&list);
-		return_command.status = -3;
-		return (return_command);
-	}
-	if (!(return_command.outfile = ft_strdup("")))
-	{
-		clear_command(&list);
-		return_command.status = -4;
-		return (return_command);
-	}
-	*/
 	return_command.infile = NULL;
 	return_command.outfile = NULL;
 	return_command.errfile = NULL;
@@ -101,24 +85,32 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 				if (!ft_strncmp(tokens[i], cmds[j].name, ft_strlen(cmds[j].name) + 1))
 				{
 					cmd = cmds[j];
-					ft_putstr_fd(tokens[i], 1);
-					simple_command->command = strdup(tokens[i]);
+					simple_command->command = ft_strdup(tokens[i]);
 					break ;
 				}
 			}
 			if (!simple_command->command)
 			{
 				return_command.status = 1;
+				if (simple_command)
+				{
+					free(simple_command);
+					simple_command = NULL;
+				}
 				return (return_command);
 			}
 		}
-		/*
-		else if (tokens[i][0] == '-')
+		else if (tokens[i][0] == '-' && !ft_strncmp(tokens[i - 1], cmd.name, ft_strlen(cmd.name + 1)))
 		{
 			if (ft_strncmp(cmd.name, "echo", 5))
 			{
 				clear_command(&list);
 				return_command.status = 2;
+				if (simple_command)
+				{
+					free(simple_command);
+					simple_command = NULL;
+				}
 				return (return_command);
 			}
 			else if (!ft_strncmp(tokens[i], "-n", 3))
@@ -146,30 +138,55 @@ t_command		parse(char **tokens, t_shell_cmd cmds[7])
 			{
 				clear_command(&list);
 				return_command.status = 2;
+				if (simple_command)
+				{
+					free(simple_command);
+					simple_command = NULL;
+				}
 				return (return_command);
 			}
 			if (tokens[i + 1] == 0)
 			{
 				clear_command(&list);
 				return_command.status = 3;
+				if (simple_command)
+				{
+					free(simple_command);
+					simple_command = NULL;
+				}
 				return (return_command);
 			}
 			else
 			{
 				if (!ft_strncmp(tokens[i - 1], "1", 2))
-					return_command.outfile = tokens[i + 1];
+					return_command.outfile = ft_strdup(tokens[i + 1]);
 				if (!ft_strncmp(tokens[i - 1], "2", 2))
-					return_command.errfile = tokens[i + 1];
+					return_command.errfile = ft_strdup(tokens[i + 1]);
 				else
-					return_command.outfile = tokens[i + 1];
+					return_command.outfile = ft_strdup(tokens[i + 1]);
+				if (tokens[i + 2] == 0)
+				{
+					return_command.commands = list;
+					if (simple_command)
+					{
+						free(simple_command);
+						simple_command = NULL;
+					}
+					return (return_command);
+				}
+				else
+					i += 2;
 			}
-			break ;
 		}
-		*/
 		else
-			ft_lstadd_back(&(simple_command->arguments), ft_lstnew(tokens[i]));
+			ft_lstadd_back(&(simple_command->arguments), ft_lstnew(ft_strdup(tokens[i])));
+	}
+	if (simple_command->command != NULL)
 		ft_command_add_back(&list, simple_command);
-		simple_command = new_simple_command();
+	else if (simple_command)
+	{
+		free(simple_command);
+		simple_command = NULL;
 	}
 	return_command.commands = list;
 	return (return_command);

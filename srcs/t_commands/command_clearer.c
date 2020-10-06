@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   command_clearer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 14:08:02 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 16:51:25 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/03 17:05:41 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_types.h"
 #include <stdlib.h>
 #include "libft.h"
+#include "libftprintf.h"
 
 static	void	del(void *data)
 {
@@ -32,6 +33,7 @@ t_simple_command	*clear_command(t_simple_command **command)
 	}
 	if ((*command)->arguments)
 	{
+		ft_putstr_fd("qqq\n", 1);
 		ft_lstclear(&(*command)->arguments, &del);
 		(*command)->arguments = NULL;
 	}
