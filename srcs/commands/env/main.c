@@ -6,24 +6,26 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 14:15:38 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/01 14:49:01 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/06 17:26:13 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "../../../headers/commands.h"
 
-int		ft_env(char **environ);
-void	ft_unset(char *arg, char **environ);
+int		ft_env(t_list *env);
+void	ft_unset(t_list *env, char *arg);
+void	ft_get_env(t_list **env, char **environ);
 
 int		main(int argc, char **av, char **environ)
 {
-	char *arg;
+	t_list *env;
 
-	arg = malloc(2);
-	arg[0] = 'a';
-	arg[1] = '\0';
-	//ft_env(environ);
-	ft_unset(arg, &*environ);
-	ft_env(environ);
+	env = NULL;
+	ft_get_env(&env, environ);
+	//ft_env(env);
+	//ft_env(env);
+	//ft_env(env);
+	ft_unset(env, "b");
+	ft_env(env);
 	return (0);
 }
