@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 12:35:55 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 13:04:07 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,35 @@
 #include "m_types.h"
 #include "../ft_printf/libftprintf.h"
 
-void	dummy_echo(t_command command) {ft_strlen(command.commands->command);}
-void	dummy_cd(t_command command) {ft_strlen(command.commands->command);}
-void	dummy_export(t_command command) {ft_strlen(command.commands->command);}
-void	dummy_unset(t_command command) {ft_strlen(command.commands->command);}
-void	dummy_env(t_command command) {ft_strlen(command.commands->command);}
-void	dummy_exit(t_command command) {ft_strlen(command.commands->command);}
+void	dummy_echo(t_command command)
+{
+	ft_strlen(command.commands->command);
+}
+
+void	dummy_cd(t_command command)
+{
+	ft_strlen(command.commands->command);
+}
+
+void	dummy_export(t_command command)
+{
+	ft_strlen(command.commands->command);
+}
+
+void	dummy_unset(t_command command)
+{
+	ft_strlen(command.commands->command);
+}
+
+void	dummy_env(t_command command)
+{
+	ft_strlen(command.commands->command);
+}
+
+void	dummy_exit(t_command command)
+{
+	ft_strlen(command.commands->command);
+}
 
 void		setup_commands(t_shell_cmd commands[7])
 {
@@ -34,7 +57,7 @@ void		setup_commands(t_shell_cmd commands[7])
 }
 
 t_shell_cmd	g_commands[7];
-int			status = 0;
+int			g_status = 0;
 
 char		**lex(char *line)
 {
@@ -62,19 +85,14 @@ void		print_commands(t_command command)
 {
 	t_list	*arg_tmp;
 
-	arg_tmp = NULL;
 	ft_printf("return_status: %i\n", command.status);
-	if (command.status != 0)
-		return ;
-	ft_printf("infile: %i\n", command.infile);
-	ft_printf("outfile: %i\n", command.outfile);
-	ft_printf("errfile: %i\n", command.errfile);
+	ft_printf("infile: %i\noutfile: %i\nerrfile: %i\n",
+			command.infile, command.outfile, command.errfile);
 	ft_printf("========================\n");
 	while (command.commands)
 	{
-		ft_printf("command: %s\n", command.commands->command);
-		ft_printf("flag: %s\n", command.commands->flag);
-		ft_printf("arguments: ");
+		ft_printf("command: %s\nflag: %s\narguments: ",
+				command.commands->command, command.commands->flag);
 		if (command.commands->arguments)
 		{
 			arg_tmp = command.commands->arguments;
@@ -90,6 +108,26 @@ void		print_commands(t_command command)
 		ft_printf("-------------------\n");
 	}
 	ft_printf("========================\n");
+}
+
+void		free_command(t_command *command)
+{
+	clear_command(&command->commands);
+	if (command->infile)
+	{
+		free(command->infile);
+		command->infile = NULL;
+	}
+	if (command->outfile)
+	{
+		free(command->outfile);
+		command->outfile = NULL;
+	}
+	if (command->errfile)
+	{
+		free(command->errfile);
+		command->errfile = NULL;
+	}
 }
 
 int			main(void)
@@ -131,22 +169,7 @@ int			main(void)
 				ft_putstr_fd("wrong command", 2);
 			ft_putstr_fd("\n", 1);
 			free(line);
-			clear_command(&command.commands);
-			if (command.infile)
-			{
-				free(command.infile);
-				command.infile = NULL;
-			}
-			if (command.outfile)
-			{
-				free(command.outfile);
-				command.outfile = NULL;
-			}
-			if (command.errfile)
-			{
-				free(command.errfile);
-				command.errfile = NULL;
-			}
+			free_command(&command);
 		}
 	}
 	return (0);
