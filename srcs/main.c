@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/03 17:09:29 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 12:57:08 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "flexer.h"
 #include "m_types.h"
-#include "../ft_printf/libftprintf.h"
+#include "../libft/libftprintf.h"
 
 void	dummy_echo(t_command command) {ft_strlen(command.commands->command);}
 void	dummy_cd(t_command command) {ft_strlen(command.commands->command);}

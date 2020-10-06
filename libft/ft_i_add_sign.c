@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_i_add_sign.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 23:09:10 by rtrant            #+#    #+#             */
-/*   Updated: 2020/06/06 06:16:07 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 12:52:34 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "libftprintf.h"
 
 char			*i_add_minus_sign(t_directive *directive,

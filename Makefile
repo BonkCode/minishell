@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
+#    By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/03 17:09:49 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/06 12:55:36 by rvernius         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,21 +23,17 @@ FLAGS = -Ilibft -Iheaders -Ift_printf -L.
 all: $(NAME)
 
 $(NAME):
-	@echo "Compiling libft"
+	@echo "Compiling libftprintf"
 	@$(MAKE) -C libft bonus >/dev/null
 	@mv libft/libft.a .
-	@echo "Compiling libftprintf"
-	@$(MAKE) -C ft_printf > /dev/null
-	@mv ft_printf/libftprintf.a .
-	@gcc $(FLAGS) -o $(NAME) $(SRCS) libft.a libftprintf.a
+	@gcc $(FLAGS) -o $(NAME) $(SRCS) libft.a
 	@$(MAKE) clean >/dev/null
 
 clean:
 	@$(MAKE) -C libft clean >/dev/null
-	@$(MAKE) -C ft_printf clean >/dev/null
 
 fclean: clean
-	rm -rf minishell libft.a libftprintf.a
+	rm -rf minishell libft.a
 
 re: fclean all
 

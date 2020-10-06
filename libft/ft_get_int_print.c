@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_int_print.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/13 05:14:15 by rtrant            #+#    #+#             */
-/*   Updated: 2020/07/02 17:12:55 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 12:52:17 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "libftprintf.h"
 
 static char		*static_itoa(long long int n)

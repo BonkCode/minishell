@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_add_hex_rep.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 06:41:26 by rtrant            #+#    #+#             */
-/*   Updated: 2020/06/06 07:22:27 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 12:52:07 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "libftprintf.h"
 
 static void	append_hex_rep(char *ptr_to_free, char **str,
