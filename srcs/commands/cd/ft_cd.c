@@ -1,23 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 14:10:23 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 16:49:09 by rvernius         ###   ########.fr       */
+/*   Created: 2020/10/01 12:33:32 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/01 15:53:40 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/commands.h"
+#include <unistd.h>
+#include <stdio.h>
 
-void		ft_env(t_list *env)
+void	ft_cd(t_command command)
 {
-	while (env)
-	{
-		ft_putendl_fd(env->content, 1);
-		env = env->next;
-	}
-	exit(0);
+	if (ft_strlen(command.command->arguments) == 1)
+		chdir(command.command->arguments);
+
 }
+
+/*
+int		main(int argc, char **av, char **env)
+{
+	t_command com;
+
+	ft_pwd(com);
+	ft_cd(com);
+	ft_pwd(com);
+	return (0);
+}
+*/

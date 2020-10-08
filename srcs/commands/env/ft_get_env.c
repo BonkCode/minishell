@@ -1,23 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_get_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 14:10:23 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 16:49:09 by rvernius         ###   ########.fr       */
+/*   Created: 2020/10/06 13:19:39 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/06 16:42:22 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/commands.h"
 
-void		ft_env(t_list *env)
+void		ft_get_env(t_list **env, char **environ)
 {
+	int i;
+
+	i = 0;
+	while (environ[i])
+	{
+		ft_lstadd_back(env, ft_lstnew(ft_strdup(environ[i])));
+		++i;
+	}
+}
+/*
+int main(int ac, char **av, char **environ)
+{
+	t_list *env;
+
+	env = NULL;
+	ft_get_env(&env, environ);
+
+	int i = 0;
 	while (env)
 	{
-		ft_putendl_fd(env->content, 1);
+		printf("Aaaa");
+		ft_printf("%s\n", env->content);
 		env = env->next;
 	}
-	exit(0);
+	return(0);
 }
+*/

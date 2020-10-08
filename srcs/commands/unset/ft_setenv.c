@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_setenv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 14:10:23 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 16:49:09 by rvernius         ###   ########.fr       */
+/*   Created: 2020/10/01 13:47:12 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/01 17:36:19 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/commands.h"
-
-void		ft_env(t_list *env)
+int ft_setenv(char **args, char **environ)
 {
-	while (env)
-	{
-		ft_putendl_fd(env->content, 1);
-		env = env->next;
-	}
-	exit(0);
+	int i;
+
+	i = 0;
+	if (!args[0])
+	return (0);	
 }

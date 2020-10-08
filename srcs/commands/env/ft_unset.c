@@ -1,23 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 14:10:23 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 16:49:09 by rvernius         ###   ########.fr       */
+/*   Created: 2020/10/01 13:57:24 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/06 17:29:38 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/commands.h"
 
-void		ft_env(t_list *env)
+void		ft_unset(t_list *env, char *arg)
 {
+	t_list	*prev;
+	char	**split_re;
+
+	prev = env;
+	env = env->next;
 	while (env)
 	{
-		ft_putendl_fd(env->content, 1);
-		env = env->next;
+		split_re = ft_split(env->content, '=');
+		if (split_re)
+		{
+			if (ft_strncmp(split_re[0], arg, ft_strlen(arg) + 1) == 0)
+			{
+				prev->next = env->next;
+				ft_lstdelone(env, free);
+				env = prev;
+				break ;
+			}
+			else
+			{
+				prev = env;
+				env = env->next;
+			}
+		}
 	}
-	exit(0);
+	//NEED TO FREE MEMORY
 }

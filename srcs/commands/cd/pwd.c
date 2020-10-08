@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 14:10:23 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 16:49:09 by rvernius         ###   ########.fr       */
+/*   Created: 2020/09/26 15:37:27 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/01 12:52:30 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/commands.h"
 
-void		ft_env(t_list *env)
+int		ft_pwd(t_command command)
 {
-	while (env)
-	{
-		ft_putendl_fd(env->content, 1);
-		env = env->next;
-	}
-	exit(0);
+	char *buf;
+
+	buf = getcwd(NULL, 0);
+	ft_putendl_fd(buf, 1);
+	return (0);
 }
