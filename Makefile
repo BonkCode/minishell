@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
+#    By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/08 16:40:07 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/08 17:29:52 by rvernius         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRCS = 	srcs/main.c \
 
 NAME = minishell
 
-FLAGS = -Ilibft -Iheaders -Ift_printf -L.
+FLAGS = -Wall -Wextra -Werror -Ilibft -Iheaders -L.
 
 all: $(NAME)
 
@@ -37,7 +37,7 @@ $(NAME):
 	@$(MAKE) clean >/dev/null
 
 clean:
-	@$(MAKE) -C libft clean >/dev/null
+	@$(MAKE) -C libft clean
 
 fclean: clean
 	rm -rf minishell libft.a
