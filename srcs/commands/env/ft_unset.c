@@ -6,7 +6,7 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:57:24 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 17:29:38 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/08 16:21:30 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,5 @@ void		ft_unset(t_list *env, char *arg)
 			}
 		}
 	}
-	//NEED TO FREE MEMORY
+	clear_tokens(split_re, -1);
 }
