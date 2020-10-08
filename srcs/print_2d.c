@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   2d_print.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 16:53:13 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 14:36:10 by rtrant           ###   ########.fr       */
+/*   Created: 2020/10/06 17:14:51 by rtrant            #+#    #+#             */
+/*   Updated: 2020/10/06 17:16:32 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "libftprintf.h"
 
-void	ft_exit(t_command command)
+void	print_2d(char **arr)
 {
-	exit(0);
+	int	i;
+
+	i = -1;
+	while (arr[++i])
+		ft_printf("|%s| ", arr[i]);
 }

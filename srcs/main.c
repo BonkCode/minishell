@@ -3,51 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2020/10/06 13:18:23 by rvernius         ###   ########.fr       */
-=======
-/*   Updated: 2020/10/06 13:18:53 by rtrant           ###   ########.fr       */
->>>>>>> master
+/*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/08 16:59:53 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "flexer.h"
 #include "m_types.h"
+#include "commands.h"
 #include "../libft/libftprintf.h"
-
-void	dummy_echo(t_command command)
-{
-	ft_strlen(command.commands->command);
-}
-
-void	dummy_cd(t_command command)
-{
-	ft_strlen(command.commands->command);
-}
-
-void	dummy_export(t_command command)
-{
-	ft_strlen(command.commands->command);
-}
-
-void	dummy_unset(t_command command)
-{
-	ft_strlen(command.commands->command);
-}
-
-void	dummy_env(t_command command)
-{
-	ft_strlen(command.commands->command);
-}
-
-void	dummy_exit(t_command command)
-{
-	ft_strlen(command.commands->command);
-}
 
 void		setup_commands(t_shell_cmd commands[7])
 {
@@ -71,66 +38,30 @@ char		**lex(char *line)
 	return (tokens);
 }
 
-void		print_2d_arr(char **str)
+void		init_command(t_command *command)
+{
+	command->status = 127;
+	command->infile = NULL;
+	command->errfile = NULL;
+	command->outfile = NULL;
+	command->commands = NULL;
+}
+
+void		get_command(t_command *command, int *command_flag, char **tokens)
 {
 	int	i;
 
 	i = -1;
-	while (str[++i])
+	while (++i < 7)
 	{
-		ft_putchar_fd('|', 1);
-		ft_putstr_fd(str[i], 1);
-		ft_putchar_fd('|', 1);
-		ft_putchar_fd(' ', 1);
-	}
-}
-
-void		print_commands(t_command command)
-{
-	t_list	*arg_tmp;
-
-	ft_printf("return_status: %i\n", command.status);
-	ft_printf("infile: %i\noutfile: %i\nerrfile: %i\n",
-			command.infile, command.outfile, command.errfile);
-	ft_printf("========================\n");
-	while (command.commands)
-	{
-		ft_printf("command: %s\nflag: %s\narguments: ",
-				command.commands->command, command.commands->flag);
-		if (command.commands->arguments)
+		if (ft_strncmp(tokens[0], g_commands[i].name,
+				ft_strlen(g_commands[i].name) + 1) == 0)
 		{
-			arg_tmp = command.commands->arguments;
-			while (command.commands->arguments)
-			{
-				ft_printf("<%s> ", command.commands->arguments->content);
-				command.commands->arguments = command.commands->arguments->next;
-			}
-			command.commands->arguments = arg_tmp;
+			*command_flag = 1;
+			*command = parse(tokens);
+			print_commands(*command);
+			break ;
 		}
-		ft_printf("\npiped: %i\n", command.commands->piped);
-		command.commands = command.commands->next;
-		ft_printf("-------------------\n");
-	}
-	ft_printf("========================\n");
-}
-
-void		free_command(t_command *command)
-{
-	clear_command(&command->commands);
-	if (command->infile)
-	{
-		free(command->infile);
-		command->infile = NULL;
-	}
-	if (command->outfile)
-	{
-		free(command->outfile);
-		command->outfile = NULL;
-	}
-	if (command->errfile)
-	{
-		free(command->errfile);
-		command->errfile = NULL;
 	}
 }
 
@@ -138,7 +69,6 @@ int			main(void)
 {
 	char		*line;
 	char		**tokens;
-	int			i;
 	int			command_flag;
 	t_command	command;
 
@@ -148,32 +78,17 @@ int			main(void)
 		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
 		if (get_next_line(0, &line))
 		{
-			command.status = 127;
-			command.infile = NULL;
-			command.errfile = NULL;
-			command.outfile = NULL;
-			command.commands = NULL;
-			i = -1;
+			init_command(&command);
 			tokens = tokenize(line);
+			print_2d(tokens);
 			command_flag = 0;
-			while (++i < 7)
-			{
-				if (ft_strncmp(tokens[0], g_commands[i].name,
-						ft_strlen(g_commands[i].name) + 1) == 0)
-				{
-					command_flag = 1;
-					print_2d_arr(tokens);
-					command = parse(tokens, g_commands);
-					clear_tokens(tokens, -1);
-					print_commands(command);
-					break ;
-				}
-			}
+			get_command(&command, &command_flag, tokens);
 			if (!command_flag)
 				ft_putstr_fd("wrong command", 2);
 			ft_putstr_fd("\n", 1);
 			free(line);
 			free_command(&command);
+			clear_tokens(tokens, -1);
 		}
 	}
 	return (0);

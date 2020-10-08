@@ -3,191 +3,107 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/03 16:50:20 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/08 16:40:37 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_types.h"
 #include <stdlib.h>
 #include <string.h>
-#include "libft.h"
+#include "libftprintf.h"
 #include "flexer.h"
 
-static t_simple_command	*new_simple_command(void)
-{
-	t_simple_command	*simple_command;
+extern t_shell_cmd	g_commands[7];
 
-	if (!(simple_command = malloc(sizeof(t_simple_command))))
-		return (NULL);
-	simple_command->command = NULL;
-	simple_command->flag = NULL;
-	simple_command->arguments = NULL;
-	simple_command->next = NULL;
-	simple_command->piped = 0;
-	return (simple_command);
+void					try_sep(char **tokens, int i, t_simple_command **s_c,
+								t_simple_command **list)
+{
+	(*s_c)->piped = tokens[i][0] == '|' ? 1 : 0;
+	ft_command_add_back(list, (*s_c));
+	(*s_c) = new_simple_command();
 }
 
-void	ft_command_add_back(t_simple_command **lst, t_simple_command *new)
+int						is_flag(char **tokens, int i, t_simple_command **s_c)
 {
-	t_simple_command *cache;
+	if (tokens[i][0] == '-' && !ft_strncmp(tokens[i - 1],
+					(*s_c)->command, ft_strlen((*s_c)->command + 1)))
+		return (1);
+	return (0);
+}
 
-	cache = *lst;
-	if (lst && new)
+int						sep_or_add(t_tokens tokens_pos, t_simple_command **list,
+							t_simple_command **s_c, t_command *return_command)
+{
+	int		i;
+	char	**tokens;
+
+	tokens = tokens_pos.tokens;
+	i = tokens_pos.i;
+	if (!ft_strncmp_split(tokens[i], ">> < >", ' '))
 	{
-		if (*lst == NULL)
-			*lst = new;
-		else
-		{
-			while (cache->next)
-				cache = cache->next;
-			cache->next = new;
-		}
+		ft_command_add_back(list, (*s_c));
+		if (!((*s_c) = new_simple_command()) || tokens[i + 1] == 0)
+			return (3);
+		get_redirect_files(tokens, i, return_command);
+		if (tokens[i += 2] == 0)
+			return (-1);
 	}
+	else
+		ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(tokens[i])));
+	return (0);
 }
 
-t_command		parse(char **tokens, t_shell_cmd cmds[7])
+t_command				parse_tokens(char **tokens, t_simple_command **list,
+							t_simple_command **s_c, t_command *return_command)
 {
-	int					i;
-	int					j;
-	t_command			return_command;
-	t_simple_command	*list;
-	t_simple_command	*simple_command;
-	t_shell_cmd			cmd;
+	int	i;
 
 	i = -1;
-	if (!(simple_command = new_simple_command()))
-	{
-		clear_command(&list);
-		return_command.status = -1;
-		if (simple_command)
-		{
-			free(simple_command);
-			simple_command = NULL;
-		}
-		return (return_command);
-	}
-	return_command.infile = NULL;
-	return_command.outfile = NULL;
-	return_command.errfile = NULL;
-	return_command.commands = NULL;
-	return_command.status = 0;
-	list = NULL;
 	while (tokens[++i])
 	{
-		if (!simple_command->command)
+		if (!(*s_c)->command && get_shell_cmd(s_c, tokens, i) != 0)
+			return (abort_parsing(return_command, 1, s_c, list));
+		else if (is_flag(tokens, i, s_c))
 		{
-			j = -1;
-			while (++j < 7)
-			{
-				if (!ft_strncmp(tokens[i], cmds[j].name, ft_strlen(cmds[j].name) + 1))
-				{
-					cmd = cmds[j];
-					simple_command->command = ft_strdup(tokens[i]);
-					break ;
-				}
-			}
-			if (!simple_command->command)
-			{
-				return_command.status = 1;
-				if (simple_command)
-				{
-					free(simple_command);
-					simple_command = NULL;
-				}
-				return (return_command);
-			}
-		}
-		else if (tokens[i][0] == '-' && !ft_strncmp(tokens[i - 1], cmd.name, ft_strlen(cmd.name + 1)))
-		{
-			if (ft_strncmp(cmd.name, "echo", 5))
-			{
-				clear_command(&list);
-				return_command.status = 2;
-				if (simple_command)
-				{
-					free(simple_command);
-					simple_command = NULL;
-				}
-				return (return_command);
-			}
+			if (ft_strncmp((*s_c)->command, "echo", 5))
+				return (abort_parsing(return_command, 2, s_c, list));
 			else if (!ft_strncmp(tokens[i], "-n", 3))
-				simple_command->flag = ft_strdup(tokens[i]);
+				(*s_c)->flag = ft_strdup(tokens[i]);
 			else
-				ft_lstadd_back(&(simple_command->arguments), ft_lstnew(tokens[i]));
+				ft_lstadd_back(&((*s_c)->args), ft_lstnew(tokens[i]));
 		}
-		else if (!ft_strncmp(tokens[i], "|", 2))
-		{
-			simple_command->piped = 1;
-			ft_command_add_back(&list, simple_command);
-			simple_command = new_simple_command();
-		}
-		else if (!ft_strncmp(tokens[i], ";", 2))
-		{
-			ft_command_add_back(&list, simple_command);
-			simple_command = new_simple_command();
-		}
-		else if (!ft_strncmp(tokens[i], ">>", 3) ||
-				!ft_strncmp(tokens[i], ">", 2) ||
-				!ft_strncmp(tokens[i], "<", 2))
-		{
-			ft_command_add_back(&list, simple_command);
-			if (!(simple_command = new_simple_command()))
-			{
-				clear_command(&list);
-				return_command.status = 2;
-				if (simple_command)
-				{
-					free(simple_command);
-					simple_command = NULL;
-				}
-				return (return_command);
-			}
-			if (tokens[i + 1] == 0)
-			{
-				clear_command(&list);
-				return_command.status = 3;
-				if (simple_command)
-				{
-					free(simple_command);
-					simple_command = NULL;
-				}
-				return (return_command);
-			}
-			else
-			{
-				if (!ft_strncmp(tokens[i - 1], "1", 2))
-					return_command.outfile = ft_strdup(tokens[i + 1]);
-				if (!ft_strncmp(tokens[i - 1], "2", 2))
-					return_command.errfile = ft_strdup(tokens[i + 1]);
-				else
-					return_command.outfile = ft_strdup(tokens[i + 1]);
-				if (tokens[i + 2] == 0)
-				{
-					return_command.commands = list;
-					if (simple_command)
-					{
-						free(simple_command);
-						simple_command = NULL;
-					}
-					return (return_command);
-				}
-				else
-					i += 2;
-			}
-		}
-		else
-			ft_lstadd_back(&(simple_command->arguments), ft_lstnew(ft_strdup(tokens[i])));
+		else if (!ft_strncmp_split(tokens[i], "| ;", ' '))
+			try_sep(tokens, i, s_c, list);
+		else if (sep_or_add(new_t_token(tokens, i), list, s_c,
+				return_command) > 0 && (i += 2))
+			return (abort_parsing(return_command, 3, s_c, list));
+		else if (tokens[i] == 0)
+			break ;
 	}
-	if (simple_command->command != NULL)
-		ft_command_add_back(&list, simple_command);
-	else if (simple_command)
-	{
-		free(simple_command);
-		simple_command = NULL;
-	}
+	return (*return_command);
+}
+
+t_command				parse(char **tokens)
+{
+	t_command			return_command;
+	t_simple_command	*list;
+	t_simple_command	*s_c;
+	t_tokens			tokens_pos;
+
+	if (!(s_c = new_simple_command()))
+		return (abort_parsing(&return_command, -1, &s_c, &list));
+	init_return_command(&return_command);
+	list = NULL;
+	parse_tokens(tokens, &list, &s_c, &return_command);
+	if (return_command.status != 0)
+		return (return_command);
+	if (s_c->command != NULL)
+		ft_command_add_back(&list, s_c);
+	else if (s_c)
+		clear_simple_commands(&s_c);
 	return_command.commands = list;
 	return (return_command);
 }
