@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_clearer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 14:08:02 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/03 17:05:41 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 13:26:58 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ t_simple_command	*clear_command(t_simple_command **command)
 	}
 	if ((*command)->arguments)
 	{
-		ft_putstr_fd("qqq\n", 1);
 		ft_lstclear(&(*command)->arguments, &del);
 		(*command)->arguments = NULL;
 	}
