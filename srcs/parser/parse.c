@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/08 16:40:37 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/08 17:05:45 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_command				parse_tokens(char **tokens, t_simple_command **list,
 			else if (!ft_strncmp(tokens[i], "-n", 3))
 				(*s_c)->flag = ft_strdup(tokens[i]);
 			else
-				ft_lstadd_back(&((*s_c)->args), ft_lstnew(tokens[i]));
+				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(tokens[i])));
 		}
 		else if (!ft_strncmp_split(tokens[i], "| ;", ' '))
 			try_sep(tokens, i, s_c, list);
