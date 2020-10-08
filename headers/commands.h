@@ -6,7 +6,7 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 16:17:59 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/08 17:02:24 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/08 17:25:34 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 //# include "flexer.h"
 
 //char		**clear_tokens(char **tokens, int count);
+void		dummy_echo(t_command command);
+void		dummy_cd(t_command command);
+void		dummy_export(t_command command);
+void		dummy_unset(t_command command);
+void		dummy_env(t_command command);
+void		dummy_exit(t_command command);
 void		ft_echo(t_command command);
 void		ft_pwd(t_command command);
 void		ft_cd(t_command command);

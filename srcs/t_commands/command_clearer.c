@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 14:08:02 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 13:26:58 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/08 15:18:47 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-static	void	del(void *data)
+static	void		del(void *data)
 {
 	if (data)
 		free(data);
 	data = NULL;
 }
 
-t_simple_command	*clear_command(t_simple_command **command)
+t_simple_command	*clear_simple_commands(t_simple_command **command)
 {
 	if (!(*command))
 		return (NULL);
@@ -31,17 +31,37 @@ t_simple_command	*clear_command(t_simple_command **command)
 		free((*command)->flag);
 		(*command)->flag = NULL;
 	}
-	if ((*command)->arguments)
+	if ((*command)->args)
 	{
-		ft_lstclear(&(*command)->arguments, &del);
-		(*command)->arguments = NULL;
+		ft_lstclear(&(*command)->args, &del);
+		(*command)->args = NULL;
 	}
 	if ((*command)->command)
 	{
 		free((*command)->command);
 		(*command)->command = NULL;
 	}
-	(*command)->next = clear_command(&(*command)->next);
+	(*command)->next = clear_simple_commands(&(*command)->next);
 	free(*command);
 	return (*command = NULL);
+}
+
+void				free_command(t_command *command)
+{
+	clear_simple_commands(&command->commands);
+	if (command->infile)
+	{
+		free(command->infile);
+		command->infile = NULL;
+	}
+	if (command->outfile)
+	{
+		free(command->outfile);
+		command->outfile = NULL;
+	}
+	if (command->errfile)
+	{
+		free(command->errfile);
+		command->errfile = NULL;
+	}
 }
