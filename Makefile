@@ -6,7 +6,7 @@
 #    By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/08 17:25:46 by rvernius         ###   ########.fr        #
+#    Updated: 2020/10/08 17:29:52 by rvernius         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ $(NAME):
 	@$(MAKE) clean >/dev/null
 
 clean:
-	$(MAKE) -C libft clean
+	@$(MAKE) -C libft clean
 
 fclean: clean
 	rm -rf minishell libft.a

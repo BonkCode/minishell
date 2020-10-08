@@ -3,28 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   m_types.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 14:01:37 by rvernius         ###   ########.fr       */
-=======
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/08 16:07:01 by rtrant           ###   ########.fr       */
->>>>>>> master
+/*   Updated: 2020/10/08 17:29:20 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef M_TYPES_H
 # define M_TYPES_H
 
-<<<<<<< HEAD
-=======
 # include "libft.h"
 
->>>>>>> master
 typedef struct s_simple_command	t_simple_command;
 
 struct			s_simple_command
