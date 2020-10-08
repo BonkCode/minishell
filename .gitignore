@@ -2,3 +2,5 @@
 */*.a
 minishell
 */*.out
+*.o
+*.out
