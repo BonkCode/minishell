@@ -6,7 +6,7 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 15:02:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/08 16:47:07 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/08 17:15:38 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int		check_var_in_env(t_list *env, char *var, char *arg)
 		split_res = ft_split(env->content, '=');
 		if (split_res)
 		{
-			if (ft_strncmp(split_res[0], arg, ft_strlen(arg) + 1) == 0)
+			if (ft_strncmp(split_res[0], var, ft_strlen(var) + 1) == 0)
 			{
 				free(env->content);
 				env->content = NULL;
@@ -71,8 +71,9 @@ void	ft_export(t_list *env, char *arg)
 	char **split_res;
 
 	split_res = ft_split(arg, '=');
-	if (check_var_in_env(env, split_res[0], split_res[1]))
+	if (check_var_in_env(env, split_res[0], arg))
 	{
+		clear_tokens(split_res, -1);
 		return ;
 	}
 	/*
@@ -87,7 +88,7 @@ void	ft_export(t_list *env, char *arg)
 		}
 		env = env->next;
 	}
-	/
+	*/
 	add_var();
 	//printf("end\n");
 }
