@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   m_types.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/02 14:54:34 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/06 14:01:37 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef M_TYPES_H
 # define M_TYPES_H
-
-#include "libft.h"
 
 typedef struct s_simple_command	t_simple_command;
 
