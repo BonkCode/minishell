@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:38:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 17:16:55 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/08 15:10:30 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		get_command(t_command *command, int *command_flag, char **tokens)
 				ft_strlen(g_commands[i].name) + 1) == 0)
 		{
 			*command_flag = 1;
-			*command = parse(tokens, g_commands);
+			*command = parse(tokens);
 			print_commands(*command);
 			break ;
 		}

@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/06 17:17:22 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/08 16:40:07 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,10 @@ SRCS = 	srcs/main.c \
 		srcs/t_commands/command_clearer.c \
 		srcs/commands/dummy/one.c \
 		srcs/commands/dummy/two.c \
-		srcs/2d_print.c \
-		srcs/t_commands/command_printer.c
+		srcs/print_2d.c \
+		srcs/t_commands/command_printer.c \
+		srcs/t_commands/constructor.c \
+		srcs/utils/parse_utils.c
 
 NAME = minishell
 

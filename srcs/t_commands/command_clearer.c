@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 14:08:02 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 15:22:14 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/08 15:18:47 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ t_simple_command	*clear_simple_commands(t_simple_command **command)
 		free((*command)->flag);
 		(*command)->flag = NULL;
 	}
-	if ((*command)->arguments)
+	if ((*command)->args)
 	{
-		ft_lstclear(&(*command)->arguments, &del);
-		(*command)->arguments = NULL;
+		ft_lstclear(&(*command)->args, &del);
+		(*command)->args = NULL;
 	}
 	if ((*command)->command)
 	{

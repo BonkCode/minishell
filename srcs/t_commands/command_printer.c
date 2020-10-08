@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:31:39 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 17:09:30 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/08 15:18:47 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ void		print_commands(t_command command)
 	ft_printf("========================\n");
 	while (command.commands)
 	{
-		ft_printf("command: %s\nflag: %s\narguments: ",
+		ft_printf("command: %s\nflag: %s\nargs: ",
 				command.commands->command, command.commands->flag);
-		if (command.commands->arguments)
+		if (command.commands->args)
 		{
-			arg_tmp = command.commands->arguments;
-			while (command.commands->arguments)
+			arg_tmp = command.commands->args;
+			while (command.commands->args)
 			{
-				ft_printf("<%s> ", command.commands->arguments->content);
-				command.commands->arguments = command.commands->arguments->next;
+				ft_printf("<%s> ", command.commands->args->content);
+				command.commands->args = command.commands->args->next;
 			}
-			command.commands->arguments = arg_tmp;
+			command.commands->args = arg_tmp;
 		}
 		ft_printf("\npiped: %i\n", command.commands->piped);
 		command.commands = command.commands->next;
