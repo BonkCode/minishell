@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 16:17:59 by rvernius          #+#    #+#             */
 /*   Updated: 2020/10/10 14:56:41 by rvernius         ###   ########.fr       */
@@ -20,9 +20,7 @@
 # include "../libft/libftprintf.h"
 # include "m_types.h"
 # include "c_types.h"
-//# include "flexer.h"
 
-//char		**clear_tokens(char **tokens, int count);
 void		dummy_echo(t_command command);
 void		dummy_cd(t_command command);
 void		dummy_export(t_command command);
@@ -33,5 +31,6 @@ void		ft_echo(t_command command);
 void		ft_pwd(t_command command);
 void		ft_cd(t_command command);
 void		ft_exit(t_command command);
+void		ft_get_env(t_list **env, char **environ);
 
 #endif
