@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   m_types.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/08 17:29:20 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/10 16:52:29 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ typedef struct	s_tokens
 	char		**tokens;
 	int			i;
 }				t_tokens;
+
+typedef struct	s_var
+{
+	char		*name;
+	char		*value;
+	int			len;
+}				t_var;
 
 typedef struct	s_command
 {
