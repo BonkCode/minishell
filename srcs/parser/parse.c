@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/08 17:19:18 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/10 14:44:10 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ t_command				parse(char **tokens)
 	t_command			return_command;
 	t_simple_command	*list;
 	t_simple_command	*s_c;
-	t_tokens			tokens_pos;
 
 	if (!(s_c = new_simple_command()))
 		return (abort_parsing(&return_command, -1, &s_c, &list));
