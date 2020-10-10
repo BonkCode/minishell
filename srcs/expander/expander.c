@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/01 17:57:51 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 16:26:07 by rtrant           ###   ########.fr       */
+/*   Created: 2020/10/10 14:44:50 by rtrant            #+#    #+#             */
+/*   Updated: 2020/10/10 17:01:32 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
+#include "m_types.h"
+#include "flexer.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int			expand(char ***tokens, t_list *env)
 {
-	if (!s)
-		return ;
-	while (*s)
+	int		i;
+
+	if (!tokens || !env)
+		return (1);
+	i = -1;
+	while ((*tokens)[++i])
 	{
-		ft_putchar_fd(*s, fd);
-		s++;
+		expand_token(&(*tokens)[i], env);
 	}
+	return (0);
 }

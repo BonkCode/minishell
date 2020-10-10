@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/08 17:25:03 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/08 17:25:05 by rvernius         ###   ########.fr       */
+/*   Created: 2020/09/26 15:37:27 by rvernius          #+#    #+#             */
+/*   Updated: 2020/10/10 17:21:44 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/commands.h"
 
-void		ft_echo(t_command command)
+void	ft_pwd(t_command command)
 {
-	int i;
-	int n;
+	char		*buf;
+	int			i;
 
-	n = 0;
 	i = 0;
-	if(ft_strcmp(command.command->flags, "-n") == 0)
-		n = 1;
-	if (!command.command->args[0])
+	while (command.commands->args)
 	{
-		if (!n)
-			ft_putstr_fd("\n", 1);
-		exit(0);
-	}
-	while (command.command->args[i])
-	{
-		ft_putstr_fd(command.command->args[i], 1);
-		command.command->args[i + 1] ? ft_putstr_fd(" ", 1) : 0;
 		++i;
+		command.commands->args = command.commands->args->next;
 	}
-	!n ? ft_putstr_fd("\n", 1) : 0;
-	exit (0);
+	--i;
+	if (i > 0)
+	{
+		ft_putendl_fd("pwd: too many arguments", 2);
+		exit(1);
+	}
+	else
+	{
+		buf = getcwd(NULL, 0);
+		ft_putendl_fd(buf, 1);
+	}
+	exit(0);
 }

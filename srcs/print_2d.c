@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   2d_print.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/01 17:57:51 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 16:26:07 by rtrant           ###   ########.fr       */
+/*   Created: 2020/10/06 17:14:51 by rtrant            #+#    #+#             */
+/*   Updated: 2020/10/06 17:16:32 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	print_2d(char **arr)
 {
-	if (!s)
-		return ;
-	while (*s)
-	{
-		ft_putchar_fd(*s, fd);
-		s++;
-	}
+	int	i;
+
+	i = -1;
+	while (arr[++i])
+		ft_printf("|%s| ", arr[i]);
 }

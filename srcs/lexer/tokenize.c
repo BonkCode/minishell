@@ -6,43 +6,52 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/01 13:07:03 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/10 17:56:06 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "m_types.h"
+#include "flexer.h"
+
+static	void	skip_qmark(size_t *i, size_t *size, const char *str)
+{
+	int	qmark;
+
+	if (str[*i] == 34 || str[*i] == 39)
+	{
+		qmark = str[*i];
+		++(*i);
+		while (str[*i] != qmark)
+			++(*i);
+		if (str[*i + 1] != '\0' && str[*i + 1] != ' ')
+			++(*size);
+		++(*i);
+	}
+}
 
 static size_t	get_token_count(char const *str)
 {
 	size_t	i;
 	size_t	size;
 
+	if (!str)
+		return (-2);
 	i = 0;
 	size = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] != ' ')
 			++size;
-		if (str[i] == 34)
+		if (ft_strchr(";|<>", str[i]))
 		{
-			++i;
-			while (str[i] != 34)
-				++i;
-			if (str[i + 1] != '\0' && str[i + 1] != ' ')
-				++size;
+			i += ft_strchr("<>", str[i]) && str[i] == str[i + 1] ? 2 : 1;
+			continue ;
 		}
-		else if (str[i] == 39)
-		{
+		skip_qmark(&i, &size, str);
+		while (!ft_strchr("'\";| ><", str[i]) && str[i] != '\0')
 			++i;
-			while (str[i] != 39)
-				++i;
-			if (str[i + 1] != '\0' && str[i + 1] != ' ')
-				++size;
-		}
-		while (str[i] != ' ' && str[i] != '\0')
-			++i;
-		if (str[i] != '\0')
+		if (str[i] != '\0' && str[i] == ' ')
 			++i;
 	}
 	return (size);
@@ -58,26 +67,19 @@ static size_t	get_token_size(char const *str)
 		++size;
 		while (str[size] != *str && str[size] != '\0')
 			++size;
-		if (str[size] !='\0')
+		if (str[size] != '\0')
 			++size;
 	}
+	else if (ft_strchr("<>", *str) && *(str + 1) == *str)
+		return (2);
+	else if (ft_strchr(";|<>", *str))
+		return (1);
 	else
 	{
-		while (str[size] != ' ' && str[size] != '\0')
+		while (!ft_strchr("\'\";| <>", str[size]) && str[size] != '\0')
 			++size;
 	}
 	return (size);
-}
-
-static char		**clear_tokens(char **tokens, int count)
-{
-	int	i;
-
-	i = -1;
-	while (++i < count)
-		free(tokens[i]);
-	free(tokens);
-	return (NULL);
 }
 
 static void		proceed_to_next_token(char const **str)
@@ -92,13 +94,12 @@ char			**tokenize(char const *str)
 	size_t	i;
 	size_t	size;
 
-	if (!str)
-		return (NULL);
 	size = get_token_count(str);
-	tokens = malloc((size + 1) * sizeof(char *));
+	tokens = malloc((size + 2) * sizeof(char *));
 	if (!tokens)
 		return (NULL);
 	tokens[size] = 0;
+	tokens[size + 1] = 0;
 	i = 0;
 	while (*str)
 	{
@@ -108,11 +109,10 @@ char			**tokenize(char const *str)
 			tokens[i] = malloc((size + 1) * sizeof(char));
 			if (!tokens[i])
 				return (clear_tokens(tokens, i - 1));
-			tokens[i][size] = '\0';
 			ft_strlcpy(tokens[i], str, size + 1);
 			++i;
 		}
-		str = str + size;
+		str += size;
 		proceed_to_next_token(&str);
 	}
 	return (tokens);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:53:13 by rvernius          #+#    #+#             */
-/*   Updated: 2020/09/29 16:59:06 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/06 14:36:10 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/commands.h"
+#include "commands.h"
 
-void	ft_exit(t_command)
+void	ft_exit(t_command command)
 {
-	exit(0);	
+	exit(0);
 }
