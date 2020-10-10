@@ -6,14 +6,13 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/10 16:52:29 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/10 15:01:25 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef M_TYPES_H
 # define M_TYPES_H
-
-# include "libft.h"
+//# include "libft.h"
 
 typedef struct s_simple_command	t_simple_command;
 

@@ -6,7 +6,7 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 12:33:32 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/01 15:53:40 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/10 16:57:27 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 void	ft_cd(t_command command)
 {
-	if (ft_strlen(command.command->arguments) == 1)
-		chdir(command.command->arguments);
+	if (ft_strlen(command.commands->arguments) == 1)
+		chdir(command.commands->arguments);
 
 }
 
