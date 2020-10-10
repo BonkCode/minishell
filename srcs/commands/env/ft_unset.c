@@ -6,11 +6,18 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:57:24 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/08 16:21:30 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/10 16:32:24 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/commands.h"
+
+static	void		del_env(void *data)
+{
+	if (data)
+		free(data);
+	data = NULL;
+}
 
 void		ft_unset(t_list *env, char *arg)
 {
@@ -27,7 +34,7 @@ void		ft_unset(t_list *env, char *arg)
 			if (ft_strncmp(split_re[0], arg, ft_strlen(arg) + 1) == 0)
 			{
 				prev->next = env->next;
-				ft_lstdelone(env, free);
+				ft_lstdelone(env, del_env);
 				env = prev;
 				break ;
 			}

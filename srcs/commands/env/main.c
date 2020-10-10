@@ -6,7 +6,7 @@
 /*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 14:15:38 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/08 17:16:13 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/10 16:44:11 by rvernius         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int		ft_env(t_list *env);
 void	ft_unset(t_list *env, char *arg);
 void	ft_get_env(t_list **env, char **environ);
 void	ft_export(t_list *env, char *arg);
+char	**clear_tokens(char **tokens, int count);
 
 int		main(int argc, char **av, char **environ)
 {
@@ -23,11 +24,13 @@ int		main(int argc, char **av, char **environ)
 
 	env = NULL;
 	ft_get_env(&env, environ);
-	//ft_env(env);
-	//ft_env(env);
-	//ft_env(env);
-	//ft_unset(env, "a");
+	ft_unset(env, "a");
 	ft_export(env, "a=42");
+	ft_export(env, "a=43");
+	ft_export(env, "a=42");
+	ft_unset(env, "zz");
+	ft_export(env, "b=42");
+	ft_unset(env, "a");
 	ft_env(env);
 	//ft_env(env);
 	return (0);
