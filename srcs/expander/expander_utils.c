@@ -6,13 +6,15 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/10 17:01:34 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/10 17:02:10 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/10 18:12:48 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 #include "m_types.h"
 #include "flexer.h"
+
+extern int	g_status;
 
 int		delete_qmarks(char **token)
 {
@@ -36,6 +38,11 @@ void	get_var_value(char *name, char **value, t_list *env)
 	char	*env_value;
 
 	*value = NULL;
+	if (!ft_strncmp(name, "?", 2))
+	{
+		*value = ft_itoa(g_status);
+		return ;
+	}
 	while (env)
 	{
 		env_name = ft_substr(env->content, 0,
@@ -62,6 +69,11 @@ void	get_var_name(int flag, char **var_name, char **token, int *i)
 
 	if (flag == -1)
 		*var_name = ft_strdup(*token + 1);
+	else if ((*token)[*i + 1] == '?')
+	{
+		*var_name = ft_strdup("?");
+		*i += 2;
+	}
 	else
 	{
 		len = 0;
@@ -89,7 +101,6 @@ void	change_value(char *token_temp, char **token, t_var var, int i)
 	free_temp = ft_substr(*token, i, ft_strlen(*token + i));
 	token_temp = ft_strjoin_gnl(token_temp, free_temp);
 	free(free_temp);
-	free(var.value);
 	free(*token);
 	free_temp = NULL;
 	var.value = NULL;
@@ -121,6 +132,13 @@ void	expand_token(char **token, t_list *env)
 				return ;
 			}
 			change_value(token_temp = NULL, token, var, i);
+			if (var.name)
+				free(var.name);
+			if (var.value)
+				free(var.value);
+			var.value = NULL;
+			var.name = NULL;
+			i = -1;
 		}
 	}
 }
