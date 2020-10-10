@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/08 16:59:53 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/10 17:04:30 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,20 @@ void		get_command(t_command *command, int *command_flag, char **tokens)
 	}
 }
 
-int			main(void)
+int			main(int argc, char **argv, char **environ)
 {
+	t_list		*env;
 	char		*line;
 	char		**tokens;
 	int			command_flag;
 	t_command	command;
 
+	if (argc)
+		argc = 0;
+	if (argv)
+		argv = 0;
 	setup_commands(g_commands);
+	ft_get_env(&env, environ);
 	while (1)
 	{
 		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
@@ -80,6 +86,7 @@ int			main(void)
 		{
 			init_command(&command);
 			tokens = tokenize(line);
+			expand(&tokens, env);
 			print_2d(tokens);
 			command_flag = 0;
 			get_command(&command, &command_flag, tokens);

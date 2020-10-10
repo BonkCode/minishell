@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+         #
+#    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/08 17:29:52 by rvernius         ###   ########.fr        #
+#    Updated: 2020/10/10 17:03:20 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,10 @@ SRCS = 	srcs/main.c \
 		srcs/print_2d.c \
 		srcs/t_commands/command_printer.c \
 		srcs/t_commands/constructor.c \
-		srcs/utils/parse_utils.c
+		srcs/utils/parse_utils.c \
+		srcs/expander/expander.c \
+		srcs/commands/env/ft_get_env.c \
+		srcs/expander/expander_utils.c
 
 NAME = minishell
 
