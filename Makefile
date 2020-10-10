@@ -26,6 +26,8 @@ SRCS = 	srcs/main.c \
 		srcs/commands/env/ft_get_env.c \
 		srcs/expander/expander_utils.c
 
+OBJS = $(SRCS:.c=.o)
+
 NAME = minishell
 
 FLAGS = -Wall -Wextra -Werror -Ilibft -Iheaders -L.
@@ -36,8 +38,11 @@ $(NAME):
 	@echo "Compiling libftprintf"
 	@$(MAKE) -C libft bonus >/dev/null
 	@mv libft/libft.a .
-	@gcc $(FLAGS) -o $(NAME) $(SRCS) libft.a
+	@gcc $(FLAGS) -o $(NAME) $(OBJS) libft.a
 	@$(MAKE) clean >/dev/null
+
+%.o : %.c
+	@gcc $(FLAGS) -c $< -o $@
 
 clean:
 	@$(MAKE) -C libft clean
