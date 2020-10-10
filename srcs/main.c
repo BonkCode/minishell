@@ -100,7 +100,7 @@ int			main(void)
 				}
 			}
 			if (!command_flag)
-				ft_putstr_fd("wrong command", 1);
+				ft_putstr_fd("Wrong command", 1);
 			ft_putstr_fd("\n", 1);
 			free(line);
 		}
