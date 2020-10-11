@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flexer.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/10 17:04:12 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/11 14:51:46 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,7 @@ void				clear_command(t_simple_command **simple_command);
 t_tokens			new_t_token(char **tokens, int i);
 void				free_command(t_command *command);
 int					expand(char ***tokens, t_list *env);
-int					delete_qmarks(char **token);
-void				get_var_value(char *name, char **value, t_list *env);
-void				get_var_name(int flag, char **var_name,
-									char **token, int *i);
-void				change_value(char *token_temp, char **token,
-									t_var var, int i);
+void				free_2_str(char **s1, char **s2);
 void				expand_token(char **token, t_list *env);
 
 #endif

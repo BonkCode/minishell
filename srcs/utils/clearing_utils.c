@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
+/*   clearing_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/10 14:44:50 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/11 14:46:32 by rtrant           ###   ########.fr       */
+/*   Created: 2020/10/11 14:47:42 by rtrant            #+#    #+#             */
+/*   Updated: 2020/10/11 14:49:11 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-#include "m_types.h"
 #include "flexer.h"
 
-int			expand(char ***tokens, t_list *env)
+void	free_2_str(char **s1, char **s2)
 {
-	int		i;
-
-	if (!tokens || !env)
-		return (1);
-	i = -1;
-	while ((*tokens)[++i])
-	{
-		expand_token(&(*tokens)[i], env);
-	}
-	return (0);
+	if (*s1)
+		free(*s1);
+	*s1 = NULL;
+	if (*s2)
+		free(*s2);
+	*s2 = NULL;
 }
