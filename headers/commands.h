@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 16:17:59 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/10 14:56:41 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/12 01:10:42 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void		ft_echo(t_command command);
 void		ft_pwd(t_command command);
 void		ft_cd(t_command command);
 void		ft_exit(t_command command);
+void		dummy_pwd(t_command command);
 void		ft_get_env(t_list **env, char **environ);
 
 #endif
