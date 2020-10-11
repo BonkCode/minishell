@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/12 01:39:00 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/12 01:46:32 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ FLAGS = -Ilibft -Iheaders -L.
 
 all: $(NAME)
 
-$(NAME):
+$(NAME) : dummy
 	@echo "Compiling libftprintf"
 	@$(MAKE) -C libft bonus >/dev/null
 	@mv libft/libft.a .
@@ -42,6 +42,7 @@ $(NAME):
 	@$(MAKE) clean >/dev/null
 
 dummy:
+	@echo "Creating dummy exec files"
 	@gcc srcs/commands/dummy/dummy_cd.c -o executables/cd
 	@gcc srcs/commands/dummy/dummy_echo.c -o executables/echo
 	@gcc srcs/commands/dummy/dummy_env.c -o executables/env

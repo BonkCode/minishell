@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/12 01:41:58 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/12 01:44:57 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int			main(int argc, char **argv, char **environ)
 			expand(&tokens, env);
 			command_flag = -1;
 			get_command(&command, &command_flag, tokens);
+			command_flag = -1;
 			if (command_flag < 0)
 			{
 				if (!(id = fork()))
