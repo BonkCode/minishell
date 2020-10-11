@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/12 01:21:15 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/12 01:41:58 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,12 @@ int			main(int argc, char **argv, char **environ)
 				{
 					if (execve(tokens[0], tokens, environ) < 0)
 					{
-						ft_putstr_fd(tokens[0], 2);
-						ft_putstr_fd(": command not found\n", 2);
-						exit (127);
+						if (execve(ft_strjoin("executables/", tokens[0]), tokens, environ) < 0) // leak here
+						{
+							ft_putstr_fd(tokens[0], 2);
+							ft_putstr_fd(": command not found\n", 2);
+							exit (127);
+						}
 					}
 					exit (0);
 				}

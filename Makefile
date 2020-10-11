@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/11 14:52:53 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/12 01:39:00 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ SRCS = 	srcs/main.c \
 		srcs/lexer/tokens_clearer.c \
 		srcs/parser/parse.c \
 		srcs/t_commands/command_clearer.c \
-		srcs/commands/dummy/one.c \
-		srcs/commands/dummy/two.c \
+		srcs/commands/dummy/raw_dummy_1.c \
+		srcs/commands/dummy/raw_dummy_2.c \
 		srcs/print_2d.c \
 		srcs/t_commands/command_printer.c \
 		srcs/t_commands/constructor.c \
@@ -41,15 +41,24 @@ $(NAME):
 	@gcc $(FLAGS) -o $(NAME) $(SRCS) libft.a
 	@$(MAKE) clean >/dev/null
 
+dummy:
+	@gcc srcs/commands/dummy/dummy_cd.c -o executables/cd
+	@gcc srcs/commands/dummy/dummy_echo.c -o executables/echo
+	@gcc srcs/commands/dummy/dummy_env.c -o executables/env
+	@gcc srcs/commands/dummy/dummy_exit.c -o executables/exit
+	@gcc srcs/commands/dummy/dummy_export.c -o executables/export
+	@gcc srcs/commands/dummy/dummy_unset.c -o executables/unset
+	@gcc srcs/commands/dummy/dummy_pwd.c -o executables/pwd
+
 clean:
 	@$(MAKE) -C libft clean
 
 fclean: clean
-	rm -rf minishell libft.a
+	rm -rf minishell libft.a executables/*
 
 re: fclean all
 
 norme:
 	norminette $(SRCS) headers/*.h
 
-.PHONY: all clean fclean re norme
+.PHONY: all clean fclean re norme dummy
