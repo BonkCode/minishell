@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/10 17:56:06 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/11 14:46:00 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static	void	skip_qmark(size_t *i, size_t *size, const char *str)
 	{
 		qmark = str[*i];
 		++(*i);
-		while (str[*i] != qmark)
+		while (str[*i] != qmark && str[*i] != '\0')
 			++(*i);
 		if (str[*i + 1] != '\0' && str[*i + 1] != ' ')
 			++(*size);
@@ -49,6 +49,8 @@ static size_t	get_token_count(char const *str)
 			continue ;
 		}
 		skip_qmark(&i, &size, str);
+		if (str[i] == '\0')
+			return (-2);
 		while (!ft_strchr("'\";| ><", str[i]) && str[i] != '\0')
 			++i;
 		if (str[i] != '\0' && str[i] == ' ')
@@ -95,11 +97,10 @@ char			**tokenize(char const *str)
 	size_t	size;
 
 	size = get_token_count(str);
-	tokens = malloc((size + 2) * sizeof(char *));
+	tokens = malloc((size + 1) * sizeof(char *));
 	if (!tokens)
 		return (NULL);
 	tokens[size] = 0;
-	tokens[size + 1] = 0;
 	i = 0;
 	while (*str)
 	{

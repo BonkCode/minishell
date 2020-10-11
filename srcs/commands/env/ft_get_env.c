@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 13:19:39 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/08 14:53:24 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/11 14:38:47 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/commands.h"
+#include "commands.h"
+#include "libftprintf.h"
 
 void		ft_get_env(t_list **env, char **environ)
 {

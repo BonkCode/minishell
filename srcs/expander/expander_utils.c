@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/10 17:01:34 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/10 18:12:48 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/11 14:52:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 extern int	g_status;
 
-int		delete_qmarks(char **token)
+static int		delete_qmarks(char **token)
 {
 	char	*temp;
 	int		flag;
@@ -32,7 +32,7 @@ int		delete_qmarks(char **token)
 	return (flag);
 }
 
-void	get_var_value(char *name, char **value, t_list *env)
+static void		get_var_value(char *name, char **value, t_list *env)
 {
 	char	*env_name;
 	char	*env_value;
@@ -57,13 +57,10 @@ void	get_var_value(char *name, char **value, t_list *env)
 		}
 		env = env->next;
 	}
-	free(env_name);
-	env_name = NULL;
-	free(env_value);
-	env_value = NULL;
+	free_2_str(&env_value, &env_name);
 }
 
-void	get_var_name(int flag, char **var_name, char **token, int *i)
+static void		get_var_name(int flag, char **var_name, char **token, int *i)
 {
 	int	len;
 
@@ -92,9 +89,10 @@ void	get_var_name(int flag, char **var_name, char **token, int *i)
 	}
 }
 
-void	change_value(char *token_temp, char **token, t_var var, int i)
+static void		change_value(char **token, t_var var, int i)
 {
 	char	*free_temp;
+	char	*token_temp;
 
 	token_temp = ft_substr(*token, 0, ft_strchr(*token, '$') - *token);
 	token_temp = ft_strjoin_gnl(token_temp, var.value);
@@ -107,11 +105,10 @@ void	change_value(char *token_temp, char **token, t_var var, int i)
 	*token = token_temp;
 }
 
-void	expand_token(char **token, t_list *env)
+void			expand_token(char **token, t_list *env)
 {
 	t_var	var;
 	int		i;
-	char	*token_temp;
 	int		flag;
 
 	if ((flag = delete_qmarks(token)) == 1)
@@ -126,18 +123,12 @@ void	expand_token(char **token, t_list *env)
 			var.value = var.value ? var.value : ft_strdup("");
 			if (flag == -1)
 			{
-				token_temp = *token;
+				free(*token);
 				*token = var.value;
-				free(token_temp);
 				return ;
 			}
-			change_value(token_temp = NULL, token, var, i);
-			if (var.name)
-				free(var.name);
-			if (var.value)
-				free(var.value);
-			var.value = NULL;
-			var.name = NULL;
+			change_value(token, var, i);
+			free_2_str(&var.value, &var.name);
 			i = -1;
 		}
 	}

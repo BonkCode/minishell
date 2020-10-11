@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/10 17:04:30 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/11 14:45:48 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int			main(int argc, char **argv, char **environ)
 		argc = 0;
 	if (argv)
 		argv = 0;
+	env = NULL;
 	setup_commands(g_commands);
 	ft_get_env(&env, environ);
 	while (1)
@@ -86,6 +87,8 @@ int			main(int argc, char **argv, char **environ)
 		{
 			init_command(&command);
 			tokens = tokenize(line);
+			if (!tokens)
+				continue ;
 			expand(&tokens, env);
 			print_2d(tokens);
 			command_flag = 0;

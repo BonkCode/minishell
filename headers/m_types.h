@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   m_types.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/10 15:01:25 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/11 14:30:20 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef M_TYPES_H
 # define M_TYPES_H
-//# include "libft.h"
+# include "libftprintf.h"
 
 typedef struct s_simple_command	t_simple_command;
 
