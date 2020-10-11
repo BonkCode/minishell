@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
+#    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/10 17:03:20 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/11 14:28:10 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,23 +26,18 @@ SRCS = 	srcs/main.c \
 		srcs/commands/env/ft_get_env.c \
 		srcs/expander/expander_utils.c
 
-OBJS = $(SRCS:.c=.o)
-
 NAME = minishell
 
 FLAGS = -Wall -Wextra -Werror -Ilibft -Iheaders -L.
 
-all: $(NAME)
+all: $(SRCS)
 
-$(NAME):
+$(SRCS):
 	@echo "Compiling libftprintf"
 	@$(MAKE) -C libft bonus >/dev/null
 	@mv libft/libft.a .
-	@gcc $(FLAGS) -o $(NAME) $(OBJS) libft.a
+	@gcc $(FLAGS) -o $(NAME) $(SRCS) libft.a
 	@$(MAKE) clean >/dev/null
-
-%.o : %.c
-	@gcc $(FLAGS) -c $< -o $@
 
 clean:
 	@$(MAKE) -C libft clean
