@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/11 14:45:48 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/12 01:44:57 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "flexer.h"
 #include "m_types.h"
 #include "commands.h"
-#include "../libft/libftprintf.h"
+#include "libftprintf.h"
+#include <sys/wait.h>
 
 void		setup_commands(t_shell_cmd commands[7])
 {
@@ -24,7 +25,7 @@ void		setup_commands(t_shell_cmd commands[7])
 	(commands)[3] = new_shell_cmd("unset", &dummy_unset);
 	(commands)[4] = new_shell_cmd("env", &dummy_env);
 	(commands)[5] = new_shell_cmd("exit", &dummy_exit);
-	(commands)[6] = new_shell_cmd("pwd", &dummy_exit);
+	(commands)[6] = new_shell_cmd("pwd", &dummy_pwd);
 }
 
 t_shell_cmd	g_commands[7];
@@ -57,9 +58,9 @@ void		get_command(t_command *command, int *command_flag, char **tokens)
 		if (ft_strncmp(tokens[0], g_commands[i].name,
 				ft_strlen(g_commands[i].name) + 1) == 0)
 		{
-			*command_flag = 1;
+			*command_flag = i;
 			*command = parse(tokens);
-			print_commands(*command);
+			//print_commands(*command);
 			break ;
 		}
 	}
@@ -67,6 +68,7 @@ void		get_command(t_command *command, int *command_flag, char **tokens)
 
 int			main(int argc, char **argv, char **environ)
 {
+	pid_t		id;
 	t_list		*env;
 	char		*line;
 	char		**tokens;
@@ -78,6 +80,7 @@ int			main(int argc, char **argv, char **environ)
 	if (argv)
 		argv = 0;
 	env = NULL;
+	ft_putstr_fd("You're finally awake!\n", 1);
 	setup_commands(g_commands);
 	ft_get_env(&env, environ);
 	while (1)
@@ -90,12 +93,37 @@ int			main(int argc, char **argv, char **environ)
 			if (!tokens)
 				continue ;
 			expand(&tokens, env);
-			print_2d(tokens);
-			command_flag = 0;
+			command_flag = -1;
 			get_command(&command, &command_flag, tokens);
-			if (!command_flag)
-				ft_putstr_fd("wrong command", 2);
-			ft_putstr_fd("\n", 1);
+			command_flag = -1;
+			if (command_flag < 0)
+			{
+				if (!(id = fork()))
+				{
+					if (execve(tokens[0], tokens, environ) < 0)
+					{
+						if (execve(ft_strjoin("executables/", tokens[0]), tokens, environ) < 0) // leak here
+						{
+							ft_putstr_fd(tokens[0], 2);
+							ft_putstr_fd(": command not found\n", 2);
+							exit (127);
+						}
+					}
+					exit (0);
+				}
+				else
+					wait(&g_status);
+			}
+			else
+			{
+				if (!(id = fork()))
+				{
+					g_commands[command_flag].function(command);
+				}
+				else
+					wait(&g_status);
+			}
+			g_status = (g_status & 0xff00) >> 8;
 			free(line);
 			free_command(&command);
 			clear_tokens(tokens, -1);
