@@ -1,2 +1,2 @@
 # minishell
-ты долбоеб это читать?
+As beautiful as fucking deep
