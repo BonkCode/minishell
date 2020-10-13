@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 20:04:09 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 20:23:03 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@
 
 extern t_shell_cmd	g_commands[7];
 
-void					try_sep(char **tokens, int i, t_simple_command **s_c,
+static int				try_sep(t_command *command, t_simple_command **s_c,
 								t_simple_command **list)
 {
-	(*s_c)->piped = tokens[i][0] == '|' ? 1 : 0;
+	command->piped = 1;
+	(*s_c)->piped = 1;
 	ft_command_add_back(list, (*s_c));
 	(*s_c) = new_simple_command();
+	return (1);
 }
 
 int						is_flag(char **tokens, int i, t_simple_command **s_c)
@@ -75,12 +77,12 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 			else
 				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(t[i])));
 		}
-		else if (!ft_strncmp_split(t[i], "|", ' '))
-			try_sep(t, i, s_c, list);
+		else if (!ft_strncmp(t[i], "|", 2))
+			try_sep(return_command, s_c, list);
 		else if (sep_or_add(new_t_token(t, i), list, s_c,
 				return_command) > 0 && (i += 2))
 			return (abort_parsing(return_command, 3, s_c, list));
-		else if (t[i] == 0)
+		else if (t[i] == '\0')
 			break ;
 	}
 	return (*return_command);
