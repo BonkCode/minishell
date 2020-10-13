@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/10 17:01:34 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/11 14:52:25 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 19:14:58 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,7 @@ static void		get_var_name(int flag, char **var_name, char **token, int *i)
 {
 	int	len;
 
-	if (flag == -1)
-		*var_name = ft_strdup(*token + 1);
-	else if ((*token)[*i + 1] == '?')
+	if ((*token)[*i + 1] == '?')
 	{
 		*var_name = ft_strdup("?");
 		*i += 2;
@@ -113,23 +111,20 @@ void			expand_token(char **token, t_list *env)
 
 	if ((flag = delete_qmarks(token)) == 1)
 		return ;
-	i = -1;
-	while ((*token)[++i])
+	i = 0;
+	while ((*token)[i])
 	{
 		if ((*token)[i] == '$' && (i == 0 || (*token)[i - 1] != '\\'))
 		{
 			get_var_name(flag, &var.name, token, &i);
 			get_var_value(var.name, &var.value, env);
 			var.value = var.value ? var.value : ft_strdup("");
-			if (flag == -1)
-			{
-				free(*token);
-				*token = var.value;
-				return ;
-			}
 			change_value(token, var, i);
 			free_2_str(&var.value, &var.name);
-			i = -1;
+			i = 0;
+			ft_putstr_fd("ADSADSADADAS\n\n", 1);
 		}
+		else
+			++i;
 	}
 }

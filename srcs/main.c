@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/13 18:23:07 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 19:07:53 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int			main(int argc, char **argv, char **environ)
 			while (split_tokens[++i])
 			{
 				expand(&split_tokens[i], env);
+				print_2d(split_tokens[i]);
 				command_flag = -1;
 				get_command(&command, &command_flag, split_tokens[i]);
 				if (command_flag < 0)
