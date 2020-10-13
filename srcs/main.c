@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/13 20:09:36 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 20:24:43 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char		**lex(char *line)
 void		init_command(t_command *command)
 {
 	command->status = 127;
+	command->piped = 0;
 	command->infile = NULL;
 	command->errfile = NULL;
 	command->outfile = NULL;
@@ -91,7 +92,6 @@ int			main(int argc, char **argv, char **environ)
 		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
 		if (get_next_line(0, &line))
 		{
-			init_command(&command);
 			tokens = tokenize(line);
 			if (!tokens)
 				continue ;
@@ -106,6 +106,8 @@ int			main(int argc, char **argv, char **environ)
 				s_c = command.commands;
 				while (command.commands)
 				{
+					if (!ft_strncmp(command.commands->command, "exit", 5) && command.piped == 0)
+						exit (0);
 					if (command_flag < 0)
 					{
 						if (!(id = fork()))

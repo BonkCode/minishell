@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 18:19:36 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 20:19:37 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct	s_command
 	char				*infile;
 	char				*outfile;
 	char				*errfile;
+	int					piped;
 	int					status;
 }				t_command;
 
