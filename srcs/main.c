@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/13 19:20:27 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 20:09:36 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@ void		get_command(t_command *command, int *command_flag, char **tokens)
 		{
 			*command_flag = i;
 			*command = parse(tokens);
-			break ;
+			return ;
 		}
 	}
+	*command = parse(tokens);
 }
 
 int			main(int argc, char **argv, char **environ)
@@ -110,6 +111,8 @@ int			main(int argc, char **argv, char **environ)
 						if (!(id = fork()))
 						{
 							if (execve(split_tokens[i][0],
+										split_tokens[i], environ) < 0 &&
+								execve(ft_strjoin("/bin/", split_tokens[i][0]), // leak here
 										split_tokens[i], environ) < 0)
 							{
 								ft_putstr_fd(split_tokens[i][0], 2);
@@ -139,6 +142,11 @@ int			main(int argc, char **argv, char **environ)
 			free(line);
 			clear_tokens(tokens, -1);
 			free(split_tokens);
+		}
+		else
+		{
+			ft_putstr_fd("\n", 1);
+			exit(0);
 		}
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 18:17:13 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 20:04:09 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 	{
 		if (!(*s_c)->command && get_shell_cmd(s_c, t, i) != 0)
 			return (abort_parsing(return_command, 1, s_c, list));
-		else if (is_flag(t, i, s_c))
+		if (is_flag(t, i, s_c))
 		{
 			if (ft_strncmp((*s_c)->command, "echo", 5))
 				return (abort_parsing(return_command, 2, s_c, list));
@@ -97,8 +97,6 @@ t_command				parse(char **tokens)
 	init_return_command(&return_command);
 	list = NULL;
 	parse_tokens(tokens, &list, &s_c, &return_command);
-	if (return_command.status != 0)
-		return (return_command);
 	if (s_c->command != NULL)
 		ft_command_add_back(&list, s_c);
 	else if (s_c)
