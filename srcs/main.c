@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/13 19:07:53 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 19:20:27 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,15 @@ void		get_command(t_command *command, int *command_flag, char **tokens)
 
 int			main(int argc, char **argv, char **environ)
 {
-	pid_t		id;
-	t_list		*env;
-	char		*line;
-	char		**tokens;
-	char		***split_tokens;
-	int			command_flag;
-	t_command	command;
-	int			i;
+	pid_t				id;
+	t_list				*env;
+	char				*line;
+	char				**tokens;
+	char				***split_tokens;
+	int					command_flag;
+	t_simple_command	*s_c;
+	t_command			command;
+	int					i;
 
 	if (argc)
 		argc = 0;
@@ -99,37 +100,43 @@ int			main(int argc, char **argv, char **environ)
 			while (split_tokens[++i])
 			{
 				expand(&split_tokens[i], env);
-				print_2d(split_tokens[i]);
 				command_flag = -1;
 				get_command(&command, &command_flag, split_tokens[i]);
-				if (command_flag < 0)
+				s_c = command.commands;
+				while (command.commands)
 				{
-					if (!(id = fork()))
+					if (command_flag < 0)
 					{
-						if (execve(split_tokens[i][0], split_tokens[i], environ) < 0)
+						if (!(id = fork()))
 						{
-							ft_putstr_fd(split_tokens[i][0], 2);
-							ft_putstr_fd(": command not found\n", 2);
-							exit(127);
+							if (execve(split_tokens[i][0],
+										split_tokens[i], environ) < 0)
+							{
+								ft_putstr_fd(split_tokens[i][0], 2);
+								ft_putstr_fd(": command not found\n", 2);
+								exit(127);
+							}
+							exit(0);
 						}
-						exit(0);
+						else
+							wait(&g_status);
 					}
 					else
-						wait(&g_status);
-				}
-				else
-				{
-					if (!(id = fork()))
 					{
-						g_commands[command_flag].function(command);
+						if (!(id = fork()))
+						{
+							g_commands[command_flag].function(command);
+						}
+						else
+							wait(&g_status);
 					}
-					else
-						wait(&g_status);
+					g_status = (g_status & 0xff00) >> 8;
+					command.commands = command.commands->next;
 				}
-				g_status = (g_status & 0xff00) >> 8;
+				command.commands = s_c;
+				free_command(&command);
 			}
 			free(line);
-			free_command(&command);
 			clear_tokens(tokens, -1);
 			free(split_tokens);
 		}
