@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
+#    By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/12 01:46:32 by rtrant           ###   ########.fr        #
+#    Updated: 2020/10/13 17:39:26 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ SRCS = 	srcs/main.c \
 		srcs/expander/expander.c \
 		srcs/commands/env/ft_get_env.c \
 		srcs/expander/expander_utils.c \
-		srcs/utils/clearing_utils.c
+		srcs/utils/clearing_utils.c \
+		srcs/lexer/tokens_splitter.c
 
 NAME = minishell
 
@@ -33,7 +34,7 @@ FLAGS = -Ilibft -Iheaders -L.
 
 all: $(NAME)
 
-$(NAME) : dummy
+$(NAME):
 	@echo "Compiling libftprintf"
 	@$(MAKE) -C libft bonus >/dev/null
 	@mv libft/libft.a .

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/12 01:44:57 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 18:23:07 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void		get_command(t_command *command, int *command_flag, char **tokens)
 		{
 			*command_flag = i;
 			*command = parse(tokens);
-			//print_commands(*command);
 			break ;
 		}
 	}
@@ -72,8 +71,10 @@ int			main(int argc, char **argv, char **environ)
 	t_list		*env;
 	char		*line;
 	char		**tokens;
+	char		***split_tokens;
 	int			command_flag;
 	t_command	command;
+	int			i;
 
 	if (argc)
 		argc = 0;
@@ -92,41 +93,44 @@ int			main(int argc, char **argv, char **environ)
 			tokens = tokenize(line);
 			if (!tokens)
 				continue ;
-			expand(&tokens, env);
-			command_flag = -1;
-			get_command(&command, &command_flag, tokens);
-			command_flag = -1;
-			if (command_flag < 0)
+			if (!(split_tokens = split_tokens_by_semicolons(tokens)))
+				continue ;
+			i = -1;
+			while (split_tokens[++i])
 			{
-				if (!(id = fork()))
+				expand(&split_tokens[i], env);
+				command_flag = -1;
+				get_command(&command, &command_flag, split_tokens[i]);
+				if (command_flag < 0)
 				{
-					if (execve(tokens[0], tokens, environ) < 0)
+					if (!(id = fork()))
 					{
-						if (execve(ft_strjoin("executables/", tokens[0]), tokens, environ) < 0) // leak here
+						if (execve(split_tokens[i][0], split_tokens[i], environ) < 0)
 						{
-							ft_putstr_fd(tokens[0], 2);
+							ft_putstr_fd(split_tokens[i][0], 2);
 							ft_putstr_fd(": command not found\n", 2);
-							exit (127);
+							exit(127);
 						}
+						exit(0);
 					}
-					exit (0);
+					else
+						wait(&g_status);
 				}
 				else
-					wait(&g_status);
-			}
-			else
-			{
-				if (!(id = fork()))
 				{
-					g_commands[command_flag].function(command);
+					if (!(id = fork()))
+					{
+						g_commands[command_flag].function(command);
+					}
+					else
+						wait(&g_status);
 				}
-				else
-					wait(&g_status);
+				g_status = (g_status & 0xff00) >> 8;
 			}
-			g_status = (g_status & 0xff00) >> 8;
 			free(line);
 			free_command(&command);
 			clear_tokens(tokens, -1);
+			free(split_tokens);
 		}
 	}
 	return (0);

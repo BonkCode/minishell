@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   one.c                                              :+:      :+:    :+:   */
+/*   raw_dummy_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:28:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/12 01:15:55 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 17:06:04 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 void	dummy_echo(t_command command)
 {
 	ft_putendl_fd(command.commands->command, 1);
-	exit (0);
+	exit(0);
 }
 
 void	dummy_cd(t_command command)
 {
 	ft_putendl_fd(command.commands->command, 1);
-	exit (0);
+	exit(0);
 }
 
 void	dummy_export(t_command command)
 {
 	ft_putendl_fd(command.commands->command, 1);
-	exit (0);
+	exit(0);
 }
