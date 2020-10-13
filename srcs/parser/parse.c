@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/10 14:44:10 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/10/13 18:17:13 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 			else
 				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(t[i])));
 		}
-		else if (!ft_strncmp_split(t[i], "| ;", ' '))
+		else if (!ft_strncmp_split(t[i], "|", ' '))
 			try_sep(t, i, s_c, list);
 		else if (sep_or_add(new_t_token(t, i), list, s_c,
 				return_command) > 0 && (i += 2))

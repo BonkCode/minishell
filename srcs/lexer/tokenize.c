@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/11 14:46:00 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/13 18:16:19 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "m_types.h"
 #include "flexer.h"
 
-static	void	skip_qmark(size_t *i, size_t *size, const char *str)
+static	int		skip_qmark(size_t *i, size_t *size, const char *str)
 {
 	int	qmark;
 
@@ -22,12 +22,17 @@ static	void	skip_qmark(size_t *i, size_t *size, const char *str)
 	{
 		qmark = str[*i];
 		++(*i);
-		while (str[*i] != qmark && str[*i] != '\0')
+		while (str[*i] != qmark)
+		{
+			if (str[*i] == '\0')
+				return (-2);
 			++(*i);
+		}
 		if (str[*i + 1] != '\0' && str[*i + 1] != ' ')
 			++(*size);
 		++(*i);
 	}
+	return (0);
 }
 
 static size_t	get_token_count(char const *str)
@@ -48,8 +53,7 @@ static size_t	get_token_count(char const *str)
 			i += ft_strchr("<>", str[i]) && str[i] == str[i + 1] ? 2 : 1;
 			continue ;
 		}
-		skip_qmark(&i, &size, str);
-		if (str[i] == '\0')
+		if (skip_qmark(&i, &size, str) < 0)
 			return (-2);
 		while (!ft_strchr("'\";| ><", str[i]) && str[i] != '\0')
 			++i;
