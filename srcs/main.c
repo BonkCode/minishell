@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/15 16:42:45 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/15 17:05:59 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,16 +99,22 @@ void		glue_tokens(char ***tokens)
 	while ((*tokens)[++i])
 		++size;
 	i = 0;
-	while ((*tokens)[i] && i < size - 1)
+	while (i < size - 1 && (*tokens)[i])
 	{
 		if (ft_strncmp((*tokens)[i + 1], " ", 2))
 		{
-			temp = (*tokens)[i + 2];
-			(*tokens)[i + 2] = ft_strjoin((*tokens)[i], (*tokens)[i + 2]);
-			free(temp);
-			temp = (*tokens)[i];
-			(*tokens)[i] = ft_strdup("");
-			free(temp);
+			if (ft_strncmp_split((*tokens)[i], "; | < > >>", ' ') &&
+				ft_strncmp_split((*tokens)[i + 2], "; | < > >>", ' '))
+			{
+				temp = (*tokens)[i + 2];
+				(*tokens)[i + 2] = ft_strjoin((*tokens)[i], (*tokens)[i + 2]);
+				free(temp);
+				temp = (*tokens)[i];
+				(*tokens)[i] = ft_strdup("");
+				free(temp);
+			}
+			else
+				i += 2;
 		}
 		else
 		{
@@ -162,15 +168,21 @@ int			main(int argc, char **argv, char **environ)
 				continue ;
 			i = -1;
 			expand(&tokens, env);
+			print_2d(tokens);
+			ft_putchar_fd('\n', 1);
 			glue_tokens(&tokens);
 			if (!(split_tokens = split_tokens_by_semicolons(tokens)))
 				continue ;
 			i = -1;
 			while (split_tokens[++i])
 			{
+				print_2d(split_tokens[i]);
+				ft_putchar_fd('\n', 1);
 				command_flag = -1;
 				get_command(&command, &command_flag, split_tokens[i]);
 				s_c = command.commands;
+				print_commands(command);
+				ft_putstr_fd("\n\n", 1);
 				while (command.commands)
 				{
 					if (command_flag < 0)
@@ -195,6 +207,7 @@ int			main(int argc, char **argv, char **environ)
 					{
 						if (!(id = fork()))
 						{
+							exit (0);
 							g_commands[command_flag].function(command);
 						}
 						else

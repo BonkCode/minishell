@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 20:19:37 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/15 17:11:54 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ struct			s_simple_command
 typedef struct	s_tokens
 {
 	char		**tokens;
-	int			i;
+	int			*i;
 }				t_tokens;
 
 typedef struct	s_var

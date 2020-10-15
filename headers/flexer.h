@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 17:39:34 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/15 17:11:28 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int					get_shell_cmd(t_simple_command **simple_command,
 void				get_redirect_files(char **tokens, int i,
 							t_command *return_command);
 void				clear_command(t_simple_command **simple_command);
-t_tokens			new_t_token(char **tokens, int i);
+t_tokens			new_t_token(char **tokens, int *i);
 void				free_command(t_command *command);
 int					expand(char ***tokens, t_list *env);
 void				free_2_str(char **s1, char **s2);
