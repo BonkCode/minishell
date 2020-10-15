@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/13 20:24:43 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/15 17:05:59 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,76 @@ void		get_command(t_command *command, int *command_flag, char **tokens)
 	*command = parse(tokens);
 }
 
+int			count_non_blanks(char **tokens)
+{
+	int	i;
+	int	size;
+
+	i = -1;
+	size = 0;
+	while (tokens[++i])
+		++size;
+	i = -1;
+	while (tokens[++i])
+	{
+		if (!ft_strncmp(tokens[i], "", 1))
+			size -= 2;
+		else if (!ft_strncmp(tokens[i], " ", 2))
+			size -= 1;
+	}
+	return (size);
+}
+
+void		glue_tokens(char ***tokens)
+{
+	char	**temp_2;
+	char	*temp;
+	int		i;
+	int		size;
+
+	i = -1;
+	size = 0;
+	while ((*tokens)[++i])
+		++size;
+	i = 0;
+	while (i < size - 1 && (*tokens)[i])
+	{
+		if (ft_strncmp((*tokens)[i + 1], " ", 2))
+		{
+			if (ft_strncmp_split((*tokens)[i], "; | < > >>", ' ') &&
+				ft_strncmp_split((*tokens)[i + 2], "; | < > >>", ' '))
+			{
+				temp = (*tokens)[i + 2];
+				(*tokens)[i + 2] = ft_strjoin((*tokens)[i], (*tokens)[i + 2]);
+				free(temp);
+				temp = (*tokens)[i];
+				(*tokens)[i] = ft_strdup("");
+				free(temp);
+			}
+			else
+				i += 2;
+		}
+		else
+		{
+			temp = (*tokens)[i + 1];
+			(*tokens)[i + 1] = ft_strdup("");
+			free(temp);
+		}
+		i += 2;
+	}
+	if (!(temp_2 = ft_calloc(sizeof(char *), (size / 2 + 2))))
+		return ; // here
+	i = -1;
+	size = -1;
+	while ((*tokens)[++i])
+	{
+		if (ft_strncmp((*tokens)[i], "", 1))
+			temp_2[++size] = ft_strdup((*tokens)[i]); // here
+	}
+	clear_tokens(*tokens, -1);
+	*tokens = temp_2;
+}
+
 int			main(int argc, char **argv, char **environ)
 {
 	pid_t				id;
@@ -92,22 +162,29 @@ int			main(int argc, char **argv, char **environ)
 		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
 		if (get_next_line(0, &line))
 		{
+			init_command(&command);
 			tokens = tokenize(line);
 			if (!tokens)
 				continue ;
+			i = -1;
+			expand(&tokens, env);
+			print_2d(tokens);
+			ft_putchar_fd('\n', 1);
+			glue_tokens(&tokens);
 			if (!(split_tokens = split_tokens_by_semicolons(tokens)))
 				continue ;
 			i = -1;
 			while (split_tokens[++i])
 			{
-				expand(&split_tokens[i], env);
+				print_2d(split_tokens[i]);
+				ft_putchar_fd('\n', 1);
 				command_flag = -1;
 				get_command(&command, &command_flag, split_tokens[i]);
 				s_c = command.commands;
+				print_commands(command);
+				ft_putstr_fd("\n\n", 1);
 				while (command.commands)
 				{
-					if (!ft_strncmp(command.commands->command, "exit", 5) && command.piped == 0)
-						exit (0);
 					if (command_flag < 0)
 					{
 						if (!(id = fork()))
@@ -130,6 +207,7 @@ int			main(int argc, char **argv, char **environ)
 					{
 						if (!(id = fork()))
 						{
+							exit (0);
 							g_commands[command_flag].function(command);
 						}
 						else

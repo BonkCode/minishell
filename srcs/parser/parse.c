@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 20:23:03 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/15 17:11:55 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,23 @@ int						is_flag(char **tokens, int i, t_simple_command **s_c)
 int						sep_or_add(t_tokens tokens_pos, t_simple_command **list,
 							t_simple_command **s_c, t_command *return_command)
 {
-	int		i;
+	int		*i;
 	char	**tokens;
 
 	tokens = tokens_pos.tokens;
 	i = tokens_pos.i;
-	if (!ft_strncmp_split(tokens[i], ">> < >", ' '))
+	if (!ft_strncmp_split(tokens[*i], ">> < >", ' '))
 	{
 		ft_command_add_back(list, (*s_c));
-		if (!((*s_c) = new_simple_command()) || tokens[i + 1] == 0)
+		if (!((*s_c) = new_simple_command()) || tokens[*i + 1] == 0)
 			return (3);
-		get_redirect_files(tokens, i, return_command);
-		if (tokens[i += 2] == 0)
+		get_redirect_files(tokens, *i, return_command);
+		*i += 2;
+		if (tokens[*i] == 0)
 			return (-1);
 	}
 	else
-		ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(tokens[i])));
+		ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(tokens[*i])));
 	return (0);
 }
 
@@ -79,8 +80,8 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 		}
 		else if (!ft_strncmp(t[i], "|", 2))
 			try_sep(return_command, s_c, list);
-		else if (sep_or_add(new_t_token(t, i), list, s_c,
-				return_command) > 0 && (i += 2))
+		else if (sep_or_add(new_t_token(t, &i), list, s_c,
+				return_command) > 0)
 			return (abort_parsing(return_command, 3, s_c, list));
 		else if (t[i] == '\0')
 			break ;
@@ -99,10 +100,13 @@ t_command				parse(char **tokens)
 	init_return_command(&return_command);
 	list = NULL;
 	parse_tokens(tokens, &list, &s_c, &return_command);
-	if (s_c->command != NULL)
-		ft_command_add_back(&list, s_c);
-	else if (s_c)
-		clear_simple_commands(&s_c);
+	if (s_c)
+	{
+		if (s_c->command != NULL)
+			ft_command_add_back(&list, s_c);
+		else
+			clear_simple_commands(&s_c);
+	}
 	return_command.commands = list;
 	return (return_command);
 }

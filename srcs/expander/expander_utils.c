@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/10 17:01:34 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 19:14:58 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/15 16:42:10 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ void			expand_token(char **token, t_list *env)
 			change_value(token, var, i);
 			free_2_str(&var.value, &var.name);
 			i = 0;
-			ft_putstr_fd("ADSADSADADAS\n\n", 1);
 		}
 		else
 			++i;
