@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 18:16:19 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/15 14:19:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,13 @@ char			**tokenize(char const *str)
 	char	**tokens;
 	size_t	i;
 	size_t	size;
+	char	*space;
 
 	size = get_token_count(str);
-	tokens = malloc((size + 1) * sizeof(char *));
+	tokens = malloc((size * 2) * sizeof(char *));
 	if (!tokens)
 		return (NULL);
-	tokens[size] = 0;
+	tokens[size * 2 - 1] = 0;
 	i = 0;
 	while (*str)
 	{
@@ -118,7 +119,12 @@ char			**tokenize(char const *str)
 			++i;
 		}
 		str += size;
+		space = ft_strdup(*str == ' ' ? " " : "");
 		proceed_to_next_token(&str);
+		if (*str)
+			tokens[i++] = space;
+		else
+			free(space);
 	}
 	return (tokens);
 }
