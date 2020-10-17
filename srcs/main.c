@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/17 15:22:18 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/17 15:50:57 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void		glue_tokens(char ***tokens)
 
 	i = -1;
 	size = 0;
+	print_2d(*tokens);
+	ft_putchar_fd('\n', 1);
 	while ((*tokens)[++i])
 		++size;
 	i = 0;
@@ -167,8 +169,8 @@ int			main(int argc, char **argv, char **environ)
 			if (!tokens)
 				continue ;
 			i = -1;
-			print_2d(tokens);
-			ft_putchar_fd('\n', 1);
+			//print_2d(tokens);
+			//ft_putchar_fd('\n', 1);
 			if (!(split_tokens = split_tokens_by_semicolons(tokens)))
 				continue ;
 			i = -1;
@@ -176,8 +178,8 @@ int			main(int argc, char **argv, char **environ)
 			{
 				expand(&split_tokens[i], env);
 				glue_tokens(&split_tokens[i]);
-				print_2d(split_tokens[i]);
-				ft_putchar_fd('\n', 1);
+				//print_2d(split_tokens[i]);
+				//ft_putchar_fd('\n', 1);
 				command_flag = -1;
 				get_command(&command, &command_flag, split_tokens[i]);
 				s_c = command.commands;
