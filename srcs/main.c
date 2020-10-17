@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/17 16:47:03 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/17 17:16:41 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void		setup_commands(t_shell_cmd commands[7])
 }
 
 t_shell_cmd	g_commands[7];
+
 int			g_status = 0;
 
 char		**lex(char *line)
@@ -87,45 +88,11 @@ int			count_non_blanks(char **tokens)
 	return (size);
 }
 
-void		glue_tokens(char ***tokens)
+static void	copy_non_empty(char ***tokens, int size)
 {
-	char	**temp_2;
-	char	*temp;
 	int		i;
-	int		size;
+	char	**temp_2;
 
-	i = -1;
-	size = 0;
-	print_2d(*tokens);
-	ft_putchar_fd('\n', 1);
-	while ((*tokens)[++i])
-		++size;
-	i = 0;
-	while (i < size - 1 && (*tokens)[i])
-	{
-		if (ft_strncmp((*tokens)[i + 1], " ", 2))
-		{
-			if (ft_strncmp_split((*tokens)[i], "; | < > >>", ' ') &&
-				ft_strncmp_split((*tokens)[i + 2], "; | < > >>", ' '))
-			{
-				temp = (*tokens)[i + 2];
-				(*tokens)[i + 2] = ft_strjoin((*tokens)[i], (*tokens)[i + 2]);
-				free(temp);
-				temp = (*tokens)[i];
-				(*tokens)[i] = ft_strdup("");
-				free(temp);
-			}
-			else
-				i += 2;
-		}
-		else
-		{
-			temp = (*tokens)[i + 1];
-			(*tokens)[i + 1] = ft_strdup("");
-			free(temp);
-		}
-		i += 2;
-	}
 	if (!(temp_2 = ft_calloc(sizeof(char *), (size / 2 + 2))))
 	{
 		clear_tokens(*tokens, -1);
@@ -137,7 +104,7 @@ void		glue_tokens(char ***tokens)
 	{
 		if (ft_strncmp((*tokens)[i], "", 1))
 		{
-			if (!(temp_2[++size] = ft_strdup((*tokens)[i]))) // here
+			if (!(temp_2[++size] = ft_strdup((*tokens)[i])))
 			{
 				clear_tokens(temp_2, size);
 				break ;
@@ -146,6 +113,50 @@ void		glue_tokens(char ***tokens)
 	}
 	clear_tokens(*tokens, -1);
 	*tokens = temp_2;
+}
+
+void		glue_2_tokens(char ***tokens, int *i)
+{
+	char	*temp;
+
+	if (ft_strncmp_split((*tokens)[*i], "; | < > >>", ' ') &&
+		ft_strncmp_split((*tokens)[*i + 2], "; | < > >>", ' '))
+	{
+		temp = (*tokens)[*i + 2];
+		(*tokens)[*i + 2] = ft_strjoin((*tokens)[*i], (*tokens)[*i + 2]);
+		free(temp);
+		temp = (*tokens)[*i];
+		(*tokens)[*i] = ft_strdup("");
+		free(temp);
+	}
+	else
+		*i += 2;
+}
+
+void		glue_tokens(char ***tokens)
+{
+	char	*temp;
+	int		i;
+	int		size;
+
+	i = -1;
+	size = 0;
+	while ((*tokens)[++i])
+		++size;
+	i = 0;
+	while (i < size - 1 && (*tokens)[i])
+	{
+		if (ft_strncmp((*tokens)[i + 1], " ", 2))
+			glue_2_tokens(tokens, &i);
+		else
+		{
+			temp = (*tokens)[i + 1];
+			(*tokens)[i + 1] = ft_strdup("");
+			free(temp);
+		}
+		i += 2;
+	}
+	copy_non_empty(tokens, size);
 }
 
 int			main(int argc, char **argv, char **environ)
