@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/15 17:05:59 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/17 15:22:18 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,15 +167,15 @@ int			main(int argc, char **argv, char **environ)
 			if (!tokens)
 				continue ;
 			i = -1;
-			expand(&tokens, env);
 			print_2d(tokens);
 			ft_putchar_fd('\n', 1);
-			glue_tokens(&tokens);
 			if (!(split_tokens = split_tokens_by_semicolons(tokens)))
 				continue ;
 			i = -1;
 			while (split_tokens[++i])
 			{
+				expand(&split_tokens[i], env);
+				glue_tokens(&split_tokens[i]);
 				print_2d(split_tokens[i]);
 				ft_putchar_fd('\n', 1);
 				command_flag = -1;
