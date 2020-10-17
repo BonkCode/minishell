@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/15 17:11:28 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/17 16:41:39 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_shell_cmd			new_shell_cmd(char *name, void (*func)(t_command command));
 char				**tokenize(char const *str);
 char				***split_tokens_by_semicolons(char **tokens);
 char				**clear_tokens(char **tokens, int count);
+void				*clear_3d(char ****arr, int n, int k);
 t_command			parse(char **tokens);
 t_simple_command	*clear_simple_commands(t_simple_command **command);
 void				print_commands(t_command command);

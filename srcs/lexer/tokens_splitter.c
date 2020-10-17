@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 17:31:04 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/17 15:49:14 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/17 16:53:21 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,57 +46,55 @@ static int		alloc_2nd_dimension(char ****split_tokens,
 	{
 		if (!((*split_tokens)[i] = ft_calloc(j + 1, sizeof(char *))))
 		{
-			j = -1;
-			while (++j < i)
-				clear_tokens((*split_tokens)[j], -1);
+			clear_3d(split_tokens, i, -1);
 			return (0);
 		}
 	}
 	return (1);
 }
 
-static char		***trim_2d(char ***arr, int len)
+static void		get_size_and_bounds(int *size, int *j, char ***arr, int *end)
+{
+	*size = 0;
+	*j = -1;
+	while ((*arr)[*size])
+		++(*size);
+	if (!ft_strncmp((*arr)[*size - 1], "", 1) ||
+		!ft_strncmp((*arr)[*size - 1], " ", 2))
+		--(*size);
+	*end = *size;
+	if (!ft_strncmp((*arr)[0], "", 1) || !ft_strncmp((*arr)[0], " ", 2))
+	{
+		--(*size);
+		++(*j);
+	}
+}
+
+static char		***trim_2d(char ****arr, int len)
 {
 	char	***res;
 	int		i;
 	int		j;
 	int		end;
-	int		n;
 	int		size;
 
 	i = 0;
-	while (arr[i])
+	while ((*arr)[i])
 		++i;
-	res = ft_calloc(sizeof(char **), i + 1);
+	if (!(res = ft_calloc(sizeof(char **), i + 1)))
+		return (NULL);
 	i = -1;
-	while (arr[++i])
+	while ((*arr)[++i])
 	{
-		size = 0;
-		j = -1;
-		while (arr[i][size])
-			++size;
-		if (!ft_strncmp(arr[i][size - 1], "", 1) || !ft_strncmp(arr[i][size - 1], " ", 2))
-			--size;
-		end = size;
-		if (!ft_strncmp(arr[i][0], "", 1) || !ft_strncmp(arr[i][0], " ", 2))
-		{
-			--size;
-			++j;
-		}
-		res[i] = ft_calloc(sizeof(char *), size + 1);
-		n = -1;
-		while (arr[i][++j] && j < end)
-			res[i][++n] = ft_strdup(arr[i][j]);
+		get_size_and_bounds(&size, &j, (*arr) + i, &end);
+		if (!(res[i] = ft_calloc(sizeof(char *), size + 1)))
+			return (clear_3d(&res, i, -1));
+		size = -1;
+		while ((*arr)[i][++j] && j < end)
+			if (!(res[i][++size] = ft_strdup((*arr)[i][j])))
+				return (clear_3d(&res, i, j));
 	}
-	i = -1;
-	while (arr[++i])
-	{
-		j = -1;
-		while (arr[i][++j])
-			free(arr[i][j]);
-		free(arr[i]);
-	}
-	free(arr);
+	clear_3d(arr, -1, -1);
 	return (res);
 }
 
@@ -126,6 +124,5 @@ char			***split_tokens_by_semicolons(char **tokens)
 		}
 		split_tokens[size][++j] = ft_strdup(tokens[i]);
 	}
-	split_tokens = trim_2d(split_tokens, len);
-	return (split_tokens);
+	return (trim_2d(&split_tokens, len));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clearing_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 14:47:42 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/11 14:49:11 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/17 16:54:48 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,26 @@ void	free_2_str(char **s1, char **s2)
 	if (*s2)
 		free(*s2);
 	*s2 = NULL;
+}
+
+void	*clear_3d(char ****arr, int n, int k)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while ((*arr)[++i] && (i < n || n < 0))
+	{
+		j = -1;
+		while ((*arr)[i][++j] && (j < k || k < 0))
+		{
+			free((*arr)[i][j]);
+			(*arr)[i][j] = NULL;
+		}
+		free((*arr)[i]);
+		(*arr)[i] = NULL;
+	}
+	free((*arr));
+	(*arr) = NULL;
+	return (NULL);
 }

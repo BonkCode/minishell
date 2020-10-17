@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:23:22 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/13 20:05:05 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/17 16:18:58 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,26 +44,6 @@ t_command		abort_parsing(t_command *return_command, int code,
 	clear_simple_commands(simple_command);
 	return (*return_command);
 }
-
-/*
-int				get_shell_cmd(t_simple_command **simple_command,
-							char **tokens, int i)
-{
-	int	j;
-
-	j = -1;
-	while (++j < 7)
-	{
-		if (!ft_strncmp(tokens[i], g_commands[j].name,
-			ft_strlen(g_commands[j].name) + 1))
-		{
-			(*simple_command)->command = ft_strdup(tokens[i]);
-			return (0);
-		}
-	}
-	return (1);
-}
-*/
 
 int				get_shell_cmd(t_simple_command **simple_command,
 							char **tokens, int i)

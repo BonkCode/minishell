@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/17 15:50:57 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/10/17 16:47:03 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,13 +127,22 @@ void		glue_tokens(char ***tokens)
 		i += 2;
 	}
 	if (!(temp_2 = ft_calloc(sizeof(char *), (size / 2 + 2))))
-		return ; // here
+	{
+		clear_tokens(*tokens, -1);
+		return ;
+	}
 	i = -1;
 	size = -1;
 	while ((*tokens)[++i])
 	{
 		if (ft_strncmp((*tokens)[i], "", 1))
-			temp_2[++size] = ft_strdup((*tokens)[i]); // here
+		{
+			if (!(temp_2[++size] = ft_strdup((*tokens)[i]))) // here
+			{
+				clear_tokens(temp_2, size);
+				break ;
+			}
+		}
 	}
 	clear_tokens(*tokens, -1);
 	*tokens = temp_2;
