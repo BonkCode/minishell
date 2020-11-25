@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_clearer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 15:25:59 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 15:26:15 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/25 21:50:36 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char		**clear_tokens(char **tokens, int count)
 	int	i;
 
 	i = -1;
+	if (!tokens)
+		return (NULL);
 	if (count < 0)
 	{
 		while (tokens[++i])

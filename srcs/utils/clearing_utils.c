@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clearing_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 14:47:42 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/17 16:54:48 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/25 21:45:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	*clear_3d(char ****arr, int n, int k)
 	int	i;
 	int	j;
 
+	if (!(*arr))
+		return (NULL);
 	i = -1;
 	while ((*arr)[++i] && (i < n || n < 0))
 	{

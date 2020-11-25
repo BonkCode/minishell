@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:23:22 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/17 16:18:58 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/25 22:02:04 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,17 @@ t_command		abort_parsing(t_command *return_command, int code,
 int				get_shell_cmd(t_simple_command **simple_command,
 							char **tokens, int i)
 {
+	int	j;
+	
 	(*simple_command)->command = ft_strdup(tokens[i]);
-	return (0);
+	j = -1;
+	while (++j < 7)
+	{
+		if (!ft_strncmp(g_commands[j].name, (*simple_command)->command, ft_strlen(g_commands[j].name)))
+			return (j);
+	}
+
+	return (-1);
 }
 
 void			get_redirect_files(char **tokens, int i,

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/17 15:53:28 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/25 22:03:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,27 +63,28 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 							t_simple_command **s_c, t_command *return_command)
 {
 	int	i;
+	int	index;
 
 	i = -1;
 	while (t[++i])
 	{
-		if (!(*s_c)->command && get_shell_cmd(s_c, t, i) != 0)
-			return (abort_parsing(return_command, 1, s_c, list));
+		if (!(*s_c)->command)
+			index = get_shell_cmd(s_c, t, i);
 		if (is_flag(t, i, s_c))
 		{
-			if (ft_strncmp((*s_c)->command, "echo", 5))
+			if (index == -1)
+				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(t[i])));
+			else if (ft_strncmp((*s_c)->command, "echoq", 5))
 				return (abort_parsing(return_command, 2, s_c, list));
 			else if (!ft_strncmp(t[i], "-n", 3))
 				(*s_c)->flag = ft_strdup(t[i]);
-			else
-				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(t[i])));
 		}
 		else if (!ft_strncmp(t[i], "|", 2))
 			try_sep(return_command, s_c, list);
 		else if (sep_or_add(new_t_token(t, &i), list, s_c,
 				return_command) > 0)
 			return (abort_parsing(return_command, 3, s_c, list));
-		else if (t[i] == '\0')
+		else if (t[i][0] == '\0')
 			break ;
 	}
 	return (*return_command);
