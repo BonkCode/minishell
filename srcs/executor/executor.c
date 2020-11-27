@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/11/25 22:12:49 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/27 07:18:17 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "m_types.h"
 #include "commands.h"
 #include "libftprintf.h"
+#include <signal.h>
 #include <sys/wait.h>
 
 extern int			g_status;
@@ -46,6 +47,8 @@ static void	run_executable(char **split_tokens, char **environ)
 	
 	if (!(id = fork()))
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (execve(split_tokens[0],
 					split_tokens, environ) < 0 &&
 			execve(ft_strjoin("/bin/", split_tokens[0]), // leak here
@@ -80,7 +83,9 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	while (command.commands)
 	{
 		if (command_flag < 0)
+		{
 			run_executable((*split_tokens)[i], environ);
+		}
 		else
 			run_command(command_flag, command);
 		g_status = (g_status & 0xff00) >> 8;
@@ -122,6 +127,7 @@ void		handle_line(char **line, char **environ)
 		execute(&split_tokens, env, environ, i);
 	}
 	free(*line);
+	*line = NULL;
 	ft_lstclear(&env, del);
 	clear_tokens(tokens, -1);
 	clear_3d(&split_tokens, -1, -1);

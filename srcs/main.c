@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/11/25 22:29:53 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/27 08:25:37 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "flexer.h"
 #include "m_types.h"
 #include "commands.h"
+#include <signal.h>
 #include "libftprintf.h"
 #include <sys/wait.h>
 
@@ -159,28 +160,46 @@ void		glue_tokens(char ***tokens)
 	copy_non_empty(tokens, size);
 }
 
+char	*g_line;
+
+void		sigint_handler()
+{
+	if (g_line)
+	{
+		free(g_line);
+		g_line = NULL;
+	}
+	ft_putstr_fd("\nbibaibobabash-0.0.2$ ", 1);
+}
+
 int			main(int argc, char **argv, char **environ)
 {
-	char				*line;
+	int		read_res;
 
-	line = NULL;
+	g_line = NULL;
 	if (argc)
 		argc = 0;
 	if (argv)
 		argv = 0;
 	ft_putstr_fd("You're finally awake!\n", 1);
 	setup_commands(g_commands);
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
-		if (get_next_line(0, &line))
+		if (read_res = get_next_line(0, &g_line))
 		{
-			handle_line(&line, environ);
+			handle_line(&g_line, environ);
 		}
 		else
 		{
-			ft_putstr_fd("\n", 1);
-			exit(0);
+			if (*g_line == '\0' && read_res == 0)
+			{
+				free (g_line);
+				ft_putstr_fd("\n", 1);
+				exit(0);
+			}
 		}
 	}
 	return (0);
