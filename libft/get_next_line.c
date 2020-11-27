@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/23 11:15:24 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/08 13:59:09 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/27 07:54:09 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "libftprintf.h"
 
 static int		get_line(char **list_fd, char **line, char *p_lbrake)
 {
@@ -64,7 +65,7 @@ int				get_next_line(int fd, char **line)
 		return (-1);
 	if (BUFFER_SIZE > 2147483646 || !(buff = malloc(BUFFER_SIZE + 1)))
 		return (-1);
-	while ((read_size = read(fd, buff, BUFFER_SIZE)) > 0)
+	while ((read_size = read(fd, buff, BUFFER_SIZE)) >= 0)
 	{
 		buff[read_size] = '\0';
 		if (!(list_fd[fd] = ft_strjoin_gnl(list_fd[fd], buff)))
@@ -77,6 +78,8 @@ int				get_next_line(int fd, char **line)
 			free_chr(&buff);
 			return (get_line(&list_fd[fd], line, p_lbrake));
 		}
+		if (list_fd[fd][0] == '\0' && read_size == 0)
+			break ;
 	}
 	return (get_from_storage(&list_fd[fd], line, read_size, &buff));
 }

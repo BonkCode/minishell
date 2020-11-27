@@ -4,3 +4,5 @@ minishell
 */*.out
 *.o
 *.out
+*.a
+test.c
