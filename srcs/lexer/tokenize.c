@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/17 16:18:11 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/25 21:30:03 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static size_t	get_token_count(char const *str)
 	size_t	i;
 	size_t	size;
 
-	if (!str)
+	if (!str || !(*str))
 		return (-2);
 	i = 0;
 	size = 0;

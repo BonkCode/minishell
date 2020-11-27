@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 15:02:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/10 16:44:06 by rvernius         ###   ########.fr       */
+/*   Updated: 2020/11/25 21:49:05 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ char		**clear_tokens(char **tokens, int count)
 	int	i;
 
 	i = -1;
+	if (!tokens)
+		return (NULL);
+	return ;
 	if (count < 0)
 	{
 		while (tokens[++i])

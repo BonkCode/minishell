@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/17 17:16:41 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/25 22:29:53 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,89 +161,21 @@ void		glue_tokens(char ***tokens)
 
 int			main(int argc, char **argv, char **environ)
 {
-	pid_t				id;
-	t_list				*env;
 	char				*line;
-	char				**tokens;
-	char				***split_tokens;
-	int					command_flag;
-	t_simple_command	*s_c;
-	t_command			command;
-	int					i;
 
+	line = NULL;
 	if (argc)
 		argc = 0;
 	if (argv)
 		argv = 0;
-	env = NULL;
 	ft_putstr_fd("You're finally awake!\n", 1);
 	setup_commands(g_commands);
-	ft_get_env(&env, environ);
 	while (1)
 	{
 		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
 		if (get_next_line(0, &line))
 		{
-			init_command(&command);
-			tokens = tokenize(line);
-			if (!tokens)
-				continue ;
-			i = -1;
-			//print_2d(tokens);
-			//ft_putchar_fd('\n', 1);
-			if (!(split_tokens = split_tokens_by_semicolons(tokens)))
-				continue ;
-			i = -1;
-			while (split_tokens[++i])
-			{
-				expand(&split_tokens[i], env);
-				glue_tokens(&split_tokens[i]);
-				//print_2d(split_tokens[i]);
-				//ft_putchar_fd('\n', 1);
-				command_flag = -1;
-				get_command(&command, &command_flag, split_tokens[i]);
-				s_c = command.commands;
-				print_commands(command);
-				ft_putstr_fd("\n\n", 1);
-				while (command.commands)
-				{
-					if (command_flag < 0)
-					{
-						if (!(id = fork()))
-						{
-							if (execve(split_tokens[i][0],
-										split_tokens[i], environ) < 0 &&
-								execve(ft_strjoin("/bin/", split_tokens[i][0]), // leak here
-										split_tokens[i], environ) < 0)
-							{
-								ft_putstr_fd(split_tokens[i][0], 2);
-								ft_putstr_fd(": command not found\n", 2);
-								exit(127);
-							}
-							exit(0);
-						}
-						else
-							wait(&g_status);
-					}
-					else
-					{
-						if (!(id = fork()))
-						{
-							exit (0);
-							g_commands[command_flag].function(command);
-						}
-						else
-							wait(&g_status);
-					}
-					g_status = (g_status & 0xff00) >> 8;
-					command.commands = command.commands->next;
-				}
-				command.commands = s_c;
-				free_command(&command);
-			}
-			free(line);
-			clear_tokens(tokens, -1);
-			free(split_tokens);
+			handle_line(&line, environ);
 		}
 		else
 		{
