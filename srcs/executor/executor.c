@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/11/27 07:18:17 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/11/27 08:35:03 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,16 @@ static	void		del(void *data)
 	data = NULL;
 }
 
+static void	sigint_skip()
+{
+	write(1, "\n", 1);
+}
+
 static void	run_executable(char **split_tokens, char **environ)
 {
 	pid_t	id;
 	
+	signal(SIGINT, sigint_skip);
 	if (!(id = fork()))
 	{
 		signal(SIGINT, SIG_DFL);
@@ -62,6 +68,7 @@ static void	run_executable(char **split_tokens, char **environ)
 	}
 	else
 		wait(&g_status);
+	signal(SIGINT, sigint_handler);
 }
 
 void		execute(char ****split_tokens, t_list *env, char **environ, int i)
