@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/11/27 08:35:03 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/02 19:18:10 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "flexer.h"
 #include "m_types.h"
 #include "commands.h"
+#include <fcntl.h>
 #include "libftprintf.h"
 #include <signal.h>
 #include <sys/wait.h>
@@ -46,28 +47,49 @@ static void	sigint_skip()
 	write(1, "\n", 1);
 }
 
-static void	run_executable(char **split_tokens, char **environ)
+static char	**form_args(t_list *args)
+{
+	char	**return_args;
+	int		i;
+	
+	i = -1;
+	return_args = ft_calloc(ft_lstsize(args) + 1, sizeof(char *));
+	while (args)
+	{
+		return_args[++i] = ft_strdup(args->content);
+		args = args->next;
+	}
+	return (return_args);
+}
+
+static void	run_executable(t_simple_command *command, char **environ)
 {
 	pid_t	id;
+	char	**args;
 	
+	args = form_args(command->args);
 	signal(SIGINT, sigint_skip);
+	//ft_printf("ARGS:\n");
+	//print_2d(args);
 	if (!(id = fork()))
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (execve(split_tokens[0],
-					split_tokens, environ) < 0 &&
-			execve(ft_strjoin("/bin/", split_tokens[0]), // leak here
-					split_tokens, environ) < 0)
+		if (execve(command->command,
+					args, environ) < 0 &&
+			execve(ft_strjoin("/bin/", command->command), // leak here
+					args, environ) < 0)
 		{
-			ft_putstr_fd(split_tokens[0], 2);
+			ft_putstr_fd(command->command, 2);
 			ft_putstr_fd(": command not found\n", 2);
 			exit(127);
 		}
 		exit(0);
 	}
 	else
+	{
 		wait(&g_status);
+	}
 	signal(SIGINT, sigint_handler);
 }
 
@@ -76,27 +98,50 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	t_command			command;
 	int					command_flag;
 	t_simple_command	*s_c;
+	int					std_copy[2];
+	int					pipe_fd[2];
+	int					pipe_fd_dup[2];
 	
 	init_command(&command);
 	expand(&(*split_tokens)[i], env);
 	glue_tokens(&(*split_tokens)[i]);
-	//print_2d(split_tokens[i]);
+//	print_2d((*split_tokens)[i]);
 	//ft_putchar_fd('\n', 1);
 	command_flag = -1;
 	get_command(&command, &command_flag, (*split_tokens)[i]);
 	s_c = command.commands;
 	//print_commands(command);
 	//ft_putstr_fd("\n\n", 1);
+	if (command.piped)
+	{
+		pipe(pipe_fd);
+		std_copy[0] = dup(0);
+		std_copy[1] = dup(1);
+		pipe_fd_dup[0] = dup2(pipe_fd[0], 0);
+		pipe_fd_dup[1] = dup2(pipe_fd[1], 1);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+	}
 	while (command.commands)
 	{
+		if (command.piped && !command.commands->next)
+		{
+			dup2(std_copy[1], 1);
+			close (std_copy[1]);
+		}
 		if (command_flag < 0)
 		{
-			run_executable((*split_tokens)[i], environ);
+			run_executable(command.commands, environ);
 		}
 		else
 			run_command(command_flag, command);
 		g_status = (g_status & 0xff00) >> 8;
 		command.commands = command.commands->next;
+	}
+	if (command.piped)
+	{
+		dup2(std_copy[0], 0);
+		close(std_copy[0]);
 	}
 	command.commands = s_c;
 	free_command(&command);
@@ -119,8 +164,6 @@ void		handle_line(char **line, char **environ)
 	if (!tokens)
 		return ;
 	i = -1;
-	//print_2d(tokens);
-	//ft_putchar_fd('\n', 1);
 	if (!(split_tokens = split_tokens_by_semicolons(tokens)))
 	{
 		clear_tokens(tokens, -1);
