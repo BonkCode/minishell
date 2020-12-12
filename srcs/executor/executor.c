@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/12 14:31:24 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/12 16:18:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	command_flag = -1;
 	get_command(&command, &command_flag, (*split_tokens)[i]);
 	s_c = command.commands;
-	//print_commands(command);
+	print_commands(command);
 	//ft_putstr_fd("\n\n", 1);
 	if (command.piped)
 	{
