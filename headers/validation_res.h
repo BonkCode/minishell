@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_2d.c                                         :+:      :+:    :+:   */
+/*   validation_res.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/06 17:14:51 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/12 14:11:44 by rtrant           ###   ########.fr       */
+/*   Created: 2020/12/12 13:47:30 by rtrant            #+#    #+#             */
+/*   Updated: 2020/12/12 14:36:49 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-
-void	print_2d(char **arr)
-{
-	int	i;
-
-	if (!arr)
-	{
-		ft_printf("no array\n");
-		return ;
-	}
-	i = -1;
-	while (arr[++i])
-		ft_printf("|%s| ", arr[i]);
-}
+#ifndef VALIDATION_RES_H
+# define VALIDATION_RES_H
+# define STAT_OK 0
+# define STAT_SYNTAX_ERR 1
+# define STAT_DOUBLE_SPEC_TOKEN_ERR 2
+#endif

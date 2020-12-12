@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/02 19:18:10 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/12 14:31:24 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,15 +154,28 @@ void		handle_line(char **line, char **environ)
 	char				**tokens;
 	char				***split_tokens;
 	int					i;
-	
+
 	tokens = NULL;
 	split_tokens = NULL;
 	env = NULL;
-	
+
 	ft_get_env(&env, environ);
 	tokens = tokenize(*line);
 	if (!tokens)
+	{
+		if ((*line)[0])
+			ft_printf("NO CLOSE QMARKS\n");
 		return ;
+	}
+	print_2d(tokens);
+	if (validate_tokens(tokens))
+	{
+		ft_printf("\nraw: %i\ncode: %i \npos: %i\n", validate_tokens(tokens), (validate_tokens(tokens) << 24) >> 24, validate_tokens(tokens) >> 8);
+		clear_tokens(tokens, -1);
+		ft_lstclear(&env, free);
+		free(*line);
+		return ;
+	}
 	i = -1;
 	if (!(split_tokens = split_tokens_by_semicolons(tokens)))
 	{

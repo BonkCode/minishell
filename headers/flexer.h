@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/11/27 08:33:47 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/12 13:57:37 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ void				init_command(t_command *command);
 void				get_command(t_command *command, int *command_flag, char **tokens);
 void				glue_tokens(char ***tokens);
 void				sigint_handler();
+int					validate_tokens(char **tokens);
 
 #endif

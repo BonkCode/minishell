@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/11/25 21:11:47 by rtrant           ###   ########.fr        #
+#    Updated: 2020/12/12 13:58:13 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SRCS = 	srcs/main.c \
 		srcs/expander/expander_utils.c \
 		srcs/utils/clearing_utils.c \
 		srcs/lexer/tokens_splitter.c \
-		srcs/executor/executor.c
+		srcs/executor/executor.c \
+		srcs/validator/validator.c
 
 NAME = minishell
 
