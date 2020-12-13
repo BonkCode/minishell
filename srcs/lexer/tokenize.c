@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/11/25 21:30:03 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/12 14:14:56 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static	int		skip_qmark(size_t *i, size_t *size, const char *str)
 	return (0);
 }
 
-static size_t	get_token_count(char const *str)
+static int		get_token_count(char const *str)
 {
 	size_t	i;
 	size_t	size;
@@ -98,7 +98,7 @@ char			**tokenize(char const *str)
 {
 	char	**tokens;
 	size_t	i;
-	size_t	size;
+	int		size;
 	char	*space;
 
 	size = get_token_count(str);

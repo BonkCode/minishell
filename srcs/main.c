@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/11/27 08:25:37 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/12 16:16:20 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void		sigint_handler()
 		free(g_line);
 		g_line = NULL;
 	}
+	g_status = 130;
 	ft_putstr_fd("\nbibaibobabash-0.0.2$ ", 1);
 }
 

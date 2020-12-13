@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_splitter.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 17:31:04 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/17 16:53:21 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/12 14:33:34 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int		count_and_alloc(char ****split_tokens, char **tokens)
 	i = -1;
 	while (tokens[++i])
 	{
-		if (!ft_strncmp(tokens[i], ";", 2))
+		if (!ft_strncmp(tokens[i], ";", 2) && tokens[i + 1])
 			++size;
 	}
 	if (!(*split_tokens = malloc(sizeof(char **) * (size + 1))))
@@ -120,9 +120,9 @@ char			***split_tokens_by_semicolons(char **tokens)
 		{
 			++size;
 			j = -1;
-			continue ;
 		}
-		split_tokens[size][++j] = ft_strdup(tokens[i]);
+		else
+			split_tokens[size][++j] = ft_strdup(tokens[i]);
 	}
 	return (trim_2d(&split_tokens, len));
 }
