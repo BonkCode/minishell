@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:20:56 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/15 17:12:01 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/14 22:36:52 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void					init_return_command(t_command *return_command)
 	return_command->infile = NULL;
 	return_command->outfile = NULL;
 	return_command->errfile = NULL;
+	return_command->other_files = NULL;
 	return_command->commands = NULL;
 	return_command->piped = 0;
 	return_command->status = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_clearer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 14:08:02 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/08 15:18:47 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/18 21:18:05 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,22 @@ void				free_command(t_command *command)
 	clear_simple_commands(&command->commands);
 	if (command->infile)
 	{
-		free(command->infile);
+		ft_lstclear(&command->infile, del);
 		command->infile = NULL;
 	}
 	if (command->outfile)
 	{
-		free(command->outfile);
+		ft_lstclear(&command->outfile, del);
 		command->outfile = NULL;
 	}
 	if (command->errfile)
 	{
-		free(command->errfile);
+		ft_lstclear(&command->outfile, del);
 		command->errfile = NULL;
+	}
+	if (command->other_files)
+	{
+		ft_lstclear(&command->other_files, del);
+		command->other_files = NULL;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   m_types.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/15 17:11:54 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/14 22:34:39 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,10 @@ typedef struct	s_var
 typedef struct	s_command
 {
 	t_simple_command	*commands;
-	char				*infile;
-	char				*outfile;
-	char				*errfile;
+	t_list				*infile;
+	t_list				*outfile;
+	t_list				*errfile;
+	t_list				*other_files;
 	int					piped;
 	int					status;
 }				t_command;

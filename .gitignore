@@ -6,3 +6,6 @@ minishell
 *.out
 *.a
 test.c
+temp
+temp/temp
+temp/*

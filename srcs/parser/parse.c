@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/12 16:21:42 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/18 21:53:48 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,19 @@ int						is_flag(char **tokens, int i, t_simple_command **s_c)
 	return (0);
 }
 
+int						str_is_num(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+	}
+	return (1);
+}
+
 int						sep_or_add(t_tokens tokens_pos, t_simple_command **list,
 							t_simple_command **s_c, t_command *return_command)
 {
@@ -46,15 +59,10 @@ int						sep_or_add(t_tokens tokens_pos, t_simple_command **list,
 	i = tokens_pos.i;
 	if (!ft_strncmp_split(tokens[*i], ">> < >", ' '))
 	{
-		ft_command_add_back(list, (*s_c));
-		if (!((*s_c) = new_simple_command()) || tokens[*i + 1] == 0)
-			return (3);
 		get_redirect_files(tokens, *i, return_command);
-		*i += 2;
-		if (tokens[*i] == 0)
-			return (-1);
+		*i += 1;
 	}
-	else if (ft_strncmp_split(tokens[*i + 1], "< > >>", ' '))
+	else if (ft_strncmp_split(tokens[*i + 1], "< > >>", ' ') || !str_is_num(tokens[*i]))
 		ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(tokens[*i])));
 	return (0);
 }
@@ -68,7 +76,7 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 	i = -1;
 	while (t[++i])
 	{
-		if (!(*s_c)->command)
+		if (!(*s_c)->command && ft_strncmp_split(t[i], "< > >>", ' ') && !(str_is_num(t[i]) && !ft_strncmp_split(t[i + 1], "< > >>", ' ')))
 			index = get_shell_cmd(s_c, t, i);
 		if (is_flag(t, i, s_c))
 		{
@@ -84,7 +92,7 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 		else if (sep_or_add(new_t_token(t, &i), list, s_c,
 				return_command) > 0)
 			return (abort_parsing(return_command, 3, s_c, list));
-		else if (!t[i] || t[i][0] == '\0')
+		if (!t[i] || t[i][0] == '\0')
 			break ;
 	}
 	return (*return_command);

@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 13:44:55 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/14 21:47:46 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/14 22:23:47 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	validate_tokens(char **tokens)
 	i = 0;
 	redirected = 0;
 	len = get_2d_arr_len(tokens);
-	if (!ft_strncmp(tokens[0], ";", 2))
+	if (!ft_strncmp_split(tokens[0], "; |", ' '))
 		return ((0<<8) + STAT_SYNTAX_ERR);
 	while (tokens[i] && i < len)
 	{
@@ -49,7 +49,7 @@ int	validate_tokens(char **tokens)
 			return ((i<<8) + STAT_DOUBLE_REDIRECTION_ERR);
 		if (!ft_strncmp_split(tokens[i], "< > >>", ' '))
 			redirected = 1;
-		if (!ft_strncmp_split(tokens[i], "< > >> |", ' ') && redirected)
+		if (!ft_strncmp(tokens[i], "|", 2) && redirected)
 			return ((i<<8) + STAT_DOUBLE_REDIRECTION_ERR);
 		if (!ft_strncmp(tokens[i], ";", 2))
 			redirected = 0;

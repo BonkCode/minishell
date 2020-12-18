@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/12 16:18:25 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/18 21:23:32 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,12 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	
 	init_command(&command);
 	expand(&(*split_tokens)[i], env);
+	print_2d((*split_tokens)[i]);
 	glue_tokens(&(*split_tokens)[i]);
 //	print_2d((*split_tokens)[i]);
 	//ft_putchar_fd('\n', 1);
 	command_flag = -1;
+	print_2d((*split_tokens)[i]);
 	get_command(&command, &command_flag, (*split_tokens)[i]);
 	s_c = command.commands;
 	print_commands(command);
@@ -167,7 +169,6 @@ void		handle_line(char **line, char **environ)
 			ft_printf("NO CLOSE QMARKS\n");
 		return ;
 	}
-	print_2d(tokens);
 	if (validate_tokens(tokens))
 	{
 		ft_printf("\nraw: %i\ncode: %i \npos: %i\n", validate_tokens(tokens), (validate_tokens(tokens) << 24) >> 24, validate_tokens(tokens) >> 8);
