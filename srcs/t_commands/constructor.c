@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:20:56 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/14 22:36:52 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/21 23:53:36 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void					init_return_command(t_command *return_command)
 	return_command->commands = NULL;
 	return_command->piped = 0;
 	return_command->status = 0;
+	return_command->append = 0;
 }
 
 t_tokens				new_t_token(char **tokens, int *i)
