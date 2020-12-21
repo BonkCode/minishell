@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/22 00:21:02 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/22 00:50:08 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,28 +62,69 @@ static char	**form_args(t_list *args)
 	return (return_args);
 }
 
+t_list		*get_path(char **environ)
+{
+	int		i;
+	t_list	*env;
+	t_list	*path;
+	char	**split_var;
+	char	**paths;
+	
+	ft_get_env(&env, environ);
+	while (env)
+	{
+		split_var = ft_split(env->content, '=');
+		if (!ft_strncmp(split_var[0], "PATH", 5))
+			break ;
+		env = env->next;
+	}
+	path = ft_lstnew(ft_strdup(""));
+	paths = ft_split(split_var[1], ':');
+	
+	i = -1;
+	while (paths[++i])
+		ft_lstadd_back(&path, ft_lstnew(ft_strdup(paths[i])));
+	clear_tokens(paths, -1);
+	clear_tokens(split_var, -1);
+	return (path);
+}
+
 static void	run_executable(t_simple_command *command, char **environ)
 {
 	pid_t	id;
 	char	**args;
-	
+	t_list	*path;
+	int		executed;
+	char	*temp_path;
+
+	executed = -1;
 	args = form_args(command->args);
 	signal(SIGINT, sigint_skip);
 	//ft_printf("ARGS:\n");
 	//print_2d(args);
+	path = NULL;
 	if (!(id = fork()))
 	{
+		path = get_path(environ);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (execve(command->command,
-					args, environ) < 0 &&
-			execve(ft_strjoin("/bin/", command->command), // leak here
-					args, environ) < 0)
+		while (path)
+		{
+			temp_path = ft_strjoin(path->content, "/");
+			if ((executed = execve(ft_strjoin(temp_path, command->command), args, environ)) >= 0)
+				break ;
+			free(temp_path);
+			path = path->next;
+		}
+		if (executed < 0)
 		{
 			ft_putstr_fd(command->command, 2);
 			ft_putstr_fd(": command not found\n", 2);
+			ft_lstclear(&path, del);
 			exit(127);
 		}
+		free(temp_path);
+		ft_lstclear(&path, del);
 		exit(0);
 	}
 	else
@@ -108,15 +149,15 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	fd_dup = -1;
 	init_command(&command);
 	expand(&(*split_tokens)[i], env);
-	print_2d((*split_tokens)[i]);
+	//print_2d((*split_tokens)[i]);
 	glue_tokens(&(*split_tokens)[i]);
 //	print_2d((*split_tokens)[i]);
 	//ft_putchar_fd('\n', 1);
 	command_flag = -1;
-	print_2d((*split_tokens)[i]);
+	//print_2d((*split_tokens)[i]);
 	get_command(&command, &command_flag, (*split_tokens)[i]);
 	s_c = command.commands;
-	print_commands(command);
+	//print_commands(command);
 	//ft_putstr_fd("\n\n", 1);
 	std_copy[0] = dup(0);
 	std_copy[1] = dup(1);
