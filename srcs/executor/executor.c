@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/22 00:19:36 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/22 00:21:02 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,9 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 			while (command.outfile)
 			{
 				if (!command.append && (fd = open(command.outfile->content, O_RDONLY)) > 0)
-					return ; // todo
+					return ; // todo remove leaks
 				else if ((fd = open(command.outfile->content, O_WRONLY | O_CREAT)) < 0)
-					return ; // todo
+					return ; // todo remove leaks
 				fd_dup = dup2(fd, 1);
 				close(fd);
 				command.outfile = command.outfile->next;
