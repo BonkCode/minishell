@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/14 22:34:39 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/22 00:19:17 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,17 @@ typedef struct	s_var
 	int			len;
 }				t_var;
 
+typedef struct	s_fd_redir
+{
+	int			fd_out;
+	int			fd_in;
+	int			fd_err;
+	int			fd_other;
+	int			fd_out_dup;
+	int			fd_in_dup;
+	int			fd_err_dup;
+}				t_files_redir;
+
 typedef struct	s_command
 {
 	t_simple_command	*commands;
@@ -45,6 +56,7 @@ typedef struct	s_command
 	t_list				*outfile;
 	t_list				*errfile;
 	t_list				*other_files;
+	int					append;
 	int					piped;
 	int					status;
 }				t_command;

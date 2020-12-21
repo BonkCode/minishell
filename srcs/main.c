@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/12/21 23:47:39 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/21 23:53:23 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void		init_command(t_command *command)
 {
 	command->status = 127;
 	command->piped = 0;
+	command->append = 0;
 	command->infile = NULL;
 	command->errfile = NULL;
 	command->outfile = NULL;

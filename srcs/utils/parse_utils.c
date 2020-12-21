@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:23:22 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/18 21:13:47 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/21 23:54:42 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,10 @@ int				get_shell_cmd(t_simple_command **simple_command,
 void			get_redirect_files(char **tokens, int i,
 							t_command *return_command)
 {
+	if (!ft_strncmp(tokens[i], ">>", 3))
+		return_command->append = 1;
+	else
+		return_command->append = 0;
 	if (!ft_strncmp_split(tokens[i], "<", ' '))
 		ft_lstadd_back(&return_command->infile, ft_lstnew(ft_strdup(tokens[i + 1])));
 	else if (i > 0 && !ft_strncmp(tokens[i - 1], "1", 2))

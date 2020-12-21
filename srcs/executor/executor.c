@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/18 21:23:32 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/22 00:21:02 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,14 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	t_command			command;
 	int					command_flag;
 	t_simple_command	*s_c;
-	int					std_copy[2];
+	int					std_copy[3];
 	int					pipe_fd[2];
 	int					pipe_fd_dup[2];
+	int					fd;
+	int					fd_dup;
 	
+	fd = -1;
+	fd_dup = -1;
 	init_command(&command);
 	expand(&(*split_tokens)[i], env);
 	print_2d((*split_tokens)[i]);
@@ -114,11 +118,12 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	s_c = command.commands;
 	print_commands(command);
 	//ft_putstr_fd("\n\n", 1);
+	std_copy[0] = dup(0);
+	std_copy[1] = dup(1);
+	std_copy[2] = dup(2);
 	if (command.piped)
 	{
 		pipe(pipe_fd);
-		std_copy[0] = dup(0);
-		std_copy[1] = dup(1);
 		pipe_fd_dup[0] = dup2(pipe_fd[0], 0);
 		pipe_fd_dup[1] = dup2(pipe_fd[1], 1);
 		close(pipe_fd[0]);
@@ -129,7 +134,46 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 		if (command.piped && !command.commands->next)
 		{
 			dup2(std_copy[1], 1);
-			close (std_copy[1]);
+			std_copy[1] = dup(1);
+		}
+		else if (!command.commands->next)
+		{
+			while (command.outfile)
+			{
+				if (!command.append && (fd = open(command.outfile->content, O_RDONLY)) > 0)
+					return ; // todo remove leaks
+				else if ((fd = open(command.outfile->content, O_WRONLY | O_CREAT)) < 0)
+					return ; // todo remove leaks
+				fd_dup = dup2(fd, 1);
+				close(fd);
+				command.outfile = command.outfile->next;
+			}
+			while (command.errfile)
+			{
+				if (!command.append && (fd = open(command.errfile->content, O_RDONLY)) > 0)
+					return ; // todo
+				else if ((fd = open(command.errfile->content, O_WRONLY | O_CREAT)) < 0)
+					return ; // todo
+				fd_dup = dup2(fd, 2);
+				close(fd);
+				command.errfile = command.errfile->next;
+			}
+			while (command.infile)
+			{
+				if ((fd = open(command.infile->content, O_RDONLY)) < 0)
+					return ; // todo
+				fd_dup = dup2(fd, 0);
+				close(fd);
+				command.infile = command.infile->next;
+			}
+			while (command.other_files)
+			{
+				if (!command.append && (fd = open(command.other_files->content, O_RDONLY)) > 0)
+					return ; // todo
+				else if ((fd = open(command.other_files->content, O_WRONLY | O_CREAT)) < 0)
+					return ; // todo
+				command.other_files = command.other_files->next;
+			}
 		}
 		if (command_flag < 0)
 		{
@@ -140,11 +184,12 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 		g_status = (g_status & 0xff00) >> 8;
 		command.commands = command.commands->next;
 	}
-	if (command.piped)
-	{
-		dup2(std_copy[0], 0);
-		close(std_copy[0]);
-	}
+	dup2(std_copy[0], 0);
+	close(std_copy[0]);
+	dup2(std_copy[1], 1);
+	close(std_copy[1]);
+	dup2(std_copy[2], 2);
+	close(std_copy[2]);
 	command.commands = s_c;
 	free_command(&command);
 }
