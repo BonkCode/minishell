@@ -26,7 +26,7 @@ void		setup_commands(t_shell_cmd commands[7])
 	(commands)[3] = new_shell_cmd("unset", &dummy_unset);
 	(commands)[4] = new_shell_cmd("env", &dummy_env);
 	(commands)[5] = new_shell_cmd("exit", &dummy_exit);
-	(commands)[6] = new_shell_cmd("pwd", &dummy_pwd);
+	(commands)[6] = new_shell_cmd("pwd", &ft_pwd);
 }
 
 t_shell_cmd	g_commands[7];

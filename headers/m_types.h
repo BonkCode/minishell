@@ -64,7 +64,7 @@ typedef struct	s_command
 typedef struct	s_shell_cmd
 {
 	char		*name;
-	void		(*function)(t_command command);
+	void		(*function)(t_simple_command);
 }				t_shell_cmd;
 
 #endif

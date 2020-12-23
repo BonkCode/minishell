@@ -12,16 +12,16 @@
 
 #include "../../../headers/commands.h"
 
-void	ft_pwd(t_command command)
+void	ft_pwd(t_simple_command command)
 {
 	char		*buf;
 	int			i;
 
 	i = 0;
-	while (command.commands->args)
+	while (command.args)
 	{
 		++i;
-		command.commands->args = command.commands->args->next;
+		command.args = command.args->next;
 	}
 	--i;
 	if (i > 0)

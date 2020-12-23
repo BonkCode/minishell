@@ -22,7 +22,7 @@
 extern int			g_status;
 extern t_shell_cmd	g_commands[7];
 
-static void	run_command(int command_flag, t_command command)
+static void	run_command(int command_flag, t_simple_command command)
 {
 	pid_t	id;
 

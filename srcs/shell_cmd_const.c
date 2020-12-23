@@ -12,7 +12,7 @@
 
 #include "m_types.h"
 
-t_shell_cmd	new_shell_cmd(char *name, void (*func)(t_command command))
+t_shell_cmd	new_shell_cmd(char *name, void (*func)(t_simple_command command))
 {
 	t_shell_cmd	new_cmd;
 

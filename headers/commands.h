@@ -21,17 +21,17 @@
 # include "m_types.h"
 # include "c_types.h"
 
-void		dummy_echo(t_command command);
-void		dummy_cd(t_command command);
-void		dummy_export(t_command command);
-void		dummy_unset(t_command command);
-void		dummy_env(t_command command);
-void		dummy_exit(t_command command);
-void		ft_echo(t_command command);
-void		ft_pwd(t_command command);
-void		ft_cd(t_command command);
-void		ft_exit(t_command command);
-void		dummy_pwd(t_command command);
+void		dummy_echo(t_simple_command command);
+void		dummy_cd(t_simple_command command);
+void		dummy_export(t_simple_command command);
+void		dummy_unset(t_simple_command command);
+void		dummy_env(t_simple_command command);
+void		dummy_exit(t_simple_command command);
+void		ft_echo(t_simple_command command);
+void		ft_pwd(t_simple_command command);
+void		ft_cd(t_simple_command command);
+void		ft_exit(t_simple_command command);
+void		dummy_pwd(t_simple_command command);
 void		ft_get_env(t_list **env, char **environ);
 
 #endif

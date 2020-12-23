@@ -15,7 +15,7 @@
 # include "libft.h"
 # include "m_types.h"
 
-t_shell_cmd			new_shell_cmd(char *name, void (*func)(t_command command));
+t_shell_cmd			new_shell_cmd(char *name, void (*func)(t_simple_command command));
 char				**tokenize(char const *str);
 char				***split_tokens_by_semicolons(char **tokens);
 char				**clear_tokens(char **tokens, int count);

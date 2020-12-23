@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/commands.h"
+#include "../../../headers/m_types.h"
 #include <unistd.h>
 #include <stdio.h>
 
-void	ft_cd(t_command command)
+void	ft_cd(t_simple_command command, t_)
 {
-	if (ft_strlen(command.commands->arguments) == 1)
-		chdir(command.commands->arguments);
-
+	if (ft_strlen(command.args) == 1)
+		chdir(command.args);
+	
 }
 
 /*
