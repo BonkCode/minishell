@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 16:46:00 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/22 00:19:17 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/23 21:24:51 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct	s_command
 typedef struct	s_shell_cmd
 {
 	char		*name;
-	void		(*function)(t_command command);
+	void		(*function)(t_simple_command command);
 }				t_shell_cmd;
 
 #endif

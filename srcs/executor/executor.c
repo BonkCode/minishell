@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/22 00:50:08 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/23 21:43:52 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@
 extern int			g_status;
 extern t_shell_cmd	g_commands[7];
 
-static void	run_command(int command_flag, t_command command)
+static void	run_command(int command_flag, t_simple_command *command)
 {
 	pid_t	id;
 
 	if (!(id = fork()))
 	{
 		exit (0);
-		g_commands[command_flag].function(command);
+		g_commands[command_flag].function(*command);
 	}
 	else
 		wait(&g_status);
@@ -141,12 +141,12 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	t_simple_command	*s_c;
 	int					std_copy[3];
 	int					pipe_fd[2];
-	int					pipe_fd_dup[2];
-	int					fd;
-	int					fd_dup;
+	int					fd[4];
 	
-	fd = -1;
-	fd_dup = -1;
+	fd[0] = -1;
+	fd[1] = -1;
+	fd[2] = -1;
+	fd[3] = -1;
 	init_command(&command);
 	expand(&(*split_tokens)[i], env);
 	//print_2d((*split_tokens)[i]);
@@ -165,10 +165,10 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	if (command.piped)
 	{
 		pipe(pipe_fd);
-		pipe_fd_dup[0] = dup2(pipe_fd[0], 0);
-		pipe_fd_dup[1] = dup2(pipe_fd[1], 1);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
+		dup2(pipe_fd[0], 0);
+		dup2(pipe_fd[1], 1);
+		//close(pipe_fd[0]);
+		//close(pipe_fd[1]);
 	}
 	while (command.commands)
 	{
@@ -181,47 +181,51 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 		{
 			while (command.outfile)
 			{
-				if (!command.append && (fd = open(command.outfile->content, O_RDONLY)) > 0)
+				ft_putstr_fd(command.outfile->content, 2);
+				ft_putchar_fd('\n', 2);
+				if (!command.append && (fd[1] = open(command.outfile->content, O_RDONLY)) > 0)
 					return ; // todo remove leaks
-				else if ((fd = open(command.outfile->content, O_WRONLY | O_CREAT)) < 0)
+				else if ((fd[1] = open(command.outfile->content, O_WRONLY | O_CREAT)) < 0)
 					return ; // todo remove leaks
-				fd_dup = dup2(fd, 1);
-				close(fd);
+				if (!command.outfile->next)
+					dup2(fd[1], 1);
+				close(fd[1]);
 				command.outfile = command.outfile->next;
 			}
 			while (command.errfile)
 			{
-				if (!command.append && (fd = open(command.errfile->content, O_RDONLY)) > 0)
+				if (!command.append && (fd[2] = open(command.errfile->content, O_RDONLY)) > 0)
 					return ; // todo
-				else if ((fd = open(command.errfile->content, O_WRONLY | O_CREAT)) < 0)
+				else if ((fd[2] = open(command.errfile->content, O_WRONLY | O_CREAT)) < 0)
 					return ; // todo
-				fd_dup = dup2(fd, 2);
-				close(fd);
+				if (!command.errfile->next)
+					dup2(fd[2], 2);
+				close(fd[2]);
 				command.errfile = command.errfile->next;
 			}
 			while (command.infile)
 			{
-				if ((fd = open(command.infile->content, O_RDONLY)) < 0)
+				if ((fd[0] = open(command.infile->content, O_RDONLY)) < 0)
 					return ; // todo
-				fd_dup = dup2(fd, 0);
-				close(fd);
+				if (!command.infile->next)
+					dup2(fd[0], 0);
+				close(fd[0]);
 				command.infile = command.infile->next;
 			}
 			while (command.other_files)
 			{
-				if (!command.append && (fd = open(command.other_files->content, O_RDONLY)) > 0)
+				if (!command.append && (fd[4] = open(command.other_files->content, O_RDONLY)) > 0)
 					return ; // todo
-				else if ((fd = open(command.other_files->content, O_WRONLY | O_CREAT)) < 0)
+				else if ((fd[4] = open(command.other_files->content, O_WRONLY | O_CREAT)) < 0)
 					return ; // todo
+				close (fd[4]);
 				command.other_files = command.other_files->next;
 			}
 		}
 		if (command_flag < 0)
-		{
 			run_executable(command.commands, environ);
-		}
 		else
-			run_command(command_flag, command);
+			run_command(command_flag, command.commands);
 		g_status = (g_status & 0xff00) >> 8;
 		command.commands = command.commands->next;
 	}
