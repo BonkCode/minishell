@@ -28,7 +28,8 @@ SRCS = 	srcs/main.c \
 		srcs/utils/clearing_utils.c \
 		srcs/lexer/tokens_splitter.c \
 		srcs/executor/executor.c \
-		srcs/validator/validator.c
+		srcs/validator/validator.c \
+		srcs/commands/pwd/pwd.c
 
 NAME = minishell
 
