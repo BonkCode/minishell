@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/12/26 23:49:37 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 01:01:20 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		setup_commands(t_shell_cmd commands[7])
 {
 	(commands)[0] = new_shell_cmd("echo", &ft_echo);
 	(commands)[1] = new_shell_cmd("cd", &ft_cd);
-	(commands)[2] = new_shell_cmd("export", &dummy_export);
+	(commands)[2] = new_shell_cmd("export", &ft_export);
 	(commands)[3] = new_shell_cmd("unset", &dummy_unset);
 	(commands)[4] = new_shell_cmd("env", &ft_env);
 	(commands)[5] = new_shell_cmd("exit", &ft_exit);
@@ -174,10 +174,15 @@ void		sigint_handler()
 	ft_putstr_fd("\nbibaibobabash-0.0.2$ ", 1);
 }
 
+int	g_start_env_len;
+
 int			main(int argc, char **argv, char **environ)
 {
 	int		read_res;
 
+	g_start_env_len = 0;
+	while (environ[g_start_env_len])
+		++g_start_env_len;
 	g_line = NULL;
 	if (argc)
 		argc = 0;

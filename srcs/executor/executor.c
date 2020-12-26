@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/26 23:53:52 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 02:26:19 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,10 @@ t_list		*get_path(char **environ)
 	path = NULL;
 	if (!ft_strncmp(split_var[0], "PATH", 5))
 		paths = ft_split(split_var[1], ':');
-	
 	i = -1;
-	while (paths[++i] && !ft_strncmp(split_var[0], "PATH", 5))
+	while (paths && paths[++i] && !ft_strncmp(split_var[0], "PATH", 5))
 		ft_lstadd_back(&path, ft_lstnew(ft_strjoin(paths[i], "/")));
-	if (!ft_strncmp(split_var[0], "PATH", 5))
+	if (!ft_strncmp(split_var[0], "PATH", 5) && paths)
 		clear_tokens(paths, -1);
 	clear_tokens(split_var, -1);
 	ft_lstclear(&env, del);
@@ -144,6 +143,7 @@ void		get_shell_command_index(int *command_flag, char *command)
 	int	i;
 
 	i = -1;
+	*command_flag = -1;
 	while (++i < 7)
 	{
 		if (ft_strncmp(command, g_commands[i].name,
