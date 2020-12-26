@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_cmd_const.c                                  :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/26 15:48:44 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/26 22:56:25 by rtrant           ###   ########.fr       */
+/*   Created: 2020/12/26 23:21:09 by rtrant            #+#    #+#             */
+/*   Updated: 2020/12/26 23:23:29 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_types.h"
+#include "libftprintf.h"
+#include "flexer.h"
+#include "commands.h"
 
-t_shell_cmd	new_shell_cmd(char *name, int (*func)(t_simple_command command, char **environ))
+int		ft_env(t_simple_command command, char **environ)
 {
-	t_shell_cmd	new_cmd;
+	int		i;
 
-	new_cmd.name = name;
-	new_cmd.function = func;
-	return (new_cmd);
+	i = -1;
+	while (environ[++i])
+		ft_putendl_fd(environ[i], 1);
+	return (0);
 }

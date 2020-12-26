@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/14 22:33:29 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/26 23:52:16 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "libft.h"
 # include "m_types.h"
 
-t_shell_cmd			new_shell_cmd(char *name, void (*func)(t_command command));
+t_shell_cmd			new_shell_cmd(char *name, int (*func)(t_simple_command command, char **environ));
 char				**tokenize(char const *str);
 char				***split_tokens_by_semicolons(char **tokens);
 char				**clear_tokens(char **tokens, int count);
@@ -32,7 +32,7 @@ int					ft_strncmp_split(char *s1, char *s2, char c);
 t_command			abort_parsing(t_command *return_command, int code,
 					t_simple_command **simple_command, t_simple_command **list);
 int					get_shell_cmd(t_simple_command **simple_command,
-							char **tokens, int i);
+							char **tokens, int i, int *index);
 void				get_redirect_files(char **tokens, int i,
 							t_command *return_command);
 void				clear_command(t_simple_command **simple_command);

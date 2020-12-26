@@ -1,22 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_cmd_const.c                                  :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/26 15:48:44 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/26 22:56:25 by rtrant           ###   ########.fr       */
+/*   Created: 2020/12/26 22:08:20 by rtrant            #+#    #+#             */
+/*   Updated: 2020/12/26 22:57:20 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_types.h"
+#include "libftprintf.h"
+#include "flexer.h"
 
-t_shell_cmd	new_shell_cmd(char *name, int (*func)(t_simple_command command, char **environ))
+extern int	g_status;
+
+int	ft_echo(t_simple_command command, char **environ)
 {
-	t_shell_cmd	new_cmd;
-
-	new_cmd.name = name;
-	new_cmd.function = func;
-	return (new_cmd);
+	command.args = command.args->next;
+	while (command.args)
+	{
+		ft_putstr_fd(command.args->content, 1);
+		ft_putchar_fd(' ', 1);
+		command.args = command.args->next;
+	}
+	if (!command.flag)
+		ft_putstr_fd("\n", 1);
+	return (0);
 }

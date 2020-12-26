@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_cmd_const.c                                  :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/26 15:48:44 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/26 22:56:25 by rtrant           ###   ########.fr       */
+/*   Created: 2020/12/26 23:19:11 by rtrant            #+#    #+#             */
+/*   Updated: 2020/12/26 23:20:54 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_types.h"
+#include "libftprintf.h"
+#include "flexer.h"
+#include "commands.h"
 
-t_shell_cmd	new_shell_cmd(char *name, int (*func)(t_simple_command command, char **environ))
+int		ft_export(t_simple_command command, char **environ)
 {
-	t_shell_cmd	new_cmd;
-
-	new_cmd.name = name;
-	new_cmd.function = func;
-	return (new_cmd);
+	
+	return (0);
 }

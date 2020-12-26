@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/26 17:00:27 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/26 23:53:52 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,10 @@
 extern int			g_status;
 extern t_shell_cmd	g_commands[7];
 
-static void	run_command(int command_flag, t_simple_command *command)
+static void	run_command(int command_flag, t_simple_command *command, char **environ)
 {
-	pid_t	id;
-
-	if (!(id = fork()))
-	{
-		exit (0);
-		g_commands[command_flag].function(*command);
-	}
-	else
-		wait(&g_status);
+	g_status = g_commands[command_flag].function(*command, environ);
+	g_status = g_status << 8;
 }
 
 static	void		del(void *data)
@@ -76,16 +69,20 @@ t_list		*get_path(char **environ)
 		split_var = ft_split(env->content, '=');
 		if (!ft_strncmp(split_var[0], "PATH", 5))
 			break ;
+		clear_tokens(split_var, -1);
 		env = env->next;
 	}
-	path = ft_lstnew(ft_strdup(""));
-	paths = ft_split(split_var[1], ':');
+	path = NULL;
+	if (!ft_strncmp(split_var[0], "PATH", 5))
+		paths = ft_split(split_var[1], ':');
 	
 	i = -1;
-	while (paths[++i])
-		ft_lstadd_back(&path, ft_lstnew(ft_strdup(paths[i])));
-	clear_tokens(paths, -1);
+	while (paths[++i] && !ft_strncmp(split_var[0], "PATH", 5))
+		ft_lstadd_back(&path, ft_lstnew(ft_strjoin(paths[i], "/")));
+	if (!ft_strncmp(split_var[0], "PATH", 5))
+		clear_tokens(paths, -1);
 	clear_tokens(split_var, -1);
+	ft_lstclear(&env, del);
 	return (path);
 }
 
@@ -95,7 +92,6 @@ static void	run_executable(t_simple_command *command, char **environ)
 	char	**args;
 	t_list	*path;
 	int		executed;
-	char	*temp_path;
 
 	executed = -1;
 	args = form_args(command->args);
@@ -108,12 +104,12 @@ static void	run_executable(t_simple_command *command, char **environ)
 		path = get_path(environ);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		while (path)
+		if (ft_strchr(command->command, '/'))
+			executed = execve(command->command, args, environ);
+		while (path && executed < 0)
 		{
-			temp_path = ft_strjoin(path->content, "/");
-			if ((executed = execve(ft_strjoin(temp_path, command->command), args, environ)) >= 0)
+			if ((executed = execve(ft_strjoin(path->content, command->command), args, environ)) >= 0)
 				break ;
-			free(temp_path);
 			path = path->next;
 		}
 		if (executed < 0)
@@ -123,7 +119,6 @@ static void	run_executable(t_simple_command *command, char **environ)
 			ft_lstclear(&path, del);
 			exit(127);
 		}
-		free(temp_path);
 		ft_lstclear(&path, del);
 		exit(0);
 	}
@@ -144,6 +139,22 @@ void		flush_pipe(int fd)
 		chars_read = read(fd, buf, 5);
 }
 
+void		get_shell_command_index(int *command_flag, char *command)
+{
+	int	i;
+
+	i = -1;
+	while (++i < 7)
+	{
+		if (ft_strncmp(command, g_commands[i].name,
+				ft_strlen(g_commands[i].name) + 1) == 0)
+		{
+			*command_flag = i;
+			return ;
+		}
+	}
+}
+
 void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 {
 	t_command			command;
@@ -153,6 +164,7 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	int					pipe_fd[2];
 	int					fd[4];
 	int					flush_flag;
+	t_simple_command	*first_command;
 	
 	fd[0] = -1;
 	fd[1] = -1;
@@ -167,6 +179,16 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	command_flag = -1;
 	//print_2d((*split_tokens)[i]);
 	get_command(&command, &command_flag, (*split_tokens)[i]);
+	if (command.piped)
+	{
+		first_command = command.commands;
+		while (command.commands)
+		{
+			command.commands->piped = 1;
+			command.commands = command.commands->next;
+		}
+		command.commands = first_command;
+	}
 	s_c = command.commands;
 	//print_commands(command);
 	//ft_putstr_fd("\n\n", 1);
@@ -184,6 +206,7 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	}
 	while (command.commands)
 	{
+		get_shell_command_index(&command_flag, command.commands->command);
 		if (command.piped && !command.commands->next)
 		{
 			dup2(std_copy[1], 1);
@@ -235,7 +258,7 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 		if (command_flag < 0)
 			run_executable(command.commands, environ);
 		else
-			run_command(command_flag, command.commands);
+			run_command(command_flag, command.commands, environ);
 		g_status = (g_status & 0xff00) >> 8;
 		command.commands = command.commands->next;
 		if (flush_flag == 1)

@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/12/12 13:58:13 by rtrant           ###   ########.fr        #
+#    Updated: 2020/12/26 23:42:10 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,12 @@ SRCS = 	srcs/main.c \
 		srcs/utils/clearing_utils.c \
 		srcs/lexer/tokens_splitter.c \
 		srcs/executor/executor.c \
-		srcs/validator/validator.c
+		srcs/validator/validator.c \
+		srcs/bonk_commands/echo/echo.c \
+		srcs/bonk_commands/cd/cd.c \
+		srcs/bonk_commands/pwd/pwd.c \
+		srcs/bonk_commands/env/env.c \
+		srcs/bonk_commands/exit/exit.c 
 
 NAME = minishell
 
