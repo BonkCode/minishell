@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/23 21:43:52 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/26 17:00:27 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,16 @@ static void	run_executable(t_simple_command *command, char **environ)
 	signal(SIGINT, sigint_handler);
 }
 
+void		flush_pipe(int fd)
+{
+	char	buf[5];
+	int		chars_read;
+	
+	chars_read = read(fd, buf, 5);
+	while (chars_read == 5)
+		chars_read = read(fd, buf, 5);
+}
+
 void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 {
 	t_command			command;
@@ -142,6 +152,7 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	int					std_copy[3];
 	int					pipe_fd[2];
 	int					fd[4];
+	int					flush_flag;
 	
 	fd[0] = -1;
 	fd[1] = -1;
@@ -162,13 +173,14 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	std_copy[0] = dup(0);
 	std_copy[1] = dup(1);
 	std_copy[2] = dup(2);
+	flush_flag = 0;
 	if (command.piped)
 	{
 		pipe(pipe_fd);
 		dup2(pipe_fd[0], 0);
 		dup2(pipe_fd[1], 1);
-		//close(pipe_fd[0]);
-		//close(pipe_fd[1]);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
 	}
 	while (command.commands)
 	{
@@ -181,8 +193,6 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 		{
 			while (command.outfile)
 			{
-				ft_putstr_fd(command.outfile->content, 2);
-				ft_putchar_fd('\n', 2);
 				if (!command.append && (fd[1] = open(command.outfile->content, O_RDONLY)) > 0)
 					return ; // todo remove leaks
 				else if ((fd[1] = open(command.outfile->content, O_WRONLY | O_CREAT)) < 0)
@@ -228,6 +238,13 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 			run_command(command_flag, command.commands);
 		g_status = (g_status & 0xff00) >> 8;
 		command.commands = command.commands->next;
+		if (flush_flag == 1)
+		{
+			flush_flag = 0;
+			flush_pipe(0);
+		}
+		else
+			flush_flag = 1;
 	}
 	dup2(std_copy[0], 0);
 	close(std_copy[0]);
