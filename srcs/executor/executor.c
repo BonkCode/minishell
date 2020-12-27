@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/27 02:26:19 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 17:42:56 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,21 @@ static char	**form_args(t_list *args)
 t_list		*get_path(char **environ)
 {
 	int		i;
-	t_list	*env;
 	t_list	*path;
 	char	**split_var;
 	char	**paths;
-	
-	ft_get_env(&env, environ);
-	while (env)
+
+	i = -1;
+	while (environ[++i])
 	{
-		split_var = ft_split(env->content, '=');
+		split_var = ft_split(environ[i], '=');
 		if (!ft_strncmp(split_var[0], "PATH", 5))
 			break ;
 		clear_tokens(split_var, -1);
-		env = env->next;
+		split_var = NULL;
 	}
+	if (!split_var)
+		return (NULL);
 	path = NULL;
 	if (!ft_strncmp(split_var[0], "PATH", 5))
 		paths = ft_split(split_var[1], ':');
@@ -80,8 +81,8 @@ t_list		*get_path(char **environ)
 		ft_lstadd_back(&path, ft_lstnew(ft_strjoin(paths[i], "/")));
 	if (!ft_strncmp(split_var[0], "PATH", 5) && paths)
 		clear_tokens(paths, -1);
-	clear_tokens(split_var, -1);
-	ft_lstclear(&env, del);
+	if (split_var)
+		clear_tokens(split_var, -1);
 	return (path);
 }
 

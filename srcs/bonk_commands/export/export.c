@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 23:19:11 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/27 16:12:13 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 17:22:59 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int				ft_export(t_simple_command command, char **environ)
 				if (!ft_strchr(command.args->content, '='))
 				{
 					env_i = -1;
+					clear_tokens(env_split, -1);
 					break ;
 				}
 				if (env_i > g_start_env_len)
@@ -101,8 +102,10 @@ int				ft_export(t_simple_command command, char **environ)
 					ft_strlcpy(environ[env_i], to_insert, ft_strlen(to_insert) + 1);
 				}
 				env_i = -1;
+				clear_tokens(env_split, -1);
 				break ;
 			}
+			clear_tokens(env_split, -1);
 		}
 		if (env_i > 0 && !command.piped)
 		{

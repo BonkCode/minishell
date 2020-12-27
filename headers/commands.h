@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 16:17:59 by rvernius          #+#    #+#             */
-/*   Updated: 2020/12/27 01:00:53 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 17:27:26 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int		ft_cd(t_simple_command command, char **environ);
 int		ft_env(t_simple_command command, char **environ);
 int		ft_exit(t_simple_command command, char **environ);
 int		ft_export(t_simple_command command, char **environ);
+int		ft_unset(t_simple_command command, char **environ);
 int		dummy_pwd(t_simple_command command, char **environ);
 void	ft_get_env(t_list **env, char **environ);
 

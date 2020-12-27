@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2020/12/27 01:56:55 by rtrant           ###   ########.fr        #
+#    Updated: 2020/12/27 17:27:38 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,8 @@ SRCS = 	srcs/main.c \
 		srcs/bonk_commands/pwd/pwd.c \
 		srcs/bonk_commands/env/env.c \
 		srcs/bonk_commands/exit/exit.c \
-		srcs/bonk_commands/export/export.c
+		srcs/bonk_commands/export/export.c \
+		srcs/bonk_commands/unset/unset.c
 
 NAME = minishell
 

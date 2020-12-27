@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/12/27 01:01:20 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 17:27:46 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		setup_commands(t_shell_cmd commands[7])
 	(commands)[0] = new_shell_cmd("echo", &ft_echo);
 	(commands)[1] = new_shell_cmd("cd", &ft_cd);
 	(commands)[2] = new_shell_cmd("export", &ft_export);
-	(commands)[3] = new_shell_cmd("unset", &dummy_unset);
+	(commands)[3] = new_shell_cmd("unset", &ft_unset);
 	(commands)[4] = new_shell_cmd("env", &ft_env);
 	(commands)[5] = new_shell_cmd("exit", &ft_exit);
 	(commands)[6] = new_shell_cmd("pwd", &ft_pwd);
