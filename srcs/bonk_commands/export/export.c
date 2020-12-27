@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 23:19:11 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/27 16:02:04 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 16:09:02 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,17 @@ int				ft_export(t_simple_command command, char **environ)
 		while (var_name[++i])
 		{
 			if ((!ft_isalnum(var_name[i]) && var_name[i] != '_') || (ft_isdigit(var_name[i]) && i == 0))
-			{
-				ft_putstr_fd("minishell: export: \'", 1);
-				ft_putstr_fd(command.args->content, 1);
-				ft_putstr_fd(": not a valid identifier\n", 1);
-				free(var_name);
-				return_value = 1;
-				command.args = command.args->next;
-				continue ;
-			}
+				break ;
+		}
+		if (var_name[0] == '\0' || var_name[i] != '\0')
+		{
+			ft_putstr_fd("minishell: export: \'", 1);
+			ft_putstr_fd(command.args->content, 1);
+			ft_putstr_fd(": not a valid identifier\n", 1);
+			free(var_name);
+			return_value = 1;
+			command.args = command.args->next;
+			continue ;
 		}
 		var_value = get_var_value(command.args->content);
 		to_insert = ft_strjoin(var_name, "=");
