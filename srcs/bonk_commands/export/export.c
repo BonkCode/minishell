@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 23:19:11 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/27 16:09:02 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 16:12:13 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int				ft_export(t_simple_command command, char **environ)
 		to_insert = ft_strjoin(var_name, "=");
 		to_insert = ft_strjoin_gnl(to_insert, var_value);
 		env_i = -1;
-		while (environ[++env_i])
+		while (environ[++env_i] && !command.piped)
 		{
 			env_split = ft_split(environ[env_i], '=');
 			if (!ft_strncmp(env_split[0], var_name, ft_strlen(env_split[0]) + 1))
@@ -104,7 +104,7 @@ int				ft_export(t_simple_command command, char **environ)
 				break ;
 			}
 		}
-		if (env_i > 0)
+		if (env_i > 0 && !command.piped)
 		{
 			environ[env_i] = ft_strdup(to_insert);
 			environ[env_i + 1] = NULL;
