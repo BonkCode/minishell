@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 23:19:11 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/27 01:42:10 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/27 16:02:04 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int				ft_export(t_simple_command command, char **environ)
 		var_name = copy_till_char(command.args->content, '=');
 		while (var_name[++i])
 		{
-			if (!ft_isalpha(var_name[i]))
+			if ((!ft_isalnum(var_name[i]) && var_name[i] != '_') || (ft_isdigit(var_name[i]) && i == 0))
 			{
 				ft_putstr_fd("minishell: export: \'", 1);
 				ft_putstr_fd(command.args->content, 1);
