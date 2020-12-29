@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:23:22 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/23 21:14:36 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/26 22:11:11 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ t_command		abort_parsing(t_command *return_command, int code,
 }
 
 int				get_shell_cmd(t_simple_command **simple_command,
-							char **tokens, int i)
+							char **tokens, int i, int *index)
 {
 	int	j;
 	
+	*index = i;
 	(*simple_command)->command = ft_strdup(tokens[i]);
 	j = -1;
 	while (++j < 7)

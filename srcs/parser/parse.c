@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/18 21:53:48 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/26 22:13:12 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,23 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 {
 	int	i;
 	int	index;
+	int	command_index;
 
 	i = -1;
 	while (t[++i])
 	{
 		if (!(*s_c)->command && ft_strncmp_split(t[i], "< > >>", ' ') && !(str_is_num(t[i]) && !ft_strncmp_split(t[i + 1], "< > >>", ' ')))
-			index = get_shell_cmd(s_c, t, i);
+			index = get_shell_cmd(s_c, t, i, &command_index);
 		if (is_flag(t, i, s_c))
 		{
 			if (index == -1)
 				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(t[i])));
-			else if (ft_strncmp((*s_c)->command, "echoq", 5))
-				return (abort_parsing(return_command, 2, s_c, list));
-			else if (!ft_strncmp(t[i], "-n", 3))
+			else if (ft_strncmp((*s_c)->command, "echo", 5))
+				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(t[i])));
+			else if (!ft_strncmp(t[i], "-n", 3) && i - 1 == command_index)
 				(*s_c)->flag = ft_strdup(t[i]);
+			else
+				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(t[i])));
 		}
 		else if (!ft_strncmp(t[i], "|", 2))
 			try_sep(return_command, s_c, list);
