@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:23:22 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/26 22:11:11 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/31 19:27:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ int				get_shell_cmd(t_simple_command **simple_command,
 							char **tokens, int i, int *index)
 {
 	int	j;
-	
+
 	*index = i;
 	(*simple_command)->command = ft_strdup(tokens[i]);
 	j = -1;
 	while (++j < 7)
 	{
-		if (!ft_strncmp(g_commands[j].name, (*simple_command)->command, ft_strlen(g_commands[j].name)))
+		if (!ft_strncmp(g_commands[j].name, (*simple_command)->command,
+			ft_strlen(g_commands[j].name)))
 			return (j);
 	}
-
 	return (-1);
 }
 
@@ -70,15 +70,23 @@ void			get_redirect_files(char **tokens, int i,
 	else
 		return_command->append = 0;
 	if (!ft_strncmp_split(tokens[i], "<", ' '))
-		ft_lstadd_back(&return_command->infile, ft_lstnew(ft_strdup(tokens[i + 1])));
-	else if (i > 0 && !ft_strncmp(tokens[i - 1], "1", 2) || i - 2 >= 0 && !ft_strncmp_split(tokens[i - 2], "< > >>", ' '))
-		ft_lstadd_back(&return_command->outfile, ft_lstnew(ft_strdup(tokens[i + 1])));
-	else if (i > 0 && !ft_strncmp(tokens[i - 1], "2", 2) || i - 2 >= 0 && !ft_strncmp_split(tokens[i - 2], "< > >>", ' '))
-		ft_lstadd_back(&return_command->errfile, ft_lstnew(ft_strdup(tokens[i + 1])));
-	else if (i == 0 || !str_is_num(tokens[i - 1]) || i - 2 >= 0 && !ft_strncmp_split(tokens[i - 2], "< > >>", ' '))
-		ft_lstadd_back(&return_command->outfile, ft_lstnew(ft_strdup(tokens[i + 1])));
+		ft_lstadd_back(&return_command->infile,
+			ft_lstnew(ft_strdup(tokens[i + 1])));
+	else if (i > 0 && !ft_strncmp(tokens[i - 1], "1", 2) ||
+		i - 2 >= 0 && !ft_strncmp_split(tokens[i - 2], "< > >>", ' '))
+		ft_lstadd_back(&return_command->outfile,
+			ft_lstnew(ft_strdup(tokens[i + 1])));
+	else if (i > 0 && !ft_strncmp(tokens[i - 1], "2", 2) ||
+		i - 2 >= 0 && !ft_strncmp_split(tokens[i - 2], "< > >>", ' '))
+		ft_lstadd_back(&return_command->errfile,
+			ft_lstnew(ft_strdup(tokens[i + 1])));
+	else if (i == 0 || !str_is_num(tokens[i - 1]) ||
+		i - 2 >= 0 && !ft_strncmp_split(tokens[i - 2], "< > >>", ' '))
+		ft_lstadd_back(&return_command->outfile,
+			ft_lstnew(ft_strdup(tokens[i + 1])));
 	else
-		ft_lstadd_back(&return_command->other_files, ft_lstnew(ft_strdup(tokens[i + 1])));
+		ft_lstadd_back(&return_command->other_files,
+			ft_lstnew(ft_strdup(tokens[i + 1])));
 }
 
 void			clear_command(t_simple_command **simple_command)

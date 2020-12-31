@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2020/12/27 17:27:46 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/31 19:27:32 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void		glue_tokens(char ***tokens)
 
 char	*g_line;
 
-void		sigint_handler()
+void		sigint_handler(int s)
 {
 	if (g_line)
 	{
@@ -176,10 +176,31 @@ void		sigint_handler()
 
 int	g_start_env_len;
 
+static void	launch_minishell(char **environ)
+{
+	int	read_res;
+
+	while (1)
+	{
+		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
+		if (read_res = get_next_line(0, &g_line))
+		{
+			handle_line(&g_line, environ);
+		}
+		else
+		{
+			if (*g_line == '\0' && read_res == 0)
+			{
+				free(g_line);
+				ft_putstr_fd("\n", 1);
+				exit(0);
+			}
+		}
+	}
+}
+
 int			main(int argc, char **argv, char **environ)
 {
-	int		read_res;
-
 	g_start_env_len = 0;
 	while (environ[g_start_env_len])
 		++g_start_env_len;
@@ -192,22 +213,6 @@ int			main(int argc, char **argv, char **environ)
 	setup_commands(g_commands);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
-	while (1)
-	{
-		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
-		if (read_res = get_next_line(0, &g_line))
-		{
-			handle_line(&g_line, environ);
-		}
-		else
-		{
-			if (*g_line == '\0' && read_res == 0)
-			{
-				free (g_line);
-				ft_putstr_fd("\n", 1);
-				exit(0);
-			}
-		}
-	}
+	launch_minishell(environ);
 	return (0);
 }

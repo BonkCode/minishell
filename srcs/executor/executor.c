@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/27 17:42:56 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/31 19:23:54 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 extern int			g_status;
 extern t_shell_cmd	g_commands[7];
 
-static void	run_command(int command_flag, t_simple_command *command, char **environ)
+static void	run_command(int command_flag, t_simple_command *command,
+						char **environ)
 {
 	g_status = g_commands[command_flag].function(*command, environ);
 	g_status = g_status << 8;
@@ -44,7 +45,7 @@ static char	**form_args(t_list *args)
 {
 	char	**return_args;
 	int		i;
-	
+
 	i = -1;
 	return_args = ft_calloc(ft_lstsize(args) + 1, sizeof(char *));
 	while (args)
@@ -96,8 +97,6 @@ static void	run_executable(t_simple_command *command, char **environ)
 	executed = -1;
 	args = form_args(command->args);
 	signal(SIGINT, sigint_skip);
-	//ft_printf("ARGS:\n");
-	//print_2d(args);
 	path = NULL;
 	if (!(id = fork()))
 	{
@@ -108,7 +107,8 @@ static void	run_executable(t_simple_command *command, char **environ)
 			executed = execve(command->command, args, environ);
 		while (path && executed < 0)
 		{
-			if ((executed = execve(ft_strjoin(path->content, command->command), args, environ)) >= 0)
+			if ((executed = execve(ft_strjoin(path->content, command->command),
+								args, environ)) >= 0)
 				break ;
 			path = path->next;
 		}
@@ -133,7 +133,7 @@ void		flush_pipe(int fd)
 {
 	char	buf[5];
 	int		chars_read;
-	
+
 	chars_read = read(fd, buf, 5);
 	while (chars_read == 5)
 		chars_read = read(fd, buf, 5);
@@ -166,19 +166,15 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	int					fd[4];
 	int					flush_flag;
 	t_simple_command	*first_command;
-	
+
 	fd[0] = -1;
 	fd[1] = -1;
 	fd[2] = -1;
 	fd[3] = -1;
 	init_command(&command);
 	expand(&(*split_tokens)[i], env);
-	//print_2d((*split_tokens)[i]);
 	glue_tokens(&(*split_tokens)[i]);
-//	print_2d((*split_tokens)[i]);
-	//ft_putchar_fd('\n', 1);
 	command_flag = -1;
-	//print_2d((*split_tokens)[i]);
 	get_command(&command, &command_flag, (*split_tokens)[i]);
 	if (command.piped)
 	{
@@ -191,8 +187,6 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 		command.commands = first_command;
 	}
 	s_c = command.commands;
-	//print_commands(command);
-	//ft_putstr_fd("\n\n", 1);
 	std_copy[0] = dup(0);
 	std_copy[1] = dup(1);
 	std_copy[2] = dup(2);
@@ -291,18 +285,17 @@ void		handle_line(char **line, char **environ)
 	tokens = NULL;
 	split_tokens = NULL;
 	env = NULL;
-
 	ft_get_env(&env, environ);
 	tokens = tokenize(*line);
 	if (!tokens)
 	{
 		if ((*line)[0])
-			ft_printf("NO CLOSE QMARKS\n");
+			{ } // print err
 		return ;
 	}
 	if (validate_tokens(tokens))
 	{
-		ft_printf("\nraw: %i\ncode: %i \npos: %i\n", validate_tokens(tokens), (validate_tokens(tokens) << 24) >> 24, validate_tokens(tokens) >> 8);
+		// print err
 		clear_tokens(tokens, -1);
 		ft_lstclear(&env, free);
 		free(*line);

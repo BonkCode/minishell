@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 22:22:26 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/26 23:34:11 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/31 19:26:09 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ static char	*get_home_dir(char **environ)
 	return (home_str);
 }
 
-int	ft_cd(t_simple_command command, char **environ)
+int			ft_cd(t_simple_command command, char **environ)
 {
 	char	*home_dir;
-	
+
 	if (command.piped)
 		return (0);
 	if (command.args->next && command.args->next->next)

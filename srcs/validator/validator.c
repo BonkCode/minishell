@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 13:44:55 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/30 15:21:10 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/31 19:27:28 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,35 @@ static int	get_2d_arr_len(char **arr)
 	return (len);
 }
 
-int	validate_tokens(char **tokens)
+static int	check_tokens(char **tokens, int redirected, int len)
+{
+	int	i;
+
+	i = 0;
+	while (tokens[i] && i < len)
+	{
+		if (!ft_strncmp_split(tokens[i], "| > < >>", ' ') && !tokens[i + 1])
+			return ((i << 8) + STAT_SYNTAX_ERR);
+		else if (!ft_strncmp_split(tokens[i], "| ; < > >>", ' ') &&
+			!ft_strncmp_split(tokens[i + 2], "| ; < > >>", ' '))
+			return (((i + 2) << 8) + STAT_DOUBLE_SPEC_TOKEN_ERR);
+		else if (!ft_strncmp_split(tokens[i], "< > >>", ' ') && !tokens[i + 1])
+			return ((i << 8) + STAT_SYNTAX_ERR);
+		else if (!ft_strncmp_split(tokens[i], "< > >>", ' ') && tokens[i + 3] &&
+			!ft_strncmp(tokens[i + 4], "|", 2))
+			return ((i << 8) + STAT_DOUBLE_REDIRECTION_ERR);
+		if (!ft_strncmp_split(tokens[i], "< > >>", ' '))
+			redirected = 1;
+		if (!ft_strncmp(tokens[i], "|", 2) && redirected)
+			return ((i << 8) + STAT_DOUBLE_REDIRECTION_ERR);
+		if (!ft_strncmp(tokens[i], ";", 2))
+			redirected = 0;
+		i += 2;
+	}
+	return (STAT_OK);
+}
+
+int			validate_tokens(char **tokens)
 {
 	int	i;
 	int	len;
@@ -36,24 +64,6 @@ int	validate_tokens(char **tokens)
 	redirected = 0;
 	len = get_2d_arr_len(tokens);
 	if (!ft_strncmp_split(tokens[0], "; |", ' '))
-		return ((0<<8) + STAT_SYNTAX_ERR);
-	while (tokens[i] && i < len)
-	{
-		if (!ft_strncmp_split(tokens[i], "| > < >>", ' ') && !tokens[i + 1])
-			return ((i<<8) + STAT_SYNTAX_ERR);
-		else if (!ft_strncmp_split(tokens[i], "| ; < > >>", ' ') && !ft_strncmp_split(tokens[i + 2], "| ; < > >>", ' '))
-			return (((i + 2) << 8) + STAT_DOUBLE_SPEC_TOKEN_ERR);
-		else if (!ft_strncmp_split(tokens[i], "< > >>", ' ') && !tokens[i + 1])
-			return ((i<<8) + STAT_SYNTAX_ERR);
-		else if (!ft_strncmp_split(tokens[i], "< > >>", ' ') && tokens[i + 3] && !ft_strncmp(tokens[i + 4], "|", 2))
-			return ((i<<8) + STAT_DOUBLE_REDIRECTION_ERR);
-		if (!ft_strncmp_split(tokens[i], "< > >>", ' '))
-			redirected = 1;
-		if (!ft_strncmp(tokens[i], "|", 2) && redirected)
-			return ((i<<8) + STAT_DOUBLE_REDIRECTION_ERR);
-		if (!ft_strncmp(tokens[i], ";", 2))
-			redirected = 0;
-		i += 2;
-	}
-	return (STAT_OK);
+		return ((0 << 8) + STAT_SYNTAX_ERR);
+	return (check_tokens(tokens, redirected, len));
 }

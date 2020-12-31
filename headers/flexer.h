@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/27 01:57:03 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/31 19:22:45 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 # include "libft.h"
 # include "m_types.h"
 
-t_shell_cmd			new_shell_cmd(char *name, int (*func)(t_simple_command command, char **environ));
+t_shell_cmd			new_shell_cmd(char *name,
+						int (*func)(t_simple_command command, char **environ));
 char				**tokenize(char const *str);
 char				***split_tokens_by_semicolons(char **tokens);
 char				**clear_tokens(char **tokens, int count);
@@ -43,10 +44,13 @@ void				free_2_str(char **s1, char **s2);
 void				expand_token(char **token, t_list *env);
 void				handle_line(char **line, char **environ);
 void				init_command(t_command *command);
-void				get_command(t_command *command, int *command_flag, char **tokens);
+void				get_command(t_command *command, int *command_flag,
+								char **tokens);
 void				glue_tokens(char ***tokens);
 void				sigint_handler();
 int					validate_tokens(char **tokens);
+int					str_is_num(char *str);
+char				*copy_till_char(char *str, char c);
 int					str_is_num(char *str);
 
 #endif

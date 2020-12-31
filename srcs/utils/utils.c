@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 16:53:13 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/06 14:36:10 by rtrant           ###   ########.fr       */
+/*   Created: 2020/12/31 19:06:30 by rtrant            #+#    #+#             */
+/*   Updated: 2020/12/31 19:27:26 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
-
-void	ft_exit(t_command command)
+int						str_is_num(char *str)
 {
-	exit(0);
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+	}
+	return (1);
 }
