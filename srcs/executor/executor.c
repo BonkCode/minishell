@@ -6,10 +6,11 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:23:54 by rtrant           ###   ########.fr       */
+/*   Updated: 2020/12/31 20:35:16 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include <stdio.h>
 #include "flexer.h"
 #include "m_types.h"
@@ -158,6 +159,8 @@ void		get_shell_command_index(int *command_flag, char *command)
 
 void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 {
+	t_list				*first_line;
+	t_list				*append_buffer;
 	t_command			command;
 	int					command_flag;
 	t_simple_command	*s_c;
@@ -171,6 +174,7 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	fd[1] = -1;
 	fd[2] = -1;
 	fd[3] = -1;
+	append_buffer = NULL;
 	init_command(&command);
 	expand(&(*split_tokens)[i], env);
 	glue_tokens(&(*split_tokens)[i]);
@@ -211,10 +215,32 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 		{
 			while (command.outfile)
 			{
-				if (!command.append && (fd[1] = open(command.outfile->content, O_RDONLY)) > 0)
+				if (command.append && ((fd[1] = open(command.outfile->content, O_RDONLY)) > 0))
+				{
+					ft_lstclear(&append_buffer, del);
+					append_buffer = ft_lstnew(NULL);
+					while (get_next_line(fd[1], (char **)&ft_lstlast(append_buffer)->content) > 0)
+					{
+						ft_lstadd_back(&append_buffer, ft_lstnew(NULL));
+					}
+					close(fd[1]);
+				}
+				if (!command.append && (fd[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
 					return ; // todo remove leaks
-				else if ((fd[1] = open(command.outfile->content, O_WRONLY | O_CREAT)) < 0)
-					return ; // todo remove leaks
+				else if (command.append && (fd[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+					return ;// todo remove leaks
+				if (command.append)
+				{
+
+					first_line = append_buffer;
+					while (append_buffer)
+					{
+						if (append_buffer->content && ((char *)append_buffer->content)[0])
+							ft_putendl_fd(append_buffer->content, fd[1]);
+						append_buffer = append_buffer->next;
+					}
+					append_buffer = first_line;
+				}
 				if (!command.outfile->next)
 					dup2(fd[1], 1);
 				close(fd[1]);
@@ -222,14 +248,36 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 			}
 			while (command.errfile)
 			{
-				if (!command.append && (fd[2] = open(command.errfile->content, O_RDONLY)) > 0)
-					return ; // todo
-				else if ((fd[2] = open(command.errfile->content, O_WRONLY | O_CREAT)) < 0)
-					return ; // todo
-				if (!command.errfile->next)
+				if (command.append && ((fd[2] = open(command.outfile->content, O_RDONLY)) > 0))
+				{
+					ft_lstclear(&append_buffer, del);
+					append_buffer = ft_lstnew(NULL);
+					while (get_next_line(fd[2], (char **)&ft_lstlast(append_buffer)->content) > 0)
+					{
+						ft_lstadd_back(&append_buffer, ft_lstnew(NULL));
+					}
+					close(fd[2]);
+				}
+				if (!command.append && (fd[2] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+					return ; // todo remove leaks
+				else if (command.append && (fd[2] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+					return ;// todo remove leaks
+				if (command.append)
+				{
+
+					first_line = append_buffer;
+					while (append_buffer)
+					{
+						if (append_buffer->content && ((char *)append_buffer->content)[0])
+							ft_putendl_fd(append_buffer->content, fd[2]);
+						append_buffer = append_buffer->next;
+					}
+					append_buffer = first_line;
+				}
+				if (!command.outfile->next)
 					dup2(fd[2], 2);
 				close(fd[2]);
-				command.errfile = command.errfile->next;
+				command.outfile = command.outfile->next;
 			}
 			while (command.infile)
 			{
@@ -246,7 +294,7 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 					return ; // todo
 				else if ((fd[4] = open(command.other_files->content, O_WRONLY | O_CREAT)) < 0)
 					return ; // todo
-				close (fd[4]);
+				close(fd[4]);
 				command.other_files = command.other_files->next;
 			}
 		}
@@ -264,6 +312,7 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 		else
 			flush_flag = 1;
 	}
+	ft_lstclear(&append_buffer, del);
 	dup2(std_copy[0], 0);
 	close(std_copy[0]);
 	dup2(std_copy[1], 1);
