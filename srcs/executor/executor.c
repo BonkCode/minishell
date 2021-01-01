@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/01 23:13:38 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/01 23:29:54 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,10 +245,9 @@ void		redirect_stdout(t_command command, int (*fd)[4])
 				ft_lstadd_back(&append_buffer, ft_lstnew(NULL));
 			close((*fd)[1]);
 		}
-		if (!command.append && ((*fd)[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+		close((*fd)[1]);
+		if (((*fd)[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
 			return ; // todo remove leaks
-		else if (command.append && ((*fd)[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
-			return ;// todo remove leaks
 		if (command.append)
 		{
 			first_line = append_buffer;
@@ -282,22 +281,21 @@ void		redirect_stderr(t_command command, int (*fd)[4])
 			ft_lstclear(&append_buffer, del);
 			append_buffer = ft_lstnew(NULL);
 			while (get_next_line((*fd)[2], (char **)&ft_lstlast(append_buffer)->content) > 0)
-			{
 				ft_lstadd_back(&append_buffer, ft_lstnew(NULL));
-			}
 			close((*fd)[2]);
 		}
-		if (!command.append && ((*fd)[2] = open(command.errfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+		close((*fd)[2]);
+		if (((*fd)[2] = open(command.errfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
 			return ; // todo remove leaks
-		else if (command.append && ((*fd)[2] = open(command.errfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
-			return ;// todo remove leaks
 		if (command.append)
 		{
 			first_line = append_buffer;
 			while (append_buffer)
 			{
-				if (append_buffer->content && ((char *)append_buffer->content)[0])
+				if (append_buffer->content && append_buffer->next)
 					ft_putendl_fd(append_buffer->content, (*fd)[2]);
+				else if (append_buffer->content)
+					ft_putstr_fd(append_buffer->content, (*fd)[2]);
 				append_buffer = append_buffer->next;
 			}
 			append_buffer = first_line;
