@@ -5,24 +5,25 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/17 13:08:27 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/01 23:09:55 by rtrant           ###   ########.fr       */
+/*   Created: 2020/05/23 11:08:52 by rtrant            #+#    #+#             */
+/*   Updated: 2020/11/27 07:31:35 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
-# endif
+
 # include <unistd.h>
 # include <stdlib.h>
-# define MAX_FD_COUNT 512
 
-int		get_next_line(int fd, char **line);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strdup(const char *s);
-char	*ft_strjoin_gnl(char *s1, char *s2);
+# define FDS 14000
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
 
+size_t			ft_strlen_gnl(const char *s);
+char			*ft_find_lbreak(char *s);
+void			free_chr(char **chr);
+char			*ft_strdup_gnl(char *str);
+char			*ft_strjoin_gnl(char *s1, char *s2);
 #endif

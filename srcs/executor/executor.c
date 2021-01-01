@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 20:35:16 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/01 23:13:38 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static	void		del(void *data)
 	data = NULL;
 }
 
-static void	sigint_skip()
+static void	sigint_skip(int c)
 {
 	write(1, "\n", 1);
 }
@@ -76,16 +76,51 @@ t_list		*get_path(char **environ)
 	if (!split_var)
 		return (NULL);
 	path = NULL;
-	if (!ft_strncmp(split_var[0], "PATH", 5))
-		paths = ft_split(split_var[1], ':');
+	paths = ft_split(split_var[1], ':');
 	i = -1;
-	while (paths && paths[++i] && !ft_strncmp(split_var[0], "PATH", 5))
+	while (paths && paths[++i])
 		ft_lstadd_back(&path, ft_lstnew(ft_strjoin(paths[i], "/")));
-	if (!ft_strncmp(split_var[0], "PATH", 5) && paths)
+	if (paths)
 		clear_tokens(paths, -1);
-	if (split_var)
-		clear_tokens(split_var, -1);
+	clear_tokens(split_var, -1);
 	return (path);
+}
+
+int			cmd_not_found(t_list **path, char *command)
+{
+	ft_putstr_fd(command, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	ft_lstclear(path, del);
+	return (127);
+}
+
+void		try_rel_or_abs_path(char *command, char **args,
+							char **environ, int *executed)
+{
+	if (ft_strchr(command, '/'))
+		*executed = execve(command, args, environ);
+}
+
+int			launch_with_path_var(t_list *path, char **environ,
+								char **args, t_simple_command *command)
+{
+	int		executed;
+	char	*command_path;
+
+	executed = 0;
+	while (path)
+	{
+		command_path = ft_strjoin(path->content, command->command);
+		if ((executed = execve(command_path,
+							args, environ)) >= 0)
+		{
+			free(command_path);
+			break ;
+		}
+		free(command_path);
+		path = path->next;
+	}
+	return (executed);
 }
 
 static void	run_executable(t_simple_command *command, char **environ)
@@ -104,29 +139,15 @@ static void	run_executable(t_simple_command *command, char **environ)
 		path = get_path(environ);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (ft_strchr(command->command, '/'))
-			executed = execve(command->command, args, environ);
-		while (path && executed < 0)
-		{
-			if ((executed = execve(ft_strjoin(path->content, command->command),
-								args, environ)) >= 0)
-				break ;
-			path = path->next;
-		}
-		if (executed < 0)
-		{
-			ft_putstr_fd(command->command, 2);
-			ft_putstr_fd(": command not found\n", 2);
-			ft_lstclear(&path, del);
-			exit(127);
-		}
+		try_rel_or_abs_path(command->command, args, environ, &executed);
+		if (executed < 0 &&
+			launch_with_path_var(path, environ, args, command) < 0)
+			exit(cmd_not_found(&path, command->command));
 		ft_lstclear(&path, del);
 		exit(0);
 	}
 	else
-	{
 		wait(&g_status);
-	}
 	signal(SIGINT, sigint_handler);
 }
 
@@ -157,6 +178,155 @@ void		get_shell_command_index(int *command_flag, char *command)
 	}
 }
 
+void		set_all_subcommands_pipe(t_command *command)
+{
+	t_simple_command	*first_command;
+
+	if (command->piped)
+	{
+		first_command = command->commands;
+		while (command->commands)
+		{
+			command->commands->piped = 1;
+			command->commands = command->commands->next;
+		}
+		command->commands = first_command;
+	}
+}
+
+void		init_fds(int (*fd)[4])
+{
+	(*fd)[0] = -1;
+	(*fd)[1] = -1;
+	(*fd)[2] = -1;
+	(*fd)[3] = -1;
+}
+
+void		copy_std(int (*std_copy)[3])
+{
+	(*std_copy)[0] = dup(0);
+	(*std_copy)[1] = dup(1);
+	(*std_copy)[2] = dup(2);
+}
+
+void		setup_pipe(int piped, int (*pipe_fd)[2])
+{
+	if (piped)
+	{
+		pipe(*pipe_fd);
+		dup2((*pipe_fd)[0], 0);
+		dup2((*pipe_fd)[1], 1);
+		close((*pipe_fd)[0]);
+		close((*pipe_fd)[1]);
+	}
+}
+
+void		restore_std_fd(int *fd, int std_fd)
+{
+	dup2(*fd, std_fd);
+	*fd = dup(std_fd);
+}
+
+void		redirect_stdout(t_command command, int (*fd)[4])
+{
+	t_list	*first_line;
+	t_list	*append_buffer;
+	int		res;
+
+	append_buffer = NULL;
+	while (command.outfile)
+	{
+		if (command.append && (((*fd)[1] = open(command.outfile->content, O_RDONLY)) > 0))
+		{
+			ft_lstclear(&append_buffer, del);
+			append_buffer = ft_lstnew(NULL);
+			
+			while ((res = get_next_line((*fd)[1], (char **)&ft_lstlast(append_buffer)->content)) > 0)
+				ft_lstadd_back(&append_buffer, ft_lstnew(NULL));
+			close((*fd)[1]);
+		}
+		if (!command.append && ((*fd)[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+			return ; // todo remove leaks
+		else if (command.append && ((*fd)[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+			return ;// todo remove leaks
+		if (command.append)
+		{
+			first_line = append_buffer;
+			while (append_buffer)
+			{
+				if (append_buffer->content && append_buffer->next)
+					ft_putendl_fd(append_buffer->content, (*fd)[1]);
+				else if (append_buffer->content)
+					ft_putstr_fd(append_buffer->content, (*fd)[1]);
+				append_buffer = append_buffer->next;
+			}
+			append_buffer = first_line;
+		}
+		if (!command.outfile->next)
+			dup2((*fd)[1], 1);
+		close((*fd)[1]);
+		command.outfile = command.outfile->next;
+	}
+}
+
+void		redirect_stderr(t_command command, int (*fd)[4])
+{
+	t_list	*first_line;
+	t_list	*append_buffer;
+
+	append_buffer = NULL;
+	while (command.errfile)
+	{
+		if (command.append && (((*fd)[2] = open(command.errfile->content, O_RDONLY)) > 0))
+		{
+			ft_lstclear(&append_buffer, del);
+			append_buffer = ft_lstnew(NULL);
+			while (get_next_line((*fd)[2], (char **)&ft_lstlast(append_buffer)->content) > 0)
+			{
+				ft_lstadd_back(&append_buffer, ft_lstnew(NULL));
+			}
+			close((*fd)[2]);
+		}
+		if (!command.append && ((*fd)[2] = open(command.errfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+			return ; // todo remove leaks
+		else if (command.append && ((*fd)[2] = open(command.errfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+			return ;// todo remove leaks
+		if (command.append)
+		{
+			first_line = append_buffer;
+			while (append_buffer)
+			{
+				if (append_buffer->content && ((char *)append_buffer->content)[0])
+					ft_putendl_fd(append_buffer->content, (*fd)[2]);
+				append_buffer = append_buffer->next;
+			}
+			append_buffer = first_line;
+		}
+		if (!command.errfile->next)
+			dup2((*fd)[2], 2);
+		close((*fd)[2]);
+		command.errfile = command.errfile->next;
+	}
+}
+
+void		redirect_stdin(t_command command, int (*fd)[4])
+{
+	while (command.infile)
+	{
+		if (((*fd)[0] = open(command.infile->content, O_RDONLY)) < 0)
+			return ; // todo
+		if (!command.infile->next)
+			dup2((*fd)[0], 0);
+		close((*fd)[0]);
+		command.infile = command.infile->next;
+	}
+}
+
+void		redirect_other()
+{
+	
+}
+
 void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 {
 	t_list				*first_line;
@@ -168,131 +338,34 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	int					pipe_fd[2];
 	int					fd[4];
 	int					flush_flag;
-	t_simple_command	*first_command;
 
-	fd[0] = -1;
-	fd[1] = -1;
-	fd[2] = -1;
-	fd[3] = -1;
+	init_fds(&fd);
 	append_buffer = NULL;
 	init_command(&command);
 	expand(&(*split_tokens)[i], env);
 	glue_tokens(&(*split_tokens)[i]);
 	command_flag = -1;
 	get_command(&command, &command_flag, (*split_tokens)[i]);
-	if (command.piped)
-	{
-		first_command = command.commands;
-		while (command.commands)
-		{
-			command.commands->piped = 1;
-			command.commands = command.commands->next;
-		}
-		command.commands = first_command;
-	}
+	set_all_subcommands_pipe(&command);
 	s_c = command.commands;
-	std_copy[0] = dup(0);
-	std_copy[1] = dup(1);
-	std_copy[2] = dup(2);
+	copy_std(&std_copy);
 	flush_flag = 0;
-	if (command.piped)
-	{
-		pipe(pipe_fd);
-		dup2(pipe_fd[0], 0);
-		dup2(pipe_fd[1], 1);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-	}
+	setup_pipe(command.piped, &pipe_fd);
 	while (command.commands)
 	{
 		get_shell_command_index(&command_flag, command.commands->command);
 		if (command.piped && !command.commands->next)
+			restore_std_fd(std_copy + 1, 1);
+		if (!command.commands->next)
 		{
-			dup2(std_copy[1], 1);
-			std_copy[1] = dup(1);
-		}
-		else if (!command.commands->next)
-		{
-			while (command.outfile)
-			{
-				if (command.append && ((fd[1] = open(command.outfile->content, O_RDONLY)) > 0))
-				{
-					ft_lstclear(&append_buffer, del);
-					append_buffer = ft_lstnew(NULL);
-					while (get_next_line(fd[1], (char **)&ft_lstlast(append_buffer)->content) > 0)
-					{
-						ft_lstadd_back(&append_buffer, ft_lstnew(NULL));
-					}
-					close(fd[1]);
-				}
-				if (!command.append && (fd[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
-					return ; // todo remove leaks
-				else if (command.append && (fd[1] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
-					return ;// todo remove leaks
-				if (command.append)
-				{
-
-					first_line = append_buffer;
-					while (append_buffer)
-					{
-						if (append_buffer->content && ((char *)append_buffer->content)[0])
-							ft_putendl_fd(append_buffer->content, fd[1]);
-						append_buffer = append_buffer->next;
-					}
-					append_buffer = first_line;
-				}
-				if (!command.outfile->next)
-					dup2(fd[1], 1);
-				close(fd[1]);
-				command.outfile = command.outfile->next;
-			}
-			while (command.errfile)
-			{
-				if (command.append && ((fd[2] = open(command.outfile->content, O_RDONLY)) > 0))
-				{
-					ft_lstclear(&append_buffer, del);
-					append_buffer = ft_lstnew(NULL);
-					while (get_next_line(fd[2], (char **)&ft_lstlast(append_buffer)->content) > 0)
-					{
-						ft_lstadd_back(&append_buffer, ft_lstnew(NULL));
-					}
-					close(fd[2]);
-				}
-				if (!command.append && (fd[2] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
-					return ; // todo remove leaks
-				else if (command.append && (fd[2] = open(command.outfile->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
-					return ;// todo remove leaks
-				if (command.append)
-				{
-
-					first_line = append_buffer;
-					while (append_buffer)
-					{
-						if (append_buffer->content && ((char *)append_buffer->content)[0])
-							ft_putendl_fd(append_buffer->content, fd[2]);
-						append_buffer = append_buffer->next;
-					}
-					append_buffer = first_line;
-				}
-				if (!command.outfile->next)
-					dup2(fd[2], 2);
-				close(fd[2]);
-				command.outfile = command.outfile->next;
-			}
-			while (command.infile)
-			{
-				if ((fd[0] = open(command.infile->content, O_RDONLY)) < 0)
-					return ; // todo
-				if (!command.infile->next)
-					dup2(fd[0], 0);
-				close(fd[0]);
-				command.infile = command.infile->next;
-			}
+			redirect_stdout(command, &fd);
+			redirect_stderr(command, &fd);
+			redirect_stdin(command, &fd);
 			while (command.other_files)
 			{
 				if (!command.append && (fd[4] = open(command.other_files->content, O_RDONLY)) > 0)
 					return ; // todo
-				else if ((fd[4] = open(command.other_files->content, O_WRONLY | O_CREAT)) < 0)
+				else if ((fd[4] = open(command.other_files->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
 					return ; // todo
 				close(fd[4]);
 				command.other_files = command.other_files->next;
@@ -323,7 +396,54 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 	free_command(&command);
 }
 
-void		handle_line(char **line, char **environ)
+int			return_token_alloc_error(char **line, t_list **env)
+{
+	if ((*line)[0])
+		ft_putstr_fd("minishell: failed to create tokens from input\n", 2);
+	ft_lstclear(env, del);
+	free(*line);
+	return (-1);
+}
+
+int			return_syntax_error(int status, t_list **env,
+								char **line, char **tokens)
+{
+	ft_putstr_fd("minishell: sntax error near unexpected token '", 2);
+	ft_putstr_fd(tokens[status >> 8], 2);
+	ft_putstr_fd("'\n", 2);
+	clear_tokens(tokens, -1);
+	ft_lstclear(env, del);
+	free(*line);
+	return (status & 0xff00);
+}
+
+int			return_split_tokens_err(t_list **env, char **tokens, char **line)
+{
+	clear_tokens(tokens, -1);
+	ft_lstclear(env, del);
+	free(*line);
+	return (-2);
+}
+
+int			return_normal(t_list **env, char **line, char ****split_tokens,
+						char **tokens)
+{
+	free(*line);
+	*line = NULL;
+	ft_lstclear(env, del);
+	clear_tokens(tokens, -1);
+	clear_3d(split_tokens, -1, -1);
+	return (0);
+}
+
+void		init_vars(t_list **env, char ***tokens, char ****split_tokens)
+{
+	*tokens = NULL;
+	*split_tokens = NULL;
+	*env = NULL;
+}
+
+int			handle_line(char **line, char **environ)
 {
 	pid_t				id;
 	t_list				*env;
@@ -331,41 +451,18 @@ void		handle_line(char **line, char **environ)
 	char				***split_tokens;
 	int					i;
 
-	tokens = NULL;
-	split_tokens = NULL;
-	env = NULL;
+	init_vars(&env, &tokens, &split_tokens);
 	ft_get_env(&env, environ);
 	tokens = tokenize(*line);
 	if (!tokens)
-	{
-		if ((*line)[0])
-			{ } // print err
-		return ;
-	}
-	if (validate_tokens(tokens))
-	{
-		// print err
-		clear_tokens(tokens, -1);
-		ft_lstclear(&env, free);
-		free(*line);
-		return ;
-	}
+		return (return_token_alloc_error(line, &env));
+	if (i = validate_tokens(tokens))
+		return (return_syntax_error(i, &env, line, tokens));
 	i = -1;
 	if (!(split_tokens = split_tokens_by_semicolons(tokens)))
-	{
-		clear_tokens(tokens, -1);
-		ft_lstclear(&env, free);
-		free(*line);
-		return ;
-	}
+		return (return_split_tokens_err(&env, tokens, line));
 	i = -1;
 	while (split_tokens[++i])
-	{
 		execute(&split_tokens, env, environ, i);
-	}
-	free(*line);
-	*line = NULL;
-	ft_lstclear(&env, del);
-	clear_tokens(tokens, -1);
-	clear_3d(&split_tokens, -1, -1);
+	return (return_normal(&env, line, &split_tokens, tokens));
 }

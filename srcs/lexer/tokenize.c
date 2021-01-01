@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 13:12:23 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:26:59 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/01 20:37:02 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ char			**tokenize(char const *str)
 	int		size;
 	char	*space;
 
+	proceed_to_next_token(&str);
 	size = get_token_count(str);
 	if (!(tokens = ft_calloc((size * 2), sizeof(char *))))
 		return (NULL);
@@ -110,8 +111,7 @@ char			**tokenize(char const *str)
 		size = get_token_size(str);
 		if (!(tokens[i] = malloc((size + 1) * sizeof(char))))
 			return (clear_tokens(tokens, i - 1));
-		ft_strlcpy(tokens[i], str, size + 1);
-		++i;
+		ft_strlcpy(tokens[i++], str, size + 1);
 		str += size;
 		space = ft_strdup(*str == ' ' ? " " : "");
 		proceed_to_next_token(&str);

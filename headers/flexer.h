@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:22:45 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/01 19:50:05 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void				free_command(t_command *command);
 int					expand(char ***tokens, t_list *env);
 void				free_2_str(char **s1, char **s2);
 void				expand_token(char **token, t_list *env);
-void				handle_line(char **line, char **environ);
+int					handle_line(char **line, char **environ);
 void				init_command(t_command *command);
 void				get_command(t_command *command, int *command_flag,
 								char **tokens);

@@ -5,81 +5,83 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/23 11:15:24 by rtrant            #+#    #+#             */
-/*   Updated: 2020/11/27 07:54:09 by rtrant           ###   ########.fr       */
+/*   Created: 2020/07/17 13:09:48 by rtrant            #+#    #+#             */
+/*   Updated: 2021/01/01 23:05:47 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "libftprintf.h"
 
-static int		get_line(char **list_fd, char **line, char *p_lbrake)
+static int	get_line_eof(char **line, char **remainder)
 {
-	char *tmp;
-
-	*p_lbrake = '\0';
-	p_lbrake++;
-	*line = ft_strdup_gnl(*list_fd);
-	if (!*line)
+	*line = ft_strdup(*remainder);
+	free(*remainder);
+	*remainder = NULL;
+	if (!(*line))
 		return (-1);
-	if (*p_lbrake == '\0')
-	{
-		free_chr(list_fd);
-		return (1);
-	}
-	tmp = ft_strdup_gnl(p_lbrake);
-	free(*list_fd);
-	*list_fd = tmp;
-	return (1);
-}
-
-static int		get_from_storage(char **list_fd, char **line,
-int read_size, char **buff)
-{
-	char *p_lbrake;
-
-	free_chr(buff);
-	if (read_size < 0)
-		return (-1);
-	if (*list_fd && (p_lbrake = ft_find_lbreak(*list_fd)))
-		return (get_line(list_fd, line, p_lbrake));
-	if (*list_fd)
-	{
-		*line = *list_fd;
-		*list_fd = NULL;
-		return (0);
-	}
-	*line = ft_strdup_gnl("");
 	return (0);
 }
 
-int				get_next_line(int fd, char **line)
+static int	get_line(char **eol, char **line, char **remainder)
 {
-	static char	*list_fd[FDS];
-	char		*buff;
-	int			read_size;
-	char		*p_lbrake;
+	char	*ptr_to_free;
 
-	buff = NULL;
-	if (!line || fd < 0 || fd > FDS || read(fd, buff, 0) < 0 || BUFFER_SIZE < 1)
-		return (-1);
-	if (BUFFER_SIZE > 2147483646 || !(buff = malloc(BUFFER_SIZE + 1)))
-		return (-1);
-	while ((read_size = read(fd, buff, BUFFER_SIZE)) >= 0)
+	*eol = *eol ? *eol : ft_strchr(*remainder, '\n');
+	if (*eol != NULL)
 	{
-		buff[read_size] = '\0';
-		if (!(list_fd[fd] = ft_strjoin_gnl(list_fd[fd], buff)))
+		**eol = '\0';
+		if (!(*line = ft_strdup(*remainder)))
 		{
-			free_chr(&buff);
+			free(*remainder);
+			*remainder = NULL;
 			return (-1);
 		}
-		if ((p_lbrake = ft_find_lbreak(list_fd[fd])))
-		{
-			free_chr(&buff);
-			return (get_line(&list_fd[fd], line, p_lbrake));
-		}
-		if (list_fd[fd][0] == '\0' && read_size == 0)
-			break ;
+		ptr_to_free = *remainder;
+		if (((*eol)[1] != '\0' && !((*remainder) = ft_strdup(*eol + 1))) ||
+			(*eol)[1] == '\0')
+			*remainder = NULL;
+		free(ptr_to_free);
+		return (1);
 	}
-	return (get_from_storage(&list_fd[fd], line, read_size, &buff));
+	return (get_line_eof(line, remainder));
+}
+
+static int	get_status(char **eol, char **line, char **remainder, int readed)
+{
+	if (readed < 0)
+		return (-1);
+	else if (readed == 0 && (!(*remainder) || (*remainder)[0] == '\0'))
+	{
+		if (!(*line = ft_strdup("")))
+			return (-1);
+		return (0);
+	}
+	return (get_line(eol, line, remainder));
+}
+
+int			get_next_line(int fd, char **line)
+{
+	static char	*remainder[MAX_FD_COUNT];
+	char		*ptr_to_free;
+	char		*eol;
+	int			readed;
+	char		buffer[BUFFER_SIZE + 1];
+
+	if (fd < 0 || !line || BUFFER_SIZE < 1 || fd > MAX_FD_COUNT)
+		return (-1);
+	eol = remainder[fd] ? ft_strchr(remainder[fd], '\n') : NULL;
+	readed = 0;
+	while (!eol && (readed = read(fd, buffer, BUFFER_SIZE)) > 0)
+	{
+		buffer[readed] = '\0';
+		if (!remainder[fd] && (!(remainder[fd] = ft_strdup(""))))
+			return (-1);
+		ptr_to_free = remainder[fd];
+		remainder[fd] = ft_strjoin(remainder[fd], buffer);
+		free(ptr_to_free);
+		if (!remainder[fd])
+			return (-1);
+		eol = ft_strchr(remainder[fd], '\n');
+	}
+	return (get_status(&eol, line, &remainder[fd], readed));
 }

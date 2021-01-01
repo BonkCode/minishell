@@ -3,87 +3,74 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtrant <rtrant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/23 11:03:37 by rtrant            #+#    #+#             */
-/*   Updated: 2020/09/08 13:59:09 by rtrant           ###   ########.fr       */
+/*   Created: 2020/07/17 13:09:51 by rtrant            #+#    #+#             */
+/*   Updated: 2021/01/01 23:09:15 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void		free_chr(char **chr)
+char	*ft_strchr(const char *s, int c)
 {
-	if (chr && *chr)
+	if (!s)
+		return (NULL);
+	while (*s != '\0')
 	{
-		free(*chr);
-		*chr = NULL;
-	}
-}
-
-char		*ft_find_lbreak(char *s)
-{
-	while (*s)
-	{
-		if (*s == '\n')
-			return (s);
+		if (*s == (char)c)
+			return ((char *)s);
 		s++;
 	}
-	return (0);
+	return (NULL);
 }
 
-size_t		ft_strlen_gnl(const char *s)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	i;
+	char			*new_str;
+	unsigned int	i;
+	unsigned int	new_str_len;
 
+	if (!s1 || !s2)
+		return (NULL);
 	i = 0;
-	if (s == NULL)
-		return (0);
-	while (s[i])
-		i++;
-	return (i);
+	new_str_len = 0;
+	while (s1[i++] != '\0')
+		new_str_len++;
+	i = 0;
+	while (s2[i++] != '\0')
+		new_str_len++;
+	new_str = (char *)malloc((new_str_len + 1) * sizeof(char));
+	if (!new_str)
+		return (NULL);
+	i = -1;
+	while (*s1 != '\0')
+		new_str[++i] = *(s1++);
+	while (*s2 != '\0')
+		new_str[++i] = *(s2++);
+	new_str[++i] = '\0';
+	return (new_str);
 }
 
-char		*ft_strdup_gnl(char *str)
+char	*ft_strdup(const char *s)
 {
-	char			*dest;
-	char			*temp;
+	int		s_len;
+	char	*s_copy;
 
-	temp = (char *)malloc(sizeof(*dest) * (ft_strlen_gnl(str) + 1));
-	if (!temp)
+	if (!s)
 		return (NULL);
-	dest = temp;
-	while (*str)
+	s_len = 0;
+	while (s[s_len] != '\0')
+		s_len++;
+	s_copy = (char *)malloc((s_len + 1) * sizeof(char));
+	if (!s_copy)
+		return (NULL);
+	while (*s != '\0')
 	{
-		*temp = *str;
-		temp++;
-		str++;
+		*s_copy = *s;
+		s_copy++;
+		s++;
 	}
-	*temp = '\0';
-	return (dest);
-}
-
-char		*ft_strjoin_gnl(char *s1, char *s2)
-{
-	char		*str;
-	char		*res;
-	size_t		len1;
-	size_t		len2;
-
-	if (!s1 && !s2)
-		return (NULL);
-	if (!(s1) || !(s2))
-		return (!(s1) ? ft_strdup_gnl(s2) : ft_strdup_gnl(s1));
-	len1 = ft_strlen_gnl(s1);
-	len2 = ft_strlen_gnl(s2);
-	if (!(str = (char *)malloc(sizeof(char) * (len1 + len2 + 1))))
-		return (0);
-	res = str;
-	while (*s1)
-		*str++ = *s1++;
-	free(s1 - len1);
-	while (*s2)
-		*str++ = *s2++;
-	*str = '\0';
-	return (res);
+	*s_copy = '\0';
+	return (s_copy - s_len);
 }
