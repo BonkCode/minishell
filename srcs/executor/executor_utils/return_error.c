@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 18:25:47 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 18:26:13 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 20:25:04 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int			return_token_alloc_error(char **line, t_list **env)
 int			return_syntax_error(int status, t_list **env,
 								char **line, char **tokens)
 {
-	ft_putstr_fd("minishell: sntax error near unexpected token '", 2);
+	ft_putstr_fd("minishell: syntax error near unexpected token '", 2);
 	ft_putstr_fd(tokens[status >> 8], 2);
 	ft_putstr_fd("'\n", 2);
 	clear_tokens(tokens, -1);
