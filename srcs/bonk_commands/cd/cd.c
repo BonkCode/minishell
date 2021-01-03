@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 22:22:26 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:26:09 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 18:21:44 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 #include "libftprintf.h"
 #include "flexer.h"
 #include "commands.h"
-
-static void	del(void *data)
-{
-	if (data)
-		free(data);
-	data = NULL;
-}
 
 static char	*get_home_dir(char **environ)
 {

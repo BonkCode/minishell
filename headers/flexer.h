@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/01 19:50:05 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 19:13:29 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,24 @@ int					validate_tokens(char **tokens);
 int					str_is_num(char *str);
 char				*copy_till_char(char *str, char c);
 int					str_is_num(char *str);
+void				redirect_stdout(t_command command, int (*fd)[4]);
+void				del(void *data);
+void				redirect_stderr(t_command command, int (*fd)[4]);
+int					return_normal(t_list **env, char **line,
+								char ****split_tokens, char **tokens);
+int					return_split_tokens_err(t_list **env,
+									char **tokens, char **line);
+int					return_syntax_error(int status, t_list **env,
+										char **line, char **tokens);
+int					return_token_alloc_error(char **line, t_list **env);
+void				setup_pipe(int piped, int (*pipe_fd)[2], int fd);
+void				copy_std(int (*std_copy)[3]);
+void				init_fds(int (*fd)[4]);
+void				restore_std_fd(int *fd, int std_fd);
+void				restore_std(int (*std_copy)[3]);
+void				sigint_skip(int c);
+void				run_command(int command_flag, t_simple_command *command,
+						char **environ);
+void				run_executable(t_simple_command *command, char **environ);
 
 #endif

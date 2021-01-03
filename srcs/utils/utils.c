@@ -6,11 +6,23 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 19:06:30 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/01 23:09:34 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 18:35:36 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "flexer.h"
+
+void					sigint_skip(int c)
+{
+	write(1, "\n", 1);
+}
+
+void					del(void *data)
+{
+	if (data)
+		free(data);
+	data = NULL;
+}
 
 int						str_is_num(char *str)
 {
