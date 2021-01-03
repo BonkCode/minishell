@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 19:06:30 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 18:35:36 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 19:54:23 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int						str_is_num(char *str)
 	return (1);
 }
 
-char	*ft_strjoin_gnl(char *s1, char *s2)
+char					*ft_strjoin_gnl(char *s1, char *s2)
 {
 	char		*str;
 	char		*res;

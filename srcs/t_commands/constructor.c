@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:20:56 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:27:14 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 20:06:16 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,18 @@ void					init_return_command(t_command *return_command)
 	return_command->piped = 0;
 	return_command->status = 0;
 	return_command->append = 0;
+}
+
+void					init_command(t_command *command)
+{
+	command->status = 127;
+	command->piped = 0;
+	command->append = 0;
+	command->infile = NULL;
+	command->errfile = NULL;
+	command->outfile = NULL;
+	command->other_files = NULL;
+	command->commands = NULL;
 }
 
 t_tokens				new_t_token(char **tokens, int *i)

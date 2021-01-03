@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 19:13:29 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 20:00:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,16 @@ void				sigint_skip(int c);
 void				run_command(int command_flag, t_simple_command *command,
 						char **environ);
 void				run_executable(t_simple_command *command, char **environ);
+void				redirect_pipes(int flush_flag, t_command command,
+									t_pipe *pipe_fd);
+void				flush_pipes(int flush_flag, t_command command,
+									t_pipe *pipe_fd);
+void				close_pipe(t_pipe *pipe_fd);
+void				set_all_subcommands_pipe(t_command *command);
+void				redirect_other(t_command command, int (*fd)[4]);
+void				redirect_stdin(t_command command, int (*fd)[4]);
+void				glue_tokens(char ***tokens);
+void				init_command(t_command *command);
+void				setup_commands(t_shell_cmd commands[7]);
 
 #endif

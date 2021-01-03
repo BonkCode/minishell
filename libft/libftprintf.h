@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libftprintf.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/11 03:21:08 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/06 12:44:44 by rvernius         ###   ########.fr       */
+/*   Updated: 2021/01/03 20:06:46 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct	s_directive
 	char	*flags;
 }				t_directive;
 
-int				ft_printf(const char *format_string, ...);
 int				get_max(int count, ...);
 int				get_min(int count, ...);
 long long int	ft_abs(long int n);

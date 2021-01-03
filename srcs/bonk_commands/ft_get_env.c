@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   ft_get_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 16:53:13 by rvernius          #+#    #+#             */
-/*   Updated: 2020/10/01 12:20:50 by rvernius         ###   ########.fr       */
+/*   Created: 2020/10/06 13:19:39 by rvernius          #+#    #+#             */
+/*   Updated: 2021/01/03 20:04:50 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/commands.h"
+#include "commands.h"
+#include "libftprintf.h"
 
-void	ft_exit(t_command command)
+void		ft_get_env(t_list **env, char **environ)
 {
-	exit(0);
+	int i;
+
+	i = 0;
+	while (environ[i])
+	{
+		ft_lstadd_back(env, ft_lstnew(ft_strdup(environ[i])));
+		++i;
+	}
 }

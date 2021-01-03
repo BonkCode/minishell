@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dummy_env.c                                        :+:      :+:    :+:   */
+/*   redirect_stdin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/12 01:22:50 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/12 01:35:44 by rtrant           ###   ########.fr       */
+/*   Created: 2021/01/03 19:50:01 by rtrant            #+#    #+#             */
+/*   Updated: 2021/01/03 19:50:24 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "flexer.h"
+#include <fcntl.h>
 
-int main(int argc, char **argv, char **environ)
+void		redirect_stdin(t_command command, int (*fd)[4])
 {
-	for (int i = 0; i < argc; ++i)
+	while (command.infile)
 	{
-		printf("%s\n", argv[i]);
+		if (((*fd)[0] = open(command.infile->content, O_RDONLY)) < 0)
+			return ;
+		if (!command.infile->next)
+			dup2((*fd)[0], 0);
+		close((*fd)[0]);
+		command.infile = command.infile->next;
 	}
-	return (1);
 }

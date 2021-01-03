@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rvernius <rvernius@student.42.fr>          +#+  +:+       +#+         #
+#    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/29 16:30:05 by rtrant            #+#    #+#              #
-#    Updated: 2020/10/06 12:53:54 by rvernius         ###   ########.fr        #
+#    Updated: 2021/01/03 20:10:21 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,15 +21,7 @@ SRCS =  ft_atoi.c ft_bzero.c ft_isalpha.c ft_isascii.c \
 		ft_memchr.c ft_calloc.c ft_strdup.c ft_strncmp.c ft_strlcat.c \
 		ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c \
 		ft_strmapi.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
-		get_next_line.c get_next_line_utils.c \
-		ft_add_hex_rep.c ft_i_add_sign.c \
-		ft_get_char_print.c \
-		ft_get_int_print.c ft_get_pointer_print.c \
-		ft_get_string_print.c ft_get_unsigned_int_print.c \
-		ft_printfutils.c ft_directive.c \
-		ft_get_conversion_character.c ft_get_field_width.c ft_get_flags.c \
-		ft_get_length_modifier.c ft_get_precision.c ft_printf.c \
-		ft_print_variants.c
+		get_next_line.c get_next_line_utils.c
 		
 BONUS_SRCS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 			ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c \

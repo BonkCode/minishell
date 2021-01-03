@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dummy_cd.c                                         :+:      :+:    :+:   */
+/*   redirect_other.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/12 01:22:50 by rtrant            #+#    #+#             */
-/*   Updated: 2020/10/12 01:36:30 by rtrant           ###   ########.fr       */
+/*   Created: 2021/01/03 19:49:56 by rtrant            #+#    #+#             */
+/*   Updated: 2021/01/03 19:50:43 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "flexer.h"
+#include <fcntl.h>
 
-int main(int argc, char **argv, char **environ)
+void		redirect_other(t_command command, int (*fd)[4])
 {
-	for (int i = 0; i < argc; ++i)
+	while (command.other_files)
 	{
-		printf("%s\n", argv[i]);
+		if (!command.append &&
+			((*fd)[3] = open(command.other_files->content, O_RDONLY)) > 0)
+			return ;
+		else if (((*fd)[3] = open(
+			command.other_files->content, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+			return ;
+		close((*fd)[3]);
+		command.other_files = command.other_files->next;
 	}
-	return (1);
 }
