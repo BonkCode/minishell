@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2021/01/03 20:01:10 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 20:44:08 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	launch_minishell(char **environ)
 	while (1)
 	{
 		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
-		if (read_res = get_next_line(0, &g_line))
+		if (read_res = get_next_line_no_eof(0, &g_line))
 		{
 			handle_line(&g_line, environ);
 		}

@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 13:08:27 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/01 23:09:55 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 20:43:33 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s);
 char	*ft_strjoin_gnl(char *s1, char *s2);
+int		get_next_line_no_eof(int fd, char **line);
 
 #endif

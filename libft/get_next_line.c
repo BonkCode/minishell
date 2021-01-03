@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 13:09:48 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/01 23:05:47 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/03 20:43:54 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,33 @@ int			get_next_line(int fd, char **line)
 	eol = remainder[fd] ? ft_strchr(remainder[fd], '\n') : NULL;
 	readed = 0;
 	while (!eol && (readed = read(fd, buffer, BUFFER_SIZE)) > 0)
+	{
+		buffer[readed] = '\0';
+		if (!remainder[fd] && (!(remainder[fd] = ft_strdup(""))))
+			return (-1);
+		ptr_to_free = remainder[fd];
+		remainder[fd] = ft_strjoin(remainder[fd], buffer);
+		free(ptr_to_free);
+		if (!remainder[fd])
+			return (-1);
+		eol = ft_strchr(remainder[fd], '\n');
+	}
+	return (get_status(&eol, line, &remainder[fd], readed));
+}
+
+int			get_next_line_no_eof(int fd, char **line)
+{
+	static char	*remainder[MAX_FD_COUNT];
+	char		*ptr_to_free;
+	char		*eol;
+	int			readed;
+	char		buffer[BUFFER_SIZE + 1];
+
+	if (fd < 0 || !line || BUFFER_SIZE < 1 || fd > MAX_FD_COUNT)
+		return (-1);
+	eol = remainder[fd] ? ft_strchr(remainder[fd], '\n') : NULL;
+	readed = 0;
+	while (!eol && (readed = read(fd, buffer, BUFFER_SIZE)) >= 0)
 	{
 		buffer[readed] = '\0';
 		if (!remainder[fd] && (!(remainder[fd] = ft_strdup(""))))
