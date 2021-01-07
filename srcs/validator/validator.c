@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 13:44:55 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/07 19:11:18 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:16:55 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static int	check_tokens(char **tokens, int redirected, int len)
 	{
 		if (!ft_strncmp_split(tokens[i], "| > < >>", ' ') && !tokens[i + 1])
 			return ((i << 8) + STAT_SYNTAX_ERR);
-		else if (!ft_strncmp_split(tokens[i], "| ; < > >>", ' ') &&
+		else if (!ft_strncmp_split(tokens[i], "| ; < > >>", ' ')
+				&& tokens[i + 1] &&
 			!ft_strncmp_split(tokens[i + 2], "| ; < > >>", ' '))
 			return (((i + 2) << 8) + STAT_DOUBLE_SPEC_TOKEN_ERR);
 		else if (!ft_strncmp_split(tokens[i], "< > >>", ' ') && !tokens[i + 1])

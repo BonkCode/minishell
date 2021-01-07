@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:27:07 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 19:39:07 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int						is_flag(char **tokens, int i, t_simple_command **s_c)
 	return (0);
 }
 
-int						sep_or_add(t_tokens tokens_pos, t_simple_command **list,
+static int				sep_or_add(t_tokens tokens_pos,
 							t_simple_command **s_c, t_command *return_command)
 {
 	int		*i;
@@ -77,7 +77,7 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 		}
 		else if (!ft_strncmp(t[i], "|", 2))
 			try_sep(return_command, s_c, list);
-		else if (sep_or_add(new_t_token(t, &i), list, s_c, return_command) > 0)
+		else if (sep_or_add(new_t_token(t, &i), s_c, return_command) > 0)
 			return (abort_parsing(return_command, 3, s_c, list));
 		if (!t[i] || t[i][0] == '\0')
 			break ;

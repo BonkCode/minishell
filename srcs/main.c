@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2021/01/07 18:06:42 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 19:37:17 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void		sigint_handler(int s)
 	}
 	g_status = 130;
 	ft_putstr_fd("\nbibaibobabash-0.0.2$ ", 1);
+	s = s;
 }
 
 int		g_start_env_len;
@@ -61,7 +62,7 @@ static void	launch_minishell(char **environ)
 	while (1)
 	{
 		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
-		if (read_res = get_next_line_no_eof(0, &g_line))
+		if ((read_res = get_next_line_no_eof(0, &g_line)))
 		{
 			handle_line(&g_line, environ);
 		}

@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 19:06:30 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 19:54:23 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 19:35:42 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void					sigint_skip(int c)
 {
 	write(1, "\n", 1);
+	c = c;
 }
 
 void					del(void *data)
