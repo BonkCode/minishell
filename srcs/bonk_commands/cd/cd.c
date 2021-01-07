@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 22:22:26 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 18:21:44 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:29:35 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ static char	*get_home_dir(char **environ)
 	char	*home_str;
 	char	**split_env;
 	t_list	*env;
+	t_list	*env_start;
 
 	env = NULL;
 	ft_get_env(&env, environ);
+	env_start = env;
 	while (env)
 	{
 		split_env = ft_split(env->content, '=');
@@ -31,17 +33,19 @@ static char	*get_home_dir(char **environ)
 		clear_tokens(split_env, -1);
 		env = env->next;
 	}
+	ft_lstclear(&env_start, del);
 	if (ft_strncmp(split_env[0], "HOME", 5))
 		return (NULL);
 	home_str = ft_strdup(split_env[1]);
 	clear_tokens(split_env, -1);
-	ft_lstclear(&env, del);
 	return (home_str);
 }
 
 int			ft_cd(t_simple_command command, char **environ)
 {
-	char	*home_dir;
+	char				*home_dir;
+	char				cwd[1024];
+	t_simple_command	*s_c;
 
 	if (command.piped)
 		return (0);
@@ -55,6 +59,13 @@ int			ft_cd(t_simple_command command, char **environ)
 		chdir(home_dir);
 	else
 		chdir(command.args->next->content);
+	getcwd(cwd, 1023);
+	cwd[1023] = '\0';
+	s_c = new_simple_command();
+	ft_lstadd_back(&s_c->args, ft_lstnew(ft_strdup("export")));
+	ft_lstadd_back(&s_c->args, ft_lstnew(ft_strjoin("PWD=", cwd)));
+	ft_export(*s_c, environ);
+	clear_simple_commands(&s_c);
 	free(home_dir);
 	return (0);
 }
