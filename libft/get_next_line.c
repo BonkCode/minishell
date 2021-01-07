@@ -6,11 +6,13 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 13:09:48 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 20:43:54 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 18:18:05 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "libftprintf.h"
+#include <stdio.h>
 
 static int	get_line_eof(char **line, char **remainder)
 {
@@ -98,7 +100,7 @@ int			get_next_line_no_eof(int fd, char **line)
 		return (-1);
 	eol = remainder[fd] ? ft_strchr(remainder[fd], '\n') : NULL;
 	readed = 0;
-	while (!eol && (readed = read(fd, buffer, BUFFER_SIZE)) >= 0)
+	while ((!eol && (readed = read(fd, buffer, BUFFER_SIZE)) >= 0))
 	{
 		buffer[readed] = '\0';
 		if (!remainder[fd] && (!(remainder[fd] = ft_strdup(""))))
@@ -109,6 +111,8 @@ int			get_next_line_no_eof(int fd, char **line)
 		if (!remainder[fd])
 			return (-1);
 		eol = ft_strchr(remainder[fd], '\n');
+		if (readed == 0 && !remainder[fd][0])
+			break ;
 	}
 	return (get_status(&eol, line, &remainder[fd], readed));
 }
