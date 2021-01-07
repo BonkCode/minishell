@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:09:53 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/07 20:09:23 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:33:30 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void		execute(char ****split_tokens, t_list *env, char **environ, int i)
 
 int			handle_line(char **line, char **environ)
 {
-	pid_t				id;
 	t_list				*env;
 	char				**tokens;
 	char				***split_tokens;
@@ -112,7 +111,7 @@ int			handle_line(char **line, char **environ)
 	tokens = tokenize(*line);
 	if (!tokens)
 		return (return_token_alloc_error(line, &env));
-	if (i = validate_tokens(tokens))
+	if ((i = validate_tokens(tokens)))
 		return (return_syntax_error(i, &env, line, tokens));
 	i = -1;
 	if (!(split_tokens = split_tokens_by_semicolons(tokens)))

@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 22:08:20 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:26:14 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:37:40 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,5 @@ int	ft_echo(t_simple_command command, char **environ)
 	if (!command.flag)
 		ft_putstr_fd("\n", 1);
 	return (0);
+	environ = environ;
 }

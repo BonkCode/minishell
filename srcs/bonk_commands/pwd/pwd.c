@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 23:12:22 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/01 22:41:57 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:37:52 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,6 @@ int		ft_pwd(t_simple_command command, char **environ)
 	getcwd(dir, 100);
 	ft_putendl_fd(dir, 1);
 	return (0);
+	environ = environ;
+	command = command;
 }

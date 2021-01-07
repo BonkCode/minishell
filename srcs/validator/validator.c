@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 13:44:55 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/07 20:16:55 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:33:53 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,9 @@ static int	check_tokens(char **tokens, int redirected, int len)
 
 int			validate_tokens(char **tokens)
 {
-	int	i;
 	int	len;
 	int	redirected;
 
-	i = 0;
 	redirected = 0;
 	len = get_2d_arr_len(tokens);
 	if (!ft_strncmp_split(tokens[0], "; |", ' '))

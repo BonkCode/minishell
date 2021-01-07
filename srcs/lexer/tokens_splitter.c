@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 17:31:04 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:27:04 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:37:11 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 static int		count_and_alloc(char ****split_tokens, char **tokens)
 {
 	int	i;
-	int	j;
 	int	size;
 
 	size = 1;
@@ -70,7 +69,7 @@ static void		get_size_and_bounds(int *size, int *j, char ***arr, int *end)
 	}
 }
 
-static char		***trim_2d(char ****arr, int len)
+static char		***trim_2d(char ****arr)
 {
 	char	***res;
 	int		i;
@@ -104,13 +103,11 @@ char			***split_tokens_by_semicolons(char **tokens)
 	int		size;
 	int		i;
 	int		j;
-	int		len;
 
 	if (!(size = count_and_alloc(&split_tokens, tokens)))
 		return (NULL);
 	if (!alloc_2nd_dimension(&split_tokens, tokens, size))
 		return (NULL);
-	len = size;
 	size = 0;
 	i = -1;
 	j = -1;
@@ -124,5 +121,5 @@ char			***split_tokens_by_semicolons(char **tokens)
 		else
 			split_tokens[size][++j] = ft_strdup(tokens[i]);
 	}
-	return (trim_2d(&split_tokens, len));
+	return (trim_2d(&split_tokens));
 }

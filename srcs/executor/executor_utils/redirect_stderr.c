@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 18:22:44 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 18:24:58 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:36:45 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static void	restore_file_content(t_list **append_buffer, int (*fd)[4])
 
 void		redirect_stderr(t_command command, int (*fd)[4])
 {
-	t_list	*first_line;
 	t_list	*append_buffer;
 
 	append_buffer = NULL;

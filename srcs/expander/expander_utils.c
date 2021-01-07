@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/10 17:01:34 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:26:54 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:32:21 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void		get_var_value(char *name, char **value, t_list *env)
 	free_2_str(&env_value, &env_name);
 }
 
-static void		get_var_name(int flag, char **var_name, char **token, int *i)
+static void		get_var_name(char **var_name, char **token, int *i)
 {
 	int	len;
 
@@ -116,7 +116,7 @@ void			expand_token(char **token, t_list *env)
 	{
 		if ((*token)[i] == '$' && (i == 0 || (*token)[i - 1] != '\\'))
 		{
-			get_var_name(flag, &var.name, token, &i);
+			get_var_name(&var.name, token, &i);
 			get_var_value(var.name, &var.value, env);
 			var.value = var.value ? var.value : ft_strdup("");
 			change_value(token, var, i);

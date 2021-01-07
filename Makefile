@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2021/01/07 20:04:50 by rtrant           ###   ########.fr        #
+#    Updated: 2021/01/07 20:30:33 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ SRCS = 	srcs/main.c \
 
 NAME = minishell
 
-FLAGS = -Ilibft -Iheaders -L.
+FLAGS = -Wall -Wextra -Werror -Ilibft -Iheaders -L.
 
 all: $(NAME)
 

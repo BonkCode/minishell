@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 16:09:56 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:26:33 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 20:36:02 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,8 @@ void	unset_var(char **environ, t_simple_command command,
 
 int		ft_unset(t_simple_command command, char **environ)
 {
-	int		i;
 	int		return_value;
 	char	*var_name;
-	char	**env_split;
 
 	while (command.args->next)
 	{
