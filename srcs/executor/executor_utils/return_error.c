@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 18:25:47 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 20:25:04 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 19:23:55 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,12 @@ int			return_normal(t_list **env, char **line, char ****split_tokens,
 	clear_tokens(tokens, -1);
 	clear_3d(split_tokens, -1, -1);
 	return (0);
+}
+
+int			cmd_not_found(t_list **path, char *command)
+{
+	ft_putstr_fd(command, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	ft_lstclear(path, del);
+	return (127);
 }

@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2021/01/03 20:05:17 by rtrant           ###   ########.fr        #
+#    Updated: 2021/01/07 19:27:09 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,6 @@ fclean: clean
 re: fclean all
 
 norme:
-	norminette $(SRCS) headers/*.h
+	norminette $(SRCS) headers/*.h libft/*.c libft/*.h
 
 .PHONY: all clean fclean re norme dummy

@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 18:36:54 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 18:41:15 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 19:25:57 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,14 @@
 
 extern int	g_status;
 
-static int		cmd_not_found(t_list **path, char *command)
-{
-	ft_putstr_fd(command, 2);
-	ft_putstr_fd(": command not found\n", 2);
-	ft_lstclear(path, del);
-	return (127);
-}
-
 static char		**form_args(t_list *args)
 {
 	char	**return_args;
 	int		i;
 
 	i = -1;
-	return_args = ft_calloc(ft_lstsize(args) + 1, sizeof(char *));
+	if (!(return_args = ft_calloc(ft_lstsize(args) + 1, sizeof(char *))))
+		return (NULL);
 	while (args)
 	{
 		return_args[++i] = ft_strdup(args->content);
@@ -91,6 +84,17 @@ static int		launch_with_path_var(t_list *path, char **environ,
 	return (executed);
 }
 
+static int		init_vars(int *executed, char ***args, t_list **path,
+						t_simple_command *command)
+{
+	*executed = -1;
+	if (!(*args = form_args(command->args)))
+		return (-1);
+	signal(SIGINT, sigint_skip);
+	*path = NULL;
+	return (0);
+}
+
 void			run_executable(t_simple_command *command, char **environ)
 {
 	pid_t	id;
@@ -98,10 +102,8 @@ void			run_executable(t_simple_command *command, char **environ)
 	t_list	*path;
 	int		executed;
 
-	executed = -1;
-	args = form_args(command->args);
-	signal(SIGINT, sigint_skip);
-	path = NULL;
+	if (init_vars(&executed, &args, &path, command) < 0)
+		return ;
 	if (!(id = fork()))
 	{
 		path = get_path(environ);
@@ -117,5 +119,6 @@ void			run_executable(t_simple_command *command, char **environ)
 	}
 	else
 		wait(&g_status);
+	clear_tokens(args, -1);
 	signal(SIGINT, sigint_handler);
 }

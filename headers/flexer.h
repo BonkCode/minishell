@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/03 20:00:25 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 19:24:05 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ void				redirect_stdin(t_command command, int (*fd)[4]);
 void				glue_tokens(char ***tokens);
 void				init_command(t_command *command);
 void				setup_commands(t_shell_cmd commands[7]);
+int					cmd_not_found(t_list **path, char *command);
 
 #endif
