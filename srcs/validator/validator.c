@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 13:44:55 by rtrant            #+#    #+#             */
-/*   Updated: 2020/12/31 19:27:28 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/07 19:11:18 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	check_tokens(char **tokens, int redirected, int len)
 	int	i;
 
 	i = 0;
-	while (tokens[i] && i < len)
+	while (i < len && tokens[i])
 	{
 		if (!ft_strncmp_split(tokens[i], "| > < >>", ' ') && !tokens[i + 1])
 			return ((i << 8) + STAT_SYNTAX_ERR);
