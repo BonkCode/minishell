@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 16:59:51 by rvernius          #+#    #+#             */
-/*   Updated: 2021/01/07 19:37:17 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/14 20:26:47 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static void	launch_minishell(char **environ)
 		}
 		else
 		{
-			ft_putstr_fd("QWE", 2);
 			if (*g_line == '\0' && read_res == 0)
 			{
 				free(g_line);
