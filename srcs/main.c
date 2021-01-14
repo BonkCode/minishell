@@ -49,7 +49,7 @@ void		sigint_handler(int s)
 		g_line = NULL;
 	}
 	g_status = 130;
-	ft_putstr_fd("\nbibaibobabash-0.0.2$ ", 1);
+	ft_putstr_fd("\nbibaibobabash-1.0.0$ ", 1);
 	s = s;
 }
 
