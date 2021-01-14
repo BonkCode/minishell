@@ -61,7 +61,7 @@ static void	launch_minishell(char **environ)
 
 	while (1)
 	{
-		ft_putstr_fd("bibaibobabash-0.0.2$ ", 1);
+		ft_putstr_fd("bibaibobabash-1.0.0$ ", 1);
 		if ((read_res = get_next_line_no_eof(0, &g_line)))
 		{
 			handle_line(&g_line, environ);
