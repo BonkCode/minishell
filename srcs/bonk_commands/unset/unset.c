@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 16:09:56 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/07 20:36:02 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/16 17:32:20 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		validate_var_name(char *var_name, int *return_value, char *token)
 
 void	shift_vars(char **environ, int i)
 {
-	if (i <= g_start_env_len)
+	if (i < g_start_env_len)
 	{
 		if (environ[i + 1])
 			ft_strlcpy(environ[i], environ[i + 1],
@@ -66,6 +66,7 @@ void	unset_var(char **environ, t_simple_command command,
 	char	**env_split;
 
 	i = -1;
+	env_split = NULL;
 	while (environ[++i] && !command.piped)
 	{
 		env_split = ft_split(environ[i], '=');
@@ -77,10 +78,12 @@ void	unset_var(char **environ, t_simple_command command,
 				shift_vars(environ, i);
 				++i;
 			}
+			clear_tokens(env_split, -1);
 			break ;
 		}
 		clear_tokens(env_split, -1);
 	}
+	
 }
 
 int		ft_unset(t_simple_command command, char **environ)
