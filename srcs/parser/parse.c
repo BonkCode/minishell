@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 13:08:25 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/07 19:39:07 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/16 18:21:20 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ static int				try_sep(t_command *command, t_simple_command **s_c,
 	ft_command_add_back(list, (*s_c));
 	(*s_c) = new_simple_command();
 	return (1);
-}
-
-int						is_flag(char **tokens, int i, t_simple_command **s_c)
-{
-	if (tokens[i][0] == '-' && !ft_strncmp(tokens[i - 1],
-					(*s_c)->command, ft_strlen((*s_c)->command + 1)))
-		return (1);
-	return (0);
 }
 
 static int				sep_or_add(t_tokens tokens_pos,
@@ -59,19 +51,19 @@ t_command				parse_tokens(char **t, t_simple_command **list,
 							t_simple_command **s_c, t_command *return_command)
 {
 	int	i;
-	int	command_index;
+	int	c_index;
 
 	i = -1;
 	while (t[++i])
 	{
 		if (!(*s_c)->command && ft_strncmp_split(t[i], "< > >>", ' ') &&
 			!(str_is_num(t[i]) && !ft_strncmp_split(t[i + 1], "< > >>", ' ')))
-			get_shell_cmd(s_c, t, i, &command_index);
-		if (is_flag(t, i, s_c))
+			get_shell_cmd(s_c, t, i, &c_index);
+		if (is_flag(t, i, c_index))
 		{
-			if (!ft_strncmp(t[i], "-n", 3) && i - 1 == command_index &&
+			if (!ft_strncmp(t[i], "-n", 3) && prev_is_flag(t, i, c_index) &&
 						!ft_strncmp((*s_c)->command, "echo", 5))
-				(*s_c)->flag = ft_strdup(t[i]);
+				set_flag(s_c, t, i);
 			else
 				ft_lstadd_back(&((*s_c)->args), ft_lstnew(ft_strdup(t[i])));
 		}

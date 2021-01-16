@@ -6,7 +6,7 @@
 #    By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/03 16:18:03 by rtrant            #+#    #+#              #
-#    Updated: 2021/01/07 20:30:33 by rtrant           ###   ########.fr        #
+#    Updated: 2021/01/16 18:22:46 by rtrant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ SRCS = 	srcs/main.c \
 		srcs/executor/executor_utils/redirect_other.c \
 		srcs/glue/glue.c \
 		srcs/setup_shell_cmd.c \
-		srcs/bonk_commands/ft_get_env.c
+		srcs/bonk_commands/ft_get_env.c \
+		srcs/utils/parser_flag_utils.c
 
 NAME = minishell
 

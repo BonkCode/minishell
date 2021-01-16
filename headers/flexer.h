@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:45:12 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/07 19:24:05 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/16 18:22:30 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,8 @@ void				glue_tokens(char ***tokens);
 void				init_command(t_command *command);
 void				setup_commands(t_shell_cmd commands[7]);
 int					cmd_not_found(t_list **path, char *command);
+void				set_flag(t_simple_command **s_c, char **tokens, int i);
+int					is_flag(char **tokens, int i, int command_index);
+int					prev_is_flag(char **tokens, int i, int command_index);
 
 #endif

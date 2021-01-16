@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/26 22:08:20 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/07 20:37:40 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/16 17:40:25 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	ft_echo(t_simple_command command, char **environ)
 	while (command.args)
 	{
 		ft_putstr_fd(command.args->content, 1);
-		ft_putchar_fd(' ', 1);
+		if (command.args->next)
+			ft_putchar_fd(' ', 1);
 		command.args = command.args->next;
 	}
 	if (!command.flag)

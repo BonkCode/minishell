@@ -6,7 +6,7 @@
 /*   By: rtrant <rtrant@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 16:09:56 by rtrant            #+#    #+#             */
-/*   Updated: 2021/01/16 17:32:20 by rtrant           ###   ########.fr       */
+/*   Updated: 2021/01/16 18:26:02 by rtrant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ void	unset_var(char **environ, t_simple_command command,
 		}
 		clear_tokens(env_split, -1);
 	}
-	
 }
 
 int		ft_unset(t_simple_command command, char **environ)
